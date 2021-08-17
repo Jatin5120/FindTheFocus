@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "886158223317",
+    "project_id": "find-the-focus",
+    "storage_bucket": "find-the-focus.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886158223317:android:cbcc0afcc468a1ecdd3f5c",
+        "android_client_info": {
+          "package_name": "com.example.find_the_focus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886158223317-i7pa735bauuvoi9nigdlmgn4t52bo375.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.find_the_focus",
+            "certificate_hash": "db24600b094a3ef34f1c8f02a645afca7d69ce57"
+          }
+        },
+        {
+          "client_id": "886158223317-gicorbfmr4crsjpbi2iaovs800pbgdcf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB799dfjcV85VvyCbZ_Z77PhVOPKbEBhqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "886158223317-gicorbfmr4crsjpbi2iaovs800pbgdcf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

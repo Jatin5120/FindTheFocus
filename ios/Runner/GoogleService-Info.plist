@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>886158223317-rvmul95rleeauapagk3lk9mnulmrkovg.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.886158223317-rvmul95rleeauapagk3lk9mnulmrkovg</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>886158223317-i7pa735bauuvoi9nigdlmgn4t52bo375.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBaHzdojayXm9VNiw86qgK59Pd-TnH4wWs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>886158223317</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.findTheFocus</string>
+	<key>PROJECT_ID</key>
+	<string>find-the-focus</string>
+	<key>STORAGE_BUCKET</key>
+	<string>find-the-focus.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:886158223317:ios:05cbecc86c6e2d20dd3f5c</string>
+</dict>
+</plist>

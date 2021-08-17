@@ -1,0 +1,224 @@
+import 'dart:async';
+import 'package:flutter/services.dart';
+import '../controllers/controllers.dart';
+import '../constants/constants.dart';
+import '../modals/modals.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+
+class WorkingProjectScreen extends StatefulWidget {
+  WorkingProjectScreen({Key? key, required this.project}) : super(key: key);
+
+  final Project project;
+
+  @override
+  _WorkingProjectScreenState createState() => _WorkingProjectScreenState();
+}
+
+class _WorkingProjectScreenState extends State<WorkingProjectScreen> {
+  final WorkingTimeController workingTimeController = Get.find();
+
+  void startTimer() {
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      if (workingTimeController.isCompleted) {
+        timer.cancel();
+      } else {
+        workingTimeController.updateTime();
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    workingTimeController.isCompleted = true;
+    workingTimeController.totalTime = Duration(minutes: 15);
+    workingTimeController.resetTime();
+    startTimer();
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    super.dispose();
+  }
+
+  void _showExitDialog({required String message, required Widget action}) {
+    showDialog(
+        context: context,
+        builder: (_) =>
+            _BuildExitAlertDialog(message: message, action: action));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = Utils.size(context);
+    return WillPopScope(
+      onWillPop: () async {
+        _showExitDialog(
+          message:
+              "By closing this screen will you'll loose your current progress.",
+          action: _BuildPopButton(
+            label: 'Exit',
+            onPressed: () {
+              Navigator.pop(context);
+              workingTimeController.isCompleted = true;
+              Get.back();
+            },
+            color: MyColors.error,
+          ),
+        );
+        return false;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Padding(
+            padding: Utils.scaffoldPadding(size).copyWith(
+              bottom: size.height.tenPercent,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.project.projectName ?? 'Project',
+                    style: Get.textTheme.headline4,
+                  ),
+                ),
+                Expanded(
+                  flex: 6,
+                  child: Container(
+                    height: size.width.seventyFivePercent,
+                    width: size.width.seventyFivePercent,
+                    child: Obx(
+                      () => CircularPercentIndicator(
+                        radius: size.width.seventyFivePercent,
+                        lineWidth: size.width.fivePercent,
+                        backgroundWidth: size.width.onePercent,
+                        progressColor: MyColors.warning,
+                        backgroundColor: MyColors.background[700]!,
+                        circularStrokeCap: CircularStrokeCap.round,
+                        animation: true,
+                        animateFromLastPercent: true,
+                        curve: Curves.easeInOut,
+                        percent: (workingTimeController.workingTime.inSeconds /
+                                workingTimeController.totalTime.inSeconds)
+                            .clamp(0.0, 1.0),
+                        center: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: MyColors.accent,
+                          ),
+                          padding: EdgeInsets.all(size.width.fivePercent),
+                          child: InkWell(
+                            onTap: () => _showExitDialog(
+                              message:
+                                  "You've not worked for the target time of the day. There's more you can achieve than this",
+                              action: _BuildPopButton(
+                                label: "I'm Done",
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  workingTimeController.isCompleted = true;
+                                  Get.back();
+                                },
+                                color: MyColors.error,
+                              ),
+                            ),
+                            child: Icon(
+                              MyIcons.check,
+                              size: size.width.tenPercent,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      'Keep Working, You’ll place your Hand on the Target you have Eyes On.',
+                      style: Get.textTheme.bodyText2!
+                          .copyWith(color: MyColors.text[500]),
+                      softWrap: true,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BuildExitAlertDialog extends StatelessWidget {
+  _BuildExitAlertDialog({
+    Key? key,
+    required this.message,
+    required this.action,
+    this.title,
+  }) : super(key: key);
+
+  final String? title;
+  final String? message;
+  final Widget action;
+
+  final WorkingTimeController workingTimeController = Get.find();
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = Utils.size(context);
+    return AlertDialog(
+      elevation: Utils.elevation,
+      backgroundColor: Theme.of(context).cardTheme.color,
+      shape: RoundedRectangleBorder(borderRadius: Utils.smallRadius),
+      title: Text(title ?? 'Are you Sure?'),
+      content: Text(
+        message!,
+      ),
+      actionsPadding: EdgeInsets.symmetric(horizontal: size.width.twoPercent),
+      actions: [
+        action,
+        _BuildPopButton(
+          label: 'Keep Working',
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          color: MyColors.success,
+        ),
+      ],
+    );
+  }
+}
+
+class _BuildPopButton extends StatelessWidget {
+  const _BuildPopButton({
+    Key? key,
+    required this.label,
+    required this.onPressed,
+    this.color,
+  }) : super(key: key);
+
+  final String label;
+  final VoidCallback onPressed;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: ElevatedButton.styleFrom(onPrimary: color),
+      onPressed: onPressed,
+      child: Text(
+        label,
+        style: Get.textTheme.button!.copyWith(color: color),
+      ),
+    );
+  }
+}
