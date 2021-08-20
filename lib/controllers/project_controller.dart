@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_the_focus/controllers/controllers.dart';
+
 import '../modals/modals.dart';
 import '../constants/constants.dart';
 import 'package:get/get.dart';
@@ -51,6 +54,20 @@ class ProjectController extends GetxController {
   DateTime get targetDate => _targetDate.value;
 
   set targetDate(DateTime date) => _targetDate.value = date;
+
+  void createProject() {
+    final ProjectsClient projectsClient = Get.find();
+    Project project = Project(
+      projectName: projectName,
+      milestones: milestones,
+      startingDate: Timestamp.now(),
+      targetDate:
+          targetDate == DateTime.now() ? null : Timestamp.fromDate(targetDate),
+    );
+    projectsClient.projects.add(project);
+    projectsClient.projects.obs.refresh();
+    currentProject = project;
+  }
 
   // --------------------- Display Methods ---------------------
 

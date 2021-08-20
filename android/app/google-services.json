@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "886158223317-754qfd7fnlf04u50q8sj47rmf88mn1u2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.find_the_focus",
+            "certificate_hash": "fc630e3a9bc848be7bac4ef4633def43b17ba6ba"
+          }
+        },
+        {
           "client_id": "886158223317-i7pa735bauuvoi9nigdlmgn4t52bo375.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -37,6 +45,13 @@
             {
               "client_id": "886158223317-gicorbfmr4crsjpbi2iaovs800pbgdcf.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "886158223317-rvmul95rleeauapagk3lk9mnulmrkovg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.findTheFocus"
+              }
             }
           ]
         }

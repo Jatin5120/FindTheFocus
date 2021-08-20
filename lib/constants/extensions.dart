@@ -9,7 +9,9 @@ extension EmailValidator on String {
   }
 
   bool isValidName() {
-    return RegExp(r"^[\p{L} \.'\-]+$").hasMatch(this);
+    bool match = RegExp(r"^[A-Za-z]\\w{5, 29}$").hasMatch(this);
+    print("$this --> $match");
+    return match;
   }
 }
 

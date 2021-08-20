@@ -10,6 +10,7 @@ class CurrentProject extends StatelessWidget {
   CurrentProject({Key? key}) : super(key: key);
 
   final ProjectController projectController = Get.find();
+  final ProjectsClient projectsClient = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class CurrentProject extends StatelessWidget {
         alignment: Alignment.center,
         child: Obx(() {
           if (projectController.currentProject == null)
-            return ProjectDetailView(projects[0]);
+            return ProjectDetailView(projectsClient.projects[0]);
           return ProjectDetailView(projectController.currentProject!);
         }),
       ),

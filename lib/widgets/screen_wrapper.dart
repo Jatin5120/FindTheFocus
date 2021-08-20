@@ -1,7 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:find_the_focus/screens/projects/add_project.dart';
-import 'package:find_the_focus/services/services.dart';
-
 import '../screens/screens.dart';
 import '../widgets/widgets.dart';
 import '../constants/constants.dart';
@@ -18,7 +15,7 @@ class ScreenWrapper extends StatefulWidget {
 
 class _ScreenWrapperState extends State<ScreenWrapper> {
   final NavBarController navBarController = Get.find();
-  final ProjectsClient projectsClient = ProjectsClient();
+  final ProjectsClient projectsClient = Get.find();
 
   late Stream<QuerySnapshot<Map<String, dynamic>>> stream;
 
@@ -42,6 +39,12 @@ class _ScreenWrapperState extends State<ScreenWrapper> {
     AnalyticsScreen(),
     ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    projectsClient.get();
+  }
 
   @override
   Widget build(BuildContext context) {

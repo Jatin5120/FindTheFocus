@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../screens/screens.dart';
-import '../../services/services.dart';
 import '../../controllers/controllers.dart';
 import '../../constants/constants.dart';
 import '../../modals/modals.dart';
@@ -14,7 +13,7 @@ class AllProjects extends StatelessWidget {
 
   final AuthenticationController _authenticationController = Get.find();
   final ProjectController projectController = Get.find();
-  final ProjectsClient projectsClient = ProjectsClient();
+  final ProjectsClient projectsClient = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -35,15 +34,17 @@ class AllProjects extends StatelessWidget {
               if (snapshot.hasError) return Text('Something went wrong');
               if (snapshot.connectionState == ConnectionState.waiting)
                 return LoadingScreen('Fetching');
-
-              return ListView(
-                children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                  Map<String, dynamic> data =
-                      document.data()! as Map<String, dynamic>;
-                  print(data);
-                  final Project project = Project.fromMap(data);
+              return ListView.builder(
+                physics: BouncingScrollPhysics(),
+                itemCount: projectsClient.projects.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  Project? project;
+                  if (index == projectsClient.projects.length)
+                    project = null;
+                  else
+                    project = projectsClient.projects[index];
                   return ProjectCard(project);
-                }).toList(),
+                },
               );
             }),
       ),
@@ -54,46 +55,48 @@ class AllProjects extends StatelessWidget {
 class ProjectCard extends StatelessWidget {
   ProjectCard(this.project, {Key? key}) : super(key: key);
 
-  final Project project;
+  final Project? project;
   final ProjectController projectController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     final Size size = Utils.size(context);
-    return GestureDetector(
-      onTap: () {
-        projectController.currentProject = project;
-        projectController.selectedIndex = 0;
-        print(projectController.currentProject?.projectName);
-      },
-      child: Container(
-        child: AspectRatio(
-          aspectRatio: 3 / 2,
-          child: Container(
-            height: double.infinity,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: MyColors.background[100],
-              borderRadius: Utils.largeRadius,
-              boxShadow: Utils.mediumShadow,
+    return project == null
+        ? SizedBox(height: size.height.tenPercent)
+        : GestureDetector(
+            onTap: () {
+              projectController.currentProject = project;
+              projectController.selectedIndex = 0;
+              print(projectController.currentProject?.projectName);
+            },
+            child: Container(
+              child: AspectRatio(
+                aspectRatio: 3 / 2,
+                child: Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: MyColors.background[100],
+                    borderRadius: Utils.largeRadius,
+                    boxShadow: Utils.mediumShadow,
+                  ),
+                  margin: EdgeInsets.only(top: size.height * 0.06),
+                  padding: EdgeInsets.symmetric(
+                    vertical: size.height * 0.01,
+                    horizontal: size.width * 0.075,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _ProjectDetails(project!),
+                      _ProjectStats(project!),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            margin: EdgeInsets.only(top: size.height * 0.06),
-            padding: EdgeInsets.symmetric(
-              vertical: size.height * 0.01,
-              horizontal: size.width * 0.075,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _ProjectDetails(project),
-                _ProjectStats(project),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+          );
   }
 }
 

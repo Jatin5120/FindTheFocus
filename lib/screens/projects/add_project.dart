@@ -75,9 +75,10 @@ class AddProject extends StatelessWidget {
                               onPressed: () {
                                 final bool isValid =
                                     projectFormKey.currentState!.validate();
-                                if (!isValid) {
-                                  print("${'= ' * 20}\nNot validated");
-                                } else {}
+                                if (isValid) {
+                                  projectController.createProject();
+                                  Get.back();
+                                }
                               },
                               isCTA: true,
                               buttonSize: ButtonSize.large,
@@ -130,12 +131,9 @@ class ProjectNameField extends StatelessWidget {
           validator: (name) {
             if (name?.length == 0 || name == null)
               return "Project Name can't be Empty";
-            if (!name.isValidName()) return 'Enter a Valid Project Name';
+            // if (name.isValidName()) return 'Enter a Valid Project Name';
             projectController.projectName = name;
             return null;
-          },
-          onSaved: (value) {
-            // projectController.projectName = value!;
           },
           decoration: InputDecoration(
             prefixIcon: Icon(
@@ -204,26 +202,20 @@ class _MilestoneFieldState extends State<MilestoneField> {
                 keyboardAppearance: Brightness.dark,
                 style: Get.textTheme.subtitle1!.copyWith(color: MyColors.black),
                 validator: (value) {
-                  final String name = value ?? '';
-                  if (name.length == 0) return 'Enter Something';
-                  if (name.isValidName()) return null;
-                  return 'Enter a Valid Project';
-                },
-                onSaved: (value) {
-                  print('\n\nOn Saved --> $value\n');
-                  milestonesController.text = value!;
-                  // final String milestone = milestonesController.text;
-                  // print("\n\n${'=' * 20} \n$milestone");
-                  // if (milestone.isEmpty)
-                  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  //       content: Text('Enter something to Add to Milestones')));
-                  // else if (projectController.milestones.contains(milestone))
-                  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  //       content: Text('Enter something to Add to Milestones')));
-                  // else {
-                  //   projectController.milestones.add(milestone);
-                  //   milestonesController.text = '';
-                  // }
+                  final String? milestone = value;
+                  print("\n\n${'=' * 20} \n$milestone");
+                  if (milestone == null || milestone.isEmpty)
+                    return null;
+                  else if (milestonesContains(milestone)) {
+                    showSnackBar('$milestone is already present in Milestones');
+                    return 'Enter a different Value';
+                  } else {
+                    projectController.milestones.add(milestone);
+                    projectController.milestones.obs.refresh();
+                    showSnackBar("'$milestone' Added to milestones");
+                    milestonesController.text = '';
+                    return null;
+                  }
                 },
                 decoration: InputDecoration(
                   prefixIcon: Icon(
@@ -243,6 +235,7 @@ class _MilestoneFieldState extends State<MilestoneField> {
                   showSnackBar('$milestone is already present in Milestones');
                 else {
                   projectController.milestones.add(milestone);
+                  projectController.milestones.obs.refresh();
                   showSnackBar('$milestone Added');
                   milestonesController.text = '';
                 }
@@ -283,8 +276,7 @@ class _MilestoneFieldState extends State<MilestoneField> {
                       .copyWith(color: MyColors.subtitle),
                 ),
                 TextSpan(
-                  text:
-                      'to add Milestone. Milestones field should be empty before Creating Project',
+                  text: 'to add Milestone.',
                 ),
               ],
             ),
@@ -303,7 +295,7 @@ class TargetDatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = Utils.size(context);
-    final double padding = size.width * 0.03;
+    final double padding = size.width.twoPercent;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -322,7 +314,10 @@ class TargetDatePicker extends StatelessWidget {
               color: MyColors.background[300],
               borderRadius: Utils.smallRadius,
             ),
-            padding: EdgeInsets.all(padding),
+            padding: EdgeInsets.symmetric(
+              horizontal: size.width.fivePercent,
+              vertical: size.height.onePercent,
+            ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -359,7 +354,7 @@ class MileStoneList extends StatelessWidget {
             : Column(
                 children: [
                   Text(
-                    'Milestones Added',
+                    'Added Milestones',
                     style: Get.textTheme.bodyText1,
                   ),
                   GetX<ProjectController>(

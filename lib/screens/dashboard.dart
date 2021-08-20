@@ -16,6 +16,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final NavBarController navBarController = Get.find();
   final ProjectController projectController = Get.find();
+  final ProjectsClient projectsClient = Get.find();
 
   @override
   void initState() {
@@ -82,7 +83,7 @@ class _DashboardState extends State<Dashboard> {
                               Obx(() {
                                 final Project project =
                                     projectController.currentProject ??
-                                        projects[0];
+                                        projectsClient.projects[0];
                                 return Text(
                                   project.projectName!,
                                   style: Get.textTheme.bodyText1,
@@ -99,7 +100,7 @@ class _DashboardState extends State<Dashboard> {
                               Obx(() {
                                 final Project project =
                                     projectController.currentProject ??
-                                        projects[0];
+                                        projectsClient.projects[0];
                                 return Text(
                                   project.projectName!,
                                   style: Get.textTheme.headline6,
