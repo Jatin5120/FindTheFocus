@@ -34,18 +34,20 @@ class AllProjects extends StatelessWidget {
               if (snapshot.hasError) return Text('Something went wrong');
               if (snapshot.connectionState == ConnectionState.waiting)
                 return LoadingScreen('Fetching');
-              return ListView.builder(
-                physics: BouncingScrollPhysics(),
-                itemCount: projectsClient.projects.length + 1,
-                itemBuilder: (BuildContext context, int index) {
-                  Project? project;
-                  if (index == projectsClient.projects.length)
-                    project = null;
-                  else
-                    project = projectsClient.projects[index];
-                  return ProjectCard(project);
-                },
-              );
+              return projectsClient.projects.length == 0
+                  ? NoProjects()
+                  : ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: projectsClient.projects.length + 1,
+                      itemBuilder: (BuildContext context, int index) {
+                        Project? project;
+                        if (index == projectsClient.projects.length)
+                          project = null;
+                        else
+                          project = projectsClient.projects[index];
+                        return ProjectCard(project);
+                      },
+                    );
             }),
       ),
     );

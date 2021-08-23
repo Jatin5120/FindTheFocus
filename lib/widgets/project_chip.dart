@@ -25,7 +25,7 @@ class ProjectChip extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: Utils.chipRadius,
               color: projectController.selectedIndex == index
-                  ? MyColors.secondary
+                  ? MyColors.white
                   : Colors.transparent,
             ),
             alignment: Alignment.center,

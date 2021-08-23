@@ -63,11 +63,6 @@ class ProjectsClient extends GetxController {
       });
       projects = projectList.reversed.toList();
     });
-    // Stream<QuerySnapshot<Map<String, dynamic>>> snapShot = _projectCollection
-    //     .doc(_authenticationController.googleAccount!.id)
-    //     .collection(MyCollections.all_projects)
-    //     .snapshots();
-    // print(snapShot);
   }
 
   void post() {

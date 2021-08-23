@@ -27,9 +27,11 @@ class CurrentProject extends StatelessWidget {
         color: MyColors.background[500],
         alignment: Alignment.center,
         child: Obx(() {
-          if (projectController.currentProject == null)
-            return ProjectDetailView(projectsClient.projects[0]);
-          return ProjectDetailView(projectController.currentProject!);
+          return projectController.currentProject == null
+              ? projectsClient.projects.isEmpty
+                  ? NoProjects()
+                  : ProjectDetailView(projectsClient.projects[0])
+              : ProjectDetailView(projectController.currentProject!);
         }),
       ),
     );

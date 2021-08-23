@@ -67,47 +67,54 @@ class _DashboardState extends State<Dashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _BuildQuickCard(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              SizedBox.shrink(),
-                              Text(
-                                'Recent work',
-                                style: Get.textTheme.caption,
-                              ),
-                              SizedBox.shrink(),
-                              Text(
-                                '2.3 Hr',
-                                style: Get.textTheme.headline4,
-                              ),
-                              Obx(() {
-                                final Project project =
-                                    projectController.currentProject ??
-                                        projectsClient.projects[0];
-                                return Text(
-                                  project.projectName!,
-                                  style: Get.textTheme.bodyText1,
-                                );
-                              }),
-                              SizedBox.shrink(),
-                            ],
-                          ),
+                          child: projectController.currentProject == null &&
+                                  projectsClient.projects.isEmpty
+                              ? _NoProjectsCard()
+                              : Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    SizedBox.shrink(),
+                                    Text(
+                                      'Recent work',
+                                      style: Get.textTheme.caption,
+                                    ),
+                                    SizedBox.shrink(),
+                                    Text(
+                                      '2.3 Hr',
+                                      style: Get.textTheme.headline4,
+                                    ),
+                                    Obx(() {
+                                      final Project project =
+                                          projectController.currentProject ??
+                                              projectsClient.projects[0];
+                                      return Text(
+                                        project.projectName ?? '',
+                                        style: Get.textTheme.bodyText1,
+                                      );
+                                    }),
+                                    SizedBox.shrink(),
+                                  ],
+                                ),
                         ),
                         _BuildQuickCard(
-                          child: Column(
-                            children: [
-                              Text('All stats'),
-                              Obx(() {
-                                final Project project =
-                                    projectController.currentProject ??
-                                        projectsClient.projects[0];
-                                return Text(
-                                  project.projectName!,
-                                  style: Get.textTheme.headline6,
-                                );
-                              }),
-                            ],
-                          ),
+                          child: projectController.currentProject == null &&
+                                  projectsClient.projects.isEmpty
+                              ? _NoProjectsCard()
+                              : Column(
+                                  children: [
+                                    Text('All stats'),
+                                    Obx(() {
+                                      final Project project =
+                                          projectController.currentProject ??
+                                              projectsClient.projects[0];
+                                      return Text(
+                                        project.projectName ?? '',
+                                        style: Get.textTheme.headline6,
+                                      );
+                                    }),
+                                  ],
+                                ),
                         ),
                       ],
                     ),
@@ -140,6 +147,23 @@ class _DashboardState extends State<Dashboard> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _NoProjectsCard extends StatelessWidget {
+  const _NoProjectsCard({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        "You have worked on anything",
+        style: Get.textTheme.subtitle1,
+        textAlign: TextAlign.center,
       ),
     );
   }
