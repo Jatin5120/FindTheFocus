@@ -67,6 +67,7 @@ class ProjectController extends GetxController {
     projectsClient.projects.add(project);
     projectsClient.projects.obs.refresh();
     currentProject = project;
+    projectsClient.post();
   }
 
   // --------------------- Display Methods ---------------------

@@ -61,7 +61,7 @@ class ProjectsClient extends GetxController {
         print(project);
         projectList.add(project);
       });
-      projects = projectList;
+      projects = projectList.reversed.toList();
     });
     // Stream<QuerySnapshot<Map<String, dynamic>>> snapShot = _projectCollection
     //     .doc(_authenticationController.googleAccount!.id)
@@ -71,11 +71,11 @@ class ProjectsClient extends GetxController {
   }
 
   void post() {
-    for (int i = 0; i < projects.length; i++)
-      _allProjectsCollection
-          .doc('$i')
-          .set(projects[i].toMap())
-          .then((value) => print("Project Added"))
-          .catchError((error) => print("Failed to add: $error"));
+    print('Project to add -> ${projects.last}');
+    _allProjectsCollection
+        .doc('${projects.length - 1}')
+        .set(projects.last.toMap())
+        .then((value) => print('${projects.last.projectName} Added'))
+        .catchError((error) => print("Failed to add: $error"));
   }
 }

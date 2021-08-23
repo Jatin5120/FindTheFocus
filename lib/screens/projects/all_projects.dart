@@ -121,7 +121,6 @@ class _ProjectDetails extends StatelessWidget {
         if (project.startingDate != null)
           Text(
             'Starting date:  ${project.startingDate!.displayDateMonth()}',
-            // 'Starting date:  ${project.startingDate!.displayDateMonth()}',
             style: Get.textTheme.caption!.copyWith(color: MyColors.text[700]),
           ),
         Text(

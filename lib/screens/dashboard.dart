@@ -256,6 +256,8 @@ class _DashboardHeader extends StatelessWidget {
             style: Get.textTheme.headline5!
                 .copyWith(color: MyColors.black, fontWeight: FontWeight.w700),
           ),
+
+          /// TODO: Remove Email from Dashboard
           Text(
             user?.email ?? '',
             style: Get.textTheme.subtitle2!.copyWith(color: MyColors.text[900]),
