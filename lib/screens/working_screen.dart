@@ -16,22 +16,52 @@ class WorkingProjectScreen extends StatefulWidget {
   _WorkingProjectScreenState createState() => _WorkingProjectScreenState();
 }
 
-class _WorkingProjectScreenState extends State<WorkingProjectScreen> {
+class _WorkingProjectScreenState extends State<WorkingProjectScreen>
+    with WidgetsBindingObserver {
   final WorkingTimeController workingTimeController = Get.find();
+  late Timer timer;
 
   void startTimer() {
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (workingTimeController.isCompleted) {
         timer.cancel();
       } else {
-        workingTimeController.updateTime();
+        if (workingTimeController.activeTimer) {
+          workingTimeController.updateTime();
+          print(workingTimeController.workingTime.toString());
+        }
       }
     });
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    switch (state) {
+      case AppLifecycleState.resumed:
+        print("Resumed");
+        workingTimeController.activeTimer = true;
+        break;
+      case AppLifecycleState.inactive:
+        print("Inactive");
+        workingTimeController.appMinimized();
+        break;
+      case AppLifecycleState.detached:
+        print("Detached");
+        break;
+      case AppLifecycleState.paused:
+        print("Paused");
+        workingTimeController.appMinimized();
+
+        break;
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
     SystemChrome.setEnabledSystemUIOverlays([]);
     workingTimeController.isCompleted = true;
     workingTimeController.totalTime = Duration(minutes: 15);
@@ -41,7 +71,9 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen> {
 
   @override
   void dispose() {
+    timer.cancel();
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 

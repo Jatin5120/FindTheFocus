@@ -11,7 +11,7 @@ class Project {
 
   ///This is [List] of Milestones which one can add, this will make the work statistics
   ///more organised and clear to understand the time spent while working.
-  List<String?>? milestones;
+  List<Milestone?>? milestones;
 
   ///The starting date will be added automatically when the user adds the project
   Timestamp? startingDate;
@@ -43,14 +43,14 @@ class Project {
     if (milestones != null) {
       completedMilestones = List.generate(milestones!.length, (index) => 0);
     } else {
-      completedMilestones = [];
+      completedMilestones = null;
     }
     workingTime = [];
   }
 
   Project copyWith({
     String? projectName,
-    List<String?>? milestones,
+    List<Milestone?>? milestones,
     Timestamp? startingDate,
     Timestamp? targetDate,
     List<WorkingModal>? workingTime,
@@ -71,7 +71,7 @@ class Project {
   Map<String, dynamic> toMap() {
     return {
       'projectName': projectName,
-      'milestones': milestones?.toList(),
+      'milestones': milestones?.map((milestone) => milestone!.toMap()).toList(),
       'startingDate': startingDate,
       'targetDate': targetDate,
       'workingTime': workingTime?.map((element) => element.toMap()).toList(),
@@ -83,7 +83,8 @@ class Project {
   factory Project.fromMap(Map<String, dynamic> map) {
     return Project(
       projectName: map['projectName'],
-      milestones: List<String?>.from(map['milestones']),
+      milestones: List<Milestone?>.from(
+          map['milestones'].map((milestone) => Milestone.fromMap(milestone))),
       startingDate: map['startingDate'],
       targetDate: map['targetDate'],
       workingTime: List<WorkingModal>.from(map['workingTime']),

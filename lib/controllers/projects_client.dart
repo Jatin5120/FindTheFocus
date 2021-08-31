@@ -10,35 +10,7 @@ class ProjectsClient extends GetxController {
       FirebaseFirestore.instance.collection(MyCollections.projects);
   late CollectionReference _allProjectsCollection;
 
-  RxList<Project> _projects = [
-    Project(
-      projectName: 'FindTheFocus',
-      milestones: [
-        'Logo designing',
-        'Design System',
-        'UI Design',
-        'Prototyping',
-        'Front-end',
-        'Back-end',
-        'Testing',
-      ],
-      startingDate: Timestamp.fromDate(DateTime(2021, DateTime.july, 1)),
-      targetDate: Timestamp.fromDate(DateTime(2021, DateTime.august, 28)),
-    ),
-    Project(
-      projectName: 'College App',
-      milestones: [
-        'Design System',
-        'UI Design',
-        'Prototyping',
-        'Front-end',
-        'Back-end',
-        'Testing',
-      ],
-      startingDate: Timestamp.fromDate(DateTime(2021, DateTime.march, 1)),
-      targetDate: Timestamp.fromDate(DateTime(2021, DateTime.june, 18)),
-    ),
-  ].obs;
+  RxList<Project> _projects = <Project>[].obs;
 
   ProjectsClient() {
     _allProjectsCollection = _projectCollection

@@ -77,7 +77,7 @@ class ProjectDetailView extends StatelessWidget {
               itemCount: project.milestones?.length ?? 0,
               itemBuilder: (_, index) {
                 return _MileStoneSection(
-                  milestone: project.milestones![index]!,
+                  milestone: project.milestones![index]!.milestoneName!,
                   time: 'Time $index',
                 );
               }),

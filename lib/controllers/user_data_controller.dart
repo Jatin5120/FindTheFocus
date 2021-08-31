@@ -1,7 +1,5 @@
 import 'package:find_the_focus/modals/modals.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'controllers.dart';
 
 class UserDataController extends GetxController {
 //   UserDataController() {

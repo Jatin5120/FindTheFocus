@@ -1,3 +1,5 @@
+import 'dart:math';
+import '../../modals/modals.dart';
 import '../../controllers/controllers.dart';
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
@@ -169,8 +171,8 @@ class _MilestoneFieldState extends State<MilestoneField> {
 
   bool milestonesContains(String value) {
     final List<bool> matchValues = [];
-    projectController.milestones.forEach((milestone) =>
-        matchValues.add(milestone.toLowerCase() == value.toLowerCase()));
+    projectController.milestones.forEach((milestone) => matchValues
+        .add(milestone.milestoneName!.toLowerCase() == value.toLowerCase()));
     return matchValues.contains(true);
   }
 
@@ -182,6 +184,10 @@ class _MilestoneFieldState extends State<MilestoneField> {
           )
         : Text(message);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: content));
+  }
+
+  int getColorIndex() {
+    return Random().nextInt(MyColors.graphColors.length);
   }
 
   @override
@@ -202,17 +208,23 @@ class _MilestoneFieldState extends State<MilestoneField> {
                 keyboardAppearance: Brightness.dark,
                 style: Get.textTheme.subtitle1!.copyWith(color: MyColors.black),
                 validator: (value) {
-                  final String? milestone = value;
-                  print("\n\n${'=' * 20} \n$milestone");
-                  if (milestone == null || milestone.isEmpty)
+                  final String? milestoneName = value;
+                  print("\n\n${'=' * 20} \n$milestoneName");
+                  if (milestoneName == null || milestoneName.isEmpty)
                     return null;
-                  else if (milestonesContains(milestone)) {
-                    showSnackBar('$milestone is already present in Milestones');
+                  else if (milestonesContains(milestoneName)) {
+                    showSnackBar(
+                        '$milestoneName is already present in Milestones');
                     return 'Enter a different Value';
                   } else {
+                    final Milestone milestone = Milestone(
+                      milestoneName: milestoneName,
+                      uniqueIndex: projectController.milestones.length,
+                      colorIndex: getColorIndex(),
+                    );
                     projectController.milestones.add(milestone);
                     projectController.milestones.obs.refresh();
-                    showSnackBar("'$milestone' Added to milestones");
+                    showSnackBar("'$milestoneName' Added to milestones");
                     milestonesController.text = '';
                     return null;
                   }
@@ -227,16 +239,22 @@ class _MilestoneFieldState extends State<MilestoneField> {
             ),
             GestureDetector(
               onTap: () {
-                final String milestone = milestonesController.text;
-                print("\n\n${'=' * 20} \n$milestone");
-                if (milestone.isEmpty)
+                final String milestoneName = milestonesController.text;
+                print("\n\n${'=' * 20} \n$milestoneName");
+                if (milestoneName.isEmpty)
                   showSnackBar('Enter a milestone to add.');
-                else if (milestonesContains(milestone))
-                  showSnackBar('$milestone is already present in Milestones');
+                else if (milestonesContains(milestoneName))
+                  showSnackBar(
+                      '$milestoneName is already present in Milestones');
                 else {
+                  final Milestone milestone = Milestone(
+                    milestoneName: milestoneName,
+                    uniqueIndex: projectController.milestones.length,
+                    colorIndex: getColorIndex(),
+                  );
                   projectController.milestones.add(milestone);
                   projectController.milestones.obs.refresh();
-                  showSnackBar('$milestone Added');
+                  showSnackBar('$milestoneName Added');
                   milestonesController.text = '';
                 }
               },
@@ -367,7 +385,7 @@ class MileStoneList extends StatelessWidget {
                               ScrollViewKeyboardDismissBehavior.onDrag,
                           itemBuilder: (BuildContext context, int index) {
                             final String milestone =
-                                controller.milestones[index];
+                                controller.milestones[index].milestoneName!;
                             return Text(
                               '• $milestone',
                               style: Get.textTheme.subtitle1,

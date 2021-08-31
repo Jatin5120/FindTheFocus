@@ -1,3 +1,5 @@
+import 'package:find_the_focus/services/services.dart';
+
 import '../constants/constants.dart';
 import '../controllers/controllers.dart';
 import '../widgets/widgets.dart';
@@ -9,6 +11,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   initializeControllers();
+  await NotificationService().initializeNotification();
   runApp(MyApp());
 }
 

@@ -280,12 +280,6 @@ class _DashboardHeader extends StatelessWidget {
             style: Get.textTheme.headline5!
                 .copyWith(color: MyColors.black, fontWeight: FontWeight.w700),
           ),
-
-          /// TODO: Remove Email from Dashboard
-          Text(
-            user?.email ?? '',
-            style: Get.textTheme.subtitle2!.copyWith(color: MyColors.text[900]),
-          ),
           SizedBox(height: size.height.onePercent),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: size.width.fivePercent),
@@ -364,29 +358,3 @@ class _UserStatsElement extends StatelessWidget {
     );
   }
 }
-
-/*
-
-GestureDetector(
-  onTap: () {
-    navBarController.selectedIndex = 1;
-  },
-  child: Card(
-    shape: RoundedRectangleBorder(borderRadius: Utils.mediumRadius),
-    margin: EdgeInsets.symmetric(
-      horizontal: padding,
-      vertical: padding,
-    ),
-    child: Container(
-      height: size.height * 0.2,
-      width: size.height * 0.2,
-      alignment: Alignment.center,
-      child: Text(
-        'Projects',
-        style: Get.textTheme.headline4,
-      ),
-    ),
-  ),
-),
-
-*/

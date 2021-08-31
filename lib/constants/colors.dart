@@ -87,15 +87,26 @@ class MyColors {
   ];
 
   static const List<Color> graphColors = [
+    Color(0xFF218B82),
+    Color(0xFF3CB44B),
     Color(0xFF4382BB),
-    Color(0xFFDB93A5),
     Color(0xFF5B6D5B),
-    Color(0xFFF27348),
-    Color(0xFFBEAEE2),
-    Color(0xFF2DB4AF),
-    Color(0xFFEF4349),
-    Color(0xFFF7CE76),
+    Color(0xFF800000),
+    Color(0xFF808000),
+    Color(0xFF911EB4),
     Color(0xFF98D4BB),
+    Color(0xFF9A6324),
+    Color(0xFFAAFFC3),
+    Color(0xFFBEAEE2),
     Color(0xFFD29F8C),
+    Color(0xFFDB93A5),
+    Color(0xFFE6194B),
+    Color(0xFFEF4349),
+    Color(0xFFF032E6),
+    Color(0xFFF27348),
+    Color(0xFFF58231),
+    Color(0xFFF7CE76),
+    Color(0xFFFFD8B1),
+    Color(0xFFFFE119),
   ];
 }

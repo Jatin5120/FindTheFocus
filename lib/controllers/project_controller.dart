@@ -9,7 +9,7 @@ class ProjectController extends GetxController {
   RxInt _selectedIndex = 0.obs;
   Rx<Project?> _currentProject = Rx<Project?>(null);
   RxString _projectName = ''.obs;
-  Rx<List<String>> _milestones = Rx<List<String>>([]);
+  Rx<List<Milestone>> _milestones = Rx<List<Milestone>>([]);
   Rx<DateTime> _targetDate = DateTime.now().obs;
 
   // --------------------- Project Navigations Methods ---------------------
@@ -46,9 +46,9 @@ class ProjectController extends GetxController {
 
   set projectName(String name) => _projectName.value = name;
 
-  List<String> get milestones => _milestones.value;
+  List<Milestone> get milestones => _milestones.value;
 
-  set milestones(List<String> milestoneList) =>
+  set milestones(List<Milestone> milestoneList) =>
       _milestones.value = milestoneList;
 
   DateTime get targetDate => _targetDate.value;
