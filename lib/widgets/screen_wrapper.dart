@@ -58,6 +58,8 @@ class _ScreenWrapperState extends State<ScreenWrapper> {
             padding: EdgeInsets.symmetric(
               horizontal: isDashboard ? 0 : size.width * 0.05,
             ),
+
+            /// Here goes the logic to navigate for questionss
             child: _screens[navBarController.selectedIndex],
           );
         },

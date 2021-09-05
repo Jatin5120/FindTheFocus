@@ -20,6 +20,7 @@ void initializeControllers() async {
   Get.put(NavBarController());
   Get.put(ProjectController());
   Get.put(WorkingTimeController());
+  Get.put(QuestionsController());
 }
 
 class MyApp extends StatelessWidget {

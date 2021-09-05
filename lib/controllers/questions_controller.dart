@@ -1,7 +1,8 @@
 import 'package:find_the_focus/modals/modals.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-final List<QuestionModal> questions = [
+final List<QuestionModal> _questions = [
   QuestionModal(
     question:
         "Do you get distracted easily (e.g. by background noise, other people's conversations, etc.)?",
@@ -69,4 +70,25 @@ final List<QuestionModal> questions = [
   ),
 ];
 
-class QuestionsController extends GetxController {}
+class QuestionsController extends GetxController {
+  List<QuestionModal> questions = _questions;
+  RxBool _isFirstLogin = true.obs;
+  late SharedPreferences prefs;
+  static const _isFirstLoginKey = 'isFirstLogin';
+
+  Future<bool> checkFirstLogin() async {
+    prefs = await SharedPreferences.getInstance();
+    isFirstLogin = prefs.getBool(_isFirstLoginKey) ?? false;
+    return _isFirstLogin.value;
+  }
+
+  Future<void> setFirstLogin() async {
+    prefs = await SharedPreferences.getInstance();
+    isFirstLogin = false;
+    prefs.setBool(_isFirstLoginKey, isFirstLogin);
+  }
+
+  bool get isFirstLogin => _isFirstLogin.value;
+
+  set isFirstLogin(bool value) => _isFirstLogin.value = value;
+}
