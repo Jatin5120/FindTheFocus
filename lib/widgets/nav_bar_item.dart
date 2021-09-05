@@ -30,16 +30,16 @@ class NavBarItem extends StatelessWidget {
           width: size.width * 0.25,
           decoration: BoxDecoration(
             color: Colors.transparent,
-            // color: isSelected ? MyColors.background[300] : Colors.transparent,
+            // color: isSelected ? background[300] : Colors.transparent,
             // border: Border(
             //   top: isSelected
             //       ? BorderSide(
-            //           color: MyColors.white,
-            //           width: Utils.largeBorderWidth,
+            //           color: white,
+            //           width: largeBorderWidth,
             //         )
             //       : BorderSide(
-            //           color: MyColors.background[100]!,
-            //           width: Utils.largeBorderWidth,
+            //           color: background[100]!,
+            //           width: largeBorderWidth,
             //         ),
             // ),
           ),
@@ -53,9 +53,9 @@ class NavBarItem extends StatelessWidget {
                 height: size.height * 0.004,
                 width: isSelected ? size.width * 0.075 : 0,
                 decoration: BoxDecoration(
-                  borderRadius: Utils.smallRadius,
-                  color: MyColors.white,
-                  // color: isSelected ? MyColors.white : Colors.transparent,
+                  borderRadius: kSmallRadius,
+                  color: kWhiteColor,
+                  // color: isSelected ? white : Colors.transparent,
                 ),
               ),
               SizedBox(
@@ -63,7 +63,7 @@ class NavBarItem extends StatelessWidget {
               ),
               Icon(
                 icon,
-                color: isSelected ? MyColors.white : MyColors.disabled,
+                color: isSelected ? kWhiteColor : kDisabledColor,
               ),
             ],
           ),

@@ -59,6 +59,7 @@ class ProjectCard extends StatelessWidget {
 
   final Project? project;
   final ProjectController projectController = Get.find();
+  final ProjectsClient projectsClient = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +70,8 @@ class ProjectCard extends StatelessWidget {
             onTap: () {
               projectController.currentProject = project;
               projectController.selectedIndex = 0;
+              projectController.currentProjectIndex =
+                  projectsClient.projects.indexOf(project!);
               print(projectController.currentProject?.projectName);
             },
             child: Container(
@@ -78,8 +81,8 @@ class ProjectCard extends StatelessWidget {
                   height: double.infinity,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: MyColors.background[100],
-                    borderRadius: Utils.largeRadius,
+                    color: kBackgroundColor[100],
+                    borderRadius: kLargeRadius,
                     boxShadow: Utils.mediumShadow,
                   ),
                   margin: EdgeInsets.only(top: size.height * 0.06),
@@ -123,18 +126,18 @@ class _ProjectDetails extends StatelessWidget {
         if (project.startingDate != null)
           Text(
             'Starting date:  ${project.startingDate!.displayDateMonth()}',
-            style: Get.textTheme.caption!.copyWith(color: MyColors.text[700]),
+            style: Get.textTheme.caption!.copyWith(color: kTextColor[700]),
           ),
         Text(
           'Target date:  ${project.targetDate!.displayDateMonth()}',
           // 'Target date:  ${project.targetDate!.displayDateMonth()}',
-          style: Get.textTheme.subtitle2!.copyWith(color: MyColors.text[500]),
+          style: Get.textTheme.subtitle2!.copyWith(color: kTextColor[500]),
         ),
         MyButton.outlined(
           label: 'Start',
           onPressed: () {},
           icon: MyIcons.play,
-          backgroundColor: MyColors.success,
+          backgroundColor: kSuccessColor,
           buttonSize: ButtonSize.small,
         )
       ],
@@ -174,10 +177,10 @@ class __ProjectStatsState extends State<_ProjectStats> {
   Widget build(BuildContext context) {
     final Size size = Utils.size(context);
     final double side = size.width * 0.2;
-    final int backIndex = Random().nextInt(MyColors.graphColors.length);
-    int foreIndex = Random().nextInt(MyColors.graphColors.length);
+    final int backIndex = Random().nextInt(kGraphColors.length);
+    int foreIndex = Random().nextInt(kGraphColors.length);
     while (backIndex == foreIndex) {
-      foreIndex = Random().nextInt(MyColors.graphColors.length);
+      foreIndex = Random().nextInt(kGraphColors.length);
     }
     final double progress = Random().nextDouble();
 
@@ -192,12 +195,12 @@ class __ProjectStatsState extends State<_ProjectStats> {
               ? Text(
                   'No record',
                   style: Get.textTheme.bodyText2!.copyWith(
-                    color: MyColors.text[500],
+                    color: kTextColor[500],
                   ),
                 )
               : CircularProgressIndicator(
-                  backgroundColor: MyColors.graphColors[backIndex],
-                  color: MyColors.graphColors[foreIndex],
+                  backgroundColor: kGraphColors[backIndex],
+                  color: kGraphColors[foreIndex],
                   strokeWidth: side * 0.2,
                   value: progress,
                 ),

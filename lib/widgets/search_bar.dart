@@ -10,19 +10,19 @@ class SearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    final Size size = Utils.size(context);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: size.height * 0.025),
       child: Material(
         elevation: 10,
-        color: MyColors.background[100],
-        borderRadius: Utils.largeRadius,
+        color: kBackgroundColor[100],
+        borderRadius: kLargeRadius,
         child: ClipRRect(
-          borderRadius: Utils.largeRadius,
+          borderRadius: kLargeRadius,
           child: Container(
             height: size.height * 0.06,
             padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
-            color: MyColors.background[100],
+            color: kBackgroundColor[100],
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

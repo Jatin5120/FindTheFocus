@@ -14,6 +14,7 @@ class CurrentProject extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(projectController.currentProject);
     final Size size = Utils.size(context);
     return GestureDetector(
       onPanUpdate: (details) {
@@ -24,13 +25,13 @@ class CurrentProject extends StatelessWidget {
           horizontal: size.width * 0.05,
           vertical: size.height * 0.03,
         ),
-        color: MyColors.background[500],
+        color: kBackgroundColor[500],
         alignment: Alignment.center,
         child: Obx(() {
           return projectController.currentProject == null
               ? projectsClient.projects.isEmpty
                   ? NoProjects()
-                  : ProjectDetailView(projectsClient.projects[0])
+                  : ProjectDetailView(projectsClient.projects.first)
               : ProjectDetailView(projectController.currentProject!);
         }),
       ),
@@ -56,8 +57,8 @@ class ProjectDetailView extends StatelessWidget {
           aspectRatio: 4 / 3,
           child: Container(
             decoration: BoxDecoration(
-              color: MyColors.background[300],
-              borderRadius: Utils.largeRadius,
+              color: kBackgroundColor[300],
+              borderRadius: kLargeRadius,
               boxShadow: Utils.largeShadow,
             ),
             margin: EdgeInsets.symmetric(vertical: size.height * 0.05),
@@ -89,7 +90,7 @@ class ProjectDetailView extends StatelessWidget {
             onPressed: () =>
                 Get.to(() => WorkingProjectScreen(project: project)),
             icon: MyIcons.play,
-            backgroundColor: MyColors.success,
+            backgroundColor: kSuccessColor,
             buttonSize: ButtonSize.large,
           ),
         )

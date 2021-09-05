@@ -60,3 +60,11 @@ extension TimestampParser on Timestamp {
 
   String displayDateMonth() => this.toDate().displayDateMonth();
 }
+
+extension ListItemSum on List<int> {
+  int get sum {
+    int total = 0;
+    this.map((value) => total += value);
+    return total;
+  }
+}

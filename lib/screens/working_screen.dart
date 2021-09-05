@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import '../controllers/controllers.dart';
 import '../constants/constants.dart';
@@ -22,6 +23,7 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
   late Timer timer;
 
   void startTimer() {
+    workingTimeController.startingTime = Timestamp.now();
     timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (workingTimeController.isCompleted) {
         timer.cancel();
@@ -64,7 +66,7 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
     WidgetsBinding.instance!.addObserver(this);
     SystemChrome.setEnabledSystemUIOverlays([]);
     workingTimeController.isCompleted = true;
-    workingTimeController.totalTime = Duration(minutes: 15);
+    workingTimeController.totalTime = Duration(minutes: 1);
     workingTimeController.resetTime();
     startTimer();
   }
@@ -99,7 +101,7 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
               workingTimeController.isCompleted = true;
               Get.back();
             },
-            color: MyColors.error,
+            color: kErrorColor,
           ),
         );
         return false;
@@ -130,8 +132,8 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
                         radius: size.width.seventyFivePercent,
                         lineWidth: size.width.fivePercent,
                         backgroundWidth: size.width.onePercent,
-                        progressColor: MyColors.warning,
-                        backgroundColor: MyColors.background[700]!,
+                        progressColor: kWarningColor,
+                        backgroundColor: kBackgroundColor[700]!,
                         circularStrokeCap: CircularStrokeCap.round,
                         animation: true,
                         animateFromLastPercent: true,
@@ -142,7 +144,7 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
                         center: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: MyColors.accent,
+                            color: kAccentColor,
                           ),
                           padding: EdgeInsets.all(size.width.fivePercent),
                           child: InkWell(
@@ -156,7 +158,7 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
                                   workingTimeController.isCompleted = true;
                                   Get.back();
                                 },
-                                color: MyColors.error,
+                                color: kErrorColor,
                               ),
                             ),
                             child: Icon(
@@ -175,7 +177,7 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
                     child: Text(
                       'Keep Working, You’ll place your Hand on the Target you have Eyes On.',
                       style: Get.textTheme.bodyText2!
-                          .copyWith(color: MyColors.text[500]),
+                          .copyWith(color: kTextColor[500]),
                       softWrap: true,
                       textAlign: TextAlign.center,
                     ),
@@ -208,9 +210,9 @@ class _BuildExitAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = Utils.size(context);
     return AlertDialog(
-      elevation: Utils.elevation,
+      elevation: kElevation,
       backgroundColor: Theme.of(context).cardTheme.color,
-      shape: RoundedRectangleBorder(borderRadius: Utils.smallRadius),
+      shape: RoundedRectangleBorder(borderRadius: kSmallRadius),
       title: Text(title ?? 'Are you Sure?'),
       content: Text(
         message!,
@@ -223,7 +225,7 @@ class _BuildExitAlertDialog extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          color: MyColors.success,
+          color: kSuccessColor,
         ),
       ],
     );

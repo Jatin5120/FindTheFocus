@@ -23,7 +23,7 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: MyColors.secondary,
+        statusBarColor: kSecondaryColor,
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.dark,
       ),
@@ -34,7 +34,7 @@ class _DashboardState extends State<Dashboard> {
   void dispose() {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: MyColors.background,
+        statusBarColor: kBackgroundColor,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.light,
       ),
@@ -125,8 +125,8 @@ class _DashboardState extends State<Dashboard> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          borderRadius: Utils.cardRadius,
-                          color: MyColors.background[100],
+                          borderRadius: kCardRadius,
+                          color: kBackgroundColor[100],
                         ),
                         height: size.height.twentyPercent,
                         width: size.width.fortyPercent,
@@ -206,7 +206,7 @@ class _BuildQuickCard extends StatelessWidget {
     final Size size = Utils.size(context);
     return Container(
       decoration: BoxDecoration(
-          color: MyColors.background[100], borderRadius: Utils.cardRadius),
+          color: kBackgroundColor[100], borderRadius: kCardRadius),
       height: size.height.fifteenPercent,
       width: size.width.fortyPercent,
       padding: EdgeInsets.symmetric(
@@ -232,7 +232,7 @@ class _DashboardHeader extends StatelessWidget {
     final GoogleSignInAccount? user = authenticationController.googleAccount;
     return Container(
       decoration: BoxDecoration(
-        color: MyColors.secondary,
+        color: kSecondaryColor,
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(40),
         ),
@@ -253,10 +253,10 @@ class _DashboardHeader extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: null,
-                  child: Icon(MyIcons.setting, color: MyColors.secondary),
+                  child: Icon(MyIcons.setting, color: kSecondaryColor),
                 ),
                 ClipRRect(
-                  borderRadius: Utils.chipRadius,
+                  borderRadius: kChipRadius,
                   child: Image.network(
                     user?.photoUrl ?? '',
                     fit: BoxFit.cover,
@@ -269,7 +269,7 @@ class _DashboardHeader extends StatelessWidget {
                   onTap: () {
                     print("Setting");
                   },
-                  child: Icon(MyIcons.setting, color: MyColors.black),
+                  child: Icon(MyIcons.setting, color: kBlackColor),
                 ),
               ],
             ),
@@ -278,7 +278,7 @@ class _DashboardHeader extends StatelessWidget {
           Text(
             user?.displayName ?? 'User',
             style: Get.textTheme.headline5!
-                .copyWith(color: MyColors.black, fontWeight: FontWeight.w700),
+                .copyWith(color: kBlackColor, fontWeight: FontWeight.w700),
           ),
           SizedBox(height: size.height.onePercent),
           Padding(
@@ -313,7 +313,7 @@ class _ElementDivider extends StatelessWidget {
       child: SizedBox(
         height: size.height.fivePercent,
         child: VerticalDivider(
-          color: MyColors.text[700],
+          color: kTextColor[700],
           width: size.width.tenPercent,
           thickness: 1,
           endIndent: 5,
@@ -346,12 +346,12 @@ class _UserStatsElement extends StatelessWidget {
           Text(
             value!,
             style: Get.textTheme.bodyText1!
-                .copyWith(color: MyColors.black, fontWeight: FontWeight.w700),
+                .copyWith(color: kBlackColor, fontWeight: FontWeight.w700),
           ),
           SizedBox(height: size.height.onePercent),
           Text(
             title!,
-            style: Get.textTheme.bodyText2!.copyWith(color: MyColors.text[900]),
+            style: Get.textTheme.bodyText2!.copyWith(color: kTextColor[900]),
           ),
         ],
       ),

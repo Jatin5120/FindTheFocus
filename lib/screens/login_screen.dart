@@ -27,7 +27,7 @@ class LoginScreen extends StatelessWidget {
                   Text(
                     'Sign In using',
                     style: Get.textTheme.subtitle1?.copyWith(
-                      color: MyColors.text[500],
+                      color: kTextColor[500],
                       letterSpacing: 1.5,
                     ),
                   ),
@@ -36,19 +36,19 @@ class LoginScreen extends StatelessWidget {
                     onTap: () => authenticationController.signInWithGoogle(),
                     child: Card(
                       shape: StadiumBorder(),
-                      color: MyColors.white,
+                      color: kWhiteColor,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CircleAvatar(
                             radius: 25,
-                            backgroundColor: MyColors.white,
+                            backgroundColor: kWhiteColor,
                             child: SvgPicture.asset('assets/Logo/google.svg'),
                           ),
                           Text(
                             'Google',
                             style: Get.textTheme.headline5
-                                ?.copyWith(color: MyColors.black),
+                                ?.copyWith(color: kBlackColor),
                           ),
                           SizedBox(width: 40),
                         ],
@@ -148,7 +148,7 @@ class LoginScreen extends StatelessWidget {
                             TextSpan(
                               text: " Sign Up",
                               style: Get.textTheme.subtitle1?.copyWith(
-                                color: MyColors.primary,
+                                color: primary,
                               ),
                             ),
                           ],
@@ -181,7 +181,7 @@ class _SignInButtons extends StatelessWidget {
         Text(
           'Sign In using',
           style: Get.textTheme.subtitle1?.copyWith(
-            color: MyColors.text[500],
+            color: text[500],
             letterSpacing: 1.5,
           ),
         ),
@@ -193,13 +193,13 @@ class _SignInButtons extends StatelessWidget {
               onTap: () => authenticationController.signInWithGoogle(),
               child: CircleAvatar(
                 radius: 25,
-                backgroundColor: MyColors.white,
+                backgroundColor: white,
                 child: SvgPicture.asset('assets/Logo/google.svg'),
               ),
             ),
             CircleAvatar(
               radius: 25,
-              backgroundColor: MyColors.white,
+              backgroundColor: white,
               child: SvgPicture.asset('assets/Logo/facebook.svg'),
             ),
           ],
@@ -224,7 +224,7 @@ class _BuildOR extends StatelessWidget {
       children: [
         Expanded(
           child: Divider(
-            color: MyColors.text[700],
+            color: text[700],
             thickness: 0.5,
             endIndent: size.width * 0.05,
           ),
@@ -232,13 +232,13 @@ class _BuildOR extends StatelessWidget {
         Text(
           ' OR ',
           style: Get.textTheme.subtitle1?.copyWith(
-            color: MyColors.text[500],
+            color: text[500],
             letterSpacing: 1.5,
           ),
         ),
         Expanded(
           child: Divider(
-            color: MyColors.text[700],
+            color: text[700],
             thickness: 0.5,
             indent: size.width * 0.05,
           ),
@@ -260,7 +260,7 @@ class EmailField extends StatelessWidget {
         TextFormField(
           keyboardType: TextInputType.emailAddress,
           keyboardAppearance: Brightness.dark,
-          style: Get.textTheme.subtitle1!.copyWith(color: MyColors.black),
+          style: Get.textTheme.subtitle1!.copyWith(color: black),
           validator: (value) {
             if ((value ?? '').isValidEmail()) return null;
             return 'Check your email';
@@ -271,7 +271,7 @@ class EmailField extends StatelessWidget {
           decoration: InputDecoration(
             prefixIcon: Icon(
               Icons.email_outlined,
-              color: MyColors.primary,
+              color: primary,
             ),
           ),
         ),
@@ -294,14 +294,14 @@ class PasswordField extends StatelessWidget {
           obscureText: authenticationController.hidePassword,
           keyboardType: TextInputType.visiblePassword,
           keyboardAppearance: Brightness.dark,
-          style: Get.textTheme.subtitle1!.copyWith(color: MyColors.black),
+          style: Get.textTheme.subtitle1!.copyWith(color: black),
           onSaved: (value) {
             _password = value ?? '';
           },
           decoration: InputDecoration(
             prefixIcon: Icon(
               Icons.lock_outlined,
-              color: MyColors.primary,
+              color: primary,
             ),
             suffixIcon: ClipRRect(
               borderRadius: Utils.largeRadius,
@@ -310,7 +310,7 @@ class PasswordField extends StatelessWidget {
                     authenticationController.hidePassword
                         ? Icons.visibility_off_rounded
                         : Icons.visibility_rounded,
-                    color: MyColors.text[500],
+                    color: text[500],
                   ),
                   onTap: () {
                     authenticationController.toggleHidePassword();

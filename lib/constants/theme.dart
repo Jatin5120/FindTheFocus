@@ -4,114 +4,111 @@ import 'package:google_fonts/google_fonts.dart';
 import 'colors.dart';
 
 ThemeData myTheme = ThemeData(
-  primaryColor: MyColors.primary,
-  accentColor: MyColors.accent,
-  backgroundColor: MyColors.background,
-  scaffoldBackgroundColor: MyColors.background,
+  primaryColor: kPrimaryColor,
+  accentColor: kAccentColor,
+  backgroundColor: kBackgroundColor,
+  scaffoldBackgroundColor: kBackgroundColor,
   cardTheme: CardTheme(
-    shadowColor: MyColors.shadow,
-    color: MyColors.background[100],
+    shadowColor: kShadowColor,
+    color: kBackgroundColor[100],
   ),
-  iconTheme: IconThemeData(color: MyColors.white),
+  iconTheme: IconThemeData(color: kWhiteColor),
   inputDecorationTheme: InputDecorationTheme(
-    fillColor: MyColors.white,
+    fillColor: kWhiteColor,
     filled: true,
     focusedBorder: OutlineInputBorder(
-      borderRadius: Utils.largeRadius,
-      borderSide:
-          BorderSide(width: Utils.largeBorderWidth, color: MyColors.primary),
+      borderRadius: kLargeRadius,
+      borderSide: BorderSide(width: kLargeBorderWidth, color: kPrimaryColor),
     ),
     errorBorder: OutlineInputBorder(
-      borderRadius: Utils.largeRadius,
-      borderSide:
-          BorderSide(width: Utils.largeBorderWidth, color: MyColors.error),
+      borderRadius: kLargeRadius,
+      borderSide: BorderSide(width: kLargeBorderWidth, color: kErrorColor),
     ),
     focusedErrorBorder: OutlineInputBorder(
-      borderRadius: Utils.largeRadius,
-      borderSide:
-          BorderSide(width: Utils.largeBorderWidth, color: MyColors.warning),
+      borderRadius: kLargeRadius,
+      borderSide: BorderSide(width: kLargeBorderWidth, color: kWarningColor),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: Utils.largeRadius,
+      borderRadius: kLargeRadius,
     ),
   ),
   snackBarTheme: SnackBarThemeData(
-    backgroundColor: MyColors.accent,
+    backgroundColor: kAccentColor,
     behavior: SnackBarBehavior.floating,
   ),
   textTheme: TextTheme(
     headline1: GoogleFonts.firaSans(
-      color: MyColors.text,
+      color: kTextColor,
       fontSize: 82,
       fontWeight: FontWeight.w300,
       letterSpacing: -1.5,
     ),
     headline2: GoogleFonts.firaSans(
-      color: MyColors.text,
+      color: kTextColor,
       fontSize: 51,
       fontWeight: FontWeight.w300,
       letterSpacing: -0.5,
     ),
     headline3: GoogleFonts.firaSans(
-      color: MyColors.text,
+      color: kTextColor,
       fontSize: 41,
       fontWeight: FontWeight.w400,
     ),
     headline4: GoogleFonts.firaSans(
-      color: MyColors.text,
+      color: kTextColor,
       fontSize: 29,
       fontWeight: FontWeight.w400,
       letterSpacing: 0.25,
     ),
     headline5: GoogleFonts.firaSans(
-      color: MyColors.text,
+      color: kTextColor,
       fontSize: 20,
       fontWeight: FontWeight.w400,
     ),
     headline6: GoogleFonts.firaSans(
-      color: MyColors.text,
+      color: kTextColor,
       fontSize: 17,
       fontWeight: FontWeight.w500,
       letterSpacing: 0.15,
     ),
     subtitle1: GoogleFonts.firaSans(
-      color: MyColors.text,
+      color: kTextColor,
       fontSize: 14,
       fontWeight: FontWeight.w400,
       letterSpacing: 0.15,
     ),
     subtitle2: GoogleFonts.firaSans(
-      color: MyColors.text,
+      color: kTextColor,
       fontSize: 12,
       fontWeight: FontWeight.w500,
       letterSpacing: 0.1,
     ),
     bodyText1: GoogleFonts.montserrat(
-      color: MyColors.text,
+      color: kTextColor,
       fontSize: 14,
       fontWeight: FontWeight.w400,
       letterSpacing: 0.5,
     ),
     bodyText2: GoogleFonts.montserrat(
-      color: MyColors.text,
+      color: kTextColor,
       fontSize: 12,
       fontWeight: FontWeight.w400,
       letterSpacing: 0.25,
     ),
     button: GoogleFonts.montserrat(
-      color: MyColors.text,
+      color: kTextColor,
       fontSize: 12,
       fontWeight: FontWeight.w500,
       letterSpacing: 1.25,
     ),
     caption: GoogleFonts.montserrat(
-      color: MyColors.text,
+      color: kTextColor,
       fontSize: 10,
       fontWeight: FontWeight.w400,
       letterSpacing: 0.4,
     ),
     overline: GoogleFonts.montserrat(
-      color: MyColors.text,
+      color: kTextColor,
       fontSize: 9,
       fontWeight: FontWeight.w400,
       letterSpacing: 1.5,

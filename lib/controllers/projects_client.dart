@@ -23,6 +23,7 @@ class ProjectsClient extends GetxController {
   set projects(List<Project> value) => _projects.value = value;
 
   void get() {
+    final ProjectController projectController = Get.find();
     List<Project> projectList = <Project>[];
 
     _allProjectsCollection.get().then((value) {
@@ -35,6 +36,7 @@ class ProjectsClient extends GetxController {
       });
       projects = projectList.reversed.toList();
     });
+    if (projects.isNotEmpty) projectController.currentProject = projects.first;
   }
 
   void post() {

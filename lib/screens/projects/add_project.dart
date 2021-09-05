@@ -29,7 +29,7 @@ class AddProject extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Container(
-                    // color: MyColors.error,
+                    // color: error,
                     child: Text(
                       'Add New Project',
                       style: Get.textTheme.headline4,
@@ -39,7 +39,7 @@ class AddProject extends StatelessWidget {
                 Expanded(
                   flex: 5,
                   child: Container(
-                    // color: MyColors.accent,
+                    // color: accent,
                     child: Form(
                       key: projectFormKey,
                       child: Column(
@@ -58,14 +58,14 @@ class AddProject extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: Container(
-                    // color: MyColors.primary,
+                    // color: primary,
                     child: MileStoneList(),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: Container(
-                    // color: MyColors.success,
+                    // color: success,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -94,7 +94,7 @@ class AddProject extends StatelessWidget {
                                 Get.back();
                                 projectController.discardProject();
                               },
-                              backgroundColor: MyColors.error,
+                              backgroundColor: kErrorColor,
                               isCTA: true,
                               buttonSize: ButtonSize.medium,
                             ),
@@ -129,7 +129,7 @@ class ProjectNameField extends StatelessWidget {
         TextFormField(
           keyboardType: TextInputType.name,
           keyboardAppearance: Brightness.dark,
-          style: Get.textTheme.subtitle1!.copyWith(color: MyColors.black),
+          style: Get.textTheme.subtitle1!.copyWith(color: kBlackColor),
           validator: (name) {
             if (name?.length == 0 || name == null)
               return "Project Name can't be Empty";
@@ -140,7 +140,7 @@ class ProjectNameField extends StatelessWidget {
           decoration: InputDecoration(
             prefixIcon: Icon(
               Icons.badge_outlined,
-              color: MyColors.primary,
+              color: kPrimaryColor,
             ),
           ),
         ),
@@ -187,7 +187,7 @@ class _MilestoneFieldState extends State<MilestoneField> {
   }
 
   int getColorIndex() {
-    return Random().nextInt(MyColors.graphColors.length);
+    return Random().nextInt(kGraphColors.length);
   }
 
   @override
@@ -206,7 +206,7 @@ class _MilestoneFieldState extends State<MilestoneField> {
                 controller: milestonesController,
                 keyboardType: TextInputType.name,
                 keyboardAppearance: Brightness.dark,
-                style: Get.textTheme.subtitle1!.copyWith(color: MyColors.black),
+                style: Get.textTheme.subtitle1!.copyWith(color: kBlackColor),
                 validator: (value) {
                   final String? milestoneName = value;
                   print("\n\n${'=' * 20} \n$milestoneName");
@@ -232,7 +232,7 @@ class _MilestoneFieldState extends State<MilestoneField> {
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     MyIcons.task,
-                    color: MyColors.primary,
+                    color: kPrimaryColor,
                   ),
                 ),
               ),
@@ -262,8 +262,8 @@ class _MilestoneFieldState extends State<MilestoneField> {
                 message: 'Add Milestones to Project',
                 child: Container(
                   decoration: BoxDecoration(
-                    color: MyColors.accent,
-                    borderRadius: Utils.mediumRadius,
+                    color: kAccentColor,
+                    borderRadius: kMediumRadius,
                   ),
                   margin: EdgeInsets.only(left: size.width * 0.025),
                   padding: EdgeInsets.all(size.width * 0.025),
@@ -281,7 +281,7 @@ class _MilestoneFieldState extends State<MilestoneField> {
           child: RichText(
             text: TextSpan(
               style: Get.textTheme.overline!.copyWith(
-                color: MyColors.subtitle,
+                color: kSubtitleColor,
                 height: 1,
               ),
               children: [
@@ -290,8 +290,8 @@ class _MilestoneFieldState extends State<MilestoneField> {
                 ),
                 TextSpan(
                   text: ' + ',
-                  style: Get.textTheme.bodyText1!
-                      .copyWith(color: MyColors.subtitle),
+                  style:
+                      Get.textTheme.bodyText1!.copyWith(color: kSubtitleColor),
                 ),
                 TextSpan(
                   text: 'to add Milestone.',
@@ -329,8 +329,8 @@ class TargetDatePicker extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-              color: MyColors.background[300],
-              borderRadius: Utils.smallRadius,
+              color: kBackgroundColor[300],
+              borderRadius: kSmallRadius,
             ),
             padding: EdgeInsets.symmetric(
               horizontal: size.width.fivePercent,

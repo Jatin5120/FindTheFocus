@@ -23,9 +23,9 @@ class ProjectChip extends StatelessWidget {
           onTap: () => projectController.selectedIndex = index,
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: Utils.chipRadius,
+              borderRadius: kChipRadius,
               color: projectController.selectedIndex == index
-                  ? MyColors.white
+                  ? kWhiteColor
                   : Colors.transparent,
             ),
             alignment: Alignment.center,
@@ -33,8 +33,8 @@ class ProjectChip extends StatelessWidget {
               label,
               style: Get.textTheme.bodyText1!.copyWith(
                 color: projectController.selectedIndex == index
-                    ? MyColors.accent
-                    : MyColors.disabled,
+                    ? kAccentColor
+                    : kDisabledColor,
               ),
             ),
           ),

@@ -19,8 +19,8 @@ class ProjectScreen extends StatelessWidget {
           SearchBar(title: 'Projects'),
           Container(
             decoration: BoxDecoration(
-              borderRadius: Utils.chipRadius,
-              color: MyColors.background[700],
+              borderRadius: kChipRadius,
+              color: kBackgroundColor[700],
             ),
             constraints: BoxConstraints(maxHeight: size.height * 0.05),
             padding: EdgeInsets.all(size.height * 0.005),

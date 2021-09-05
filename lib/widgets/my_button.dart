@@ -16,7 +16,7 @@ class MyButton extends StatelessWidget {
     this.buttonSize = ButtonSize.medium,
     this.icon,
     this.isCTA = false,
-    this.backgroundColor = MyColors.primary,
+    this.backgroundColor = kPrimaryColor,
     this.elevation = 10,
   }) : super(key: key);
 
@@ -32,11 +32,11 @@ class MyButton extends StatelessWidget {
     this.buttonSize = ButtonSize.medium,
     this.icon,
     this.isCTA = false,
-    this.backgroundColor = MyColors.secondary,
+    this.backgroundColor = kSecondaryColor,
     this.elevation = 10,
   }) : super(key: key) {
     _buttonType = ButtonType.secondary;
-    _labelColor = MyColors.primary;
+    _labelColor = kPrimaryColor;
   }
 
   /// This is outlined Constructor of [MyButton] class
@@ -51,20 +51,20 @@ class MyButton extends StatelessWidget {
     this.buttonSize = ButtonSize.medium,
     this.icon,
     this.isCTA = false,
-    this.backgroundColor = MyColors.primary,
+    this.backgroundColor = kPrimaryColor,
     this.elevation = 10,
   }) : super(key: key) {
     _buttonType = ButtonType.outlined;
     _labelColor = backgroundColor!;
     switch (buttonSize) {
       case ButtonSize.small:
-        _outlinedWidth = Utils.smallBorderWidth;
+        _outlinedWidth = kSmallBorderWidth;
         break;
       case ButtonSize.medium:
-        _outlinedWidth = Utils.mediumBorderWidth;
+        _outlinedWidth = kMediumBorderWidth;
         break;
       case ButtonSize.large:
-        _outlinedWidth = Utils.largeBorderWidth;
+        _outlinedWidth = kLargeBorderWidth;
         break;
       default:
     }
@@ -92,7 +92,7 @@ class MyButton extends StatelessWidget {
   late OutlinedBorder _buttonShape;
 
   ButtonType _buttonType = ButtonType.primary;
-  Color _labelColor = MyColors.white;
+  Color _labelColor = kWhiteColor;
   double _outlinedWidth = 0;
   bool _showIcon = true;
 
@@ -118,7 +118,7 @@ class MyButton extends StatelessWidget {
         setValues(
           style: Get.textTheme.subtitle2!,
           padding: size.width / 30,
-          shape: Utils.smallButtonShape,
+          shape: kSmallButtonShape,
         );
         break;
       case ButtonSize.medium:
@@ -126,7 +126,7 @@ class MyButton extends StatelessWidget {
           space: size.width / 50,
           style: Get.textTheme.headline6!,
           padding: size.width / 20,
-          shape: Utils.mediumButtonShape,
+          shape: kMediumButtonShape,
           important: isCTA,
         );
         break;
@@ -135,7 +135,7 @@ class MyButton extends StatelessWidget {
           space: size.width / 30,
           style: Get.textTheme.headline5!,
           padding: size.width / 10,
-          shape: Utils.largeButtonShape,
+          shape: kLargeButtonShape,
           important: isCTA,
         );
         break;
@@ -144,7 +144,7 @@ class MyButton extends StatelessWidget {
           space: size.width / 30,
           style: Get.textTheme.headline6!,
           padding: size.width / 20,
-          shape: Utils.mediumButtonShape,
+          shape: kMediumButtonShape,
         );
     }
   }
@@ -171,7 +171,7 @@ class MyButton extends StatelessWidget {
       case ButtonType.primary:
         return ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: backgroundColor ?? MyColors.primary,
+            primary: backgroundColor ?? kPrimaryColor,
             padding: _buttonPadding,
             shape: _buttonShape,
             elevation: elevation,
@@ -182,7 +182,7 @@ class MyButton extends StatelessWidget {
       case ButtonType.secondary:
         return ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary: backgroundColor ?? MyColors.secondary,
+            primary: backgroundColor ?? kSecondaryColor,
             padding: _buttonPadding,
             shape: _buttonShape,
             elevation: elevation,
@@ -194,10 +194,10 @@ class MyButton extends StatelessWidget {
         return OutlinedButton(
           style: OutlinedButton.styleFrom(
             side: BorderSide(
-              color: backgroundColor ?? MyColors.primary,
+              color: backgroundColor ?? kPrimaryColor,
               width: _outlinedWidth,
             ),
-            primary: backgroundColor ?? MyColors.primary,
+            primary: backgroundColor ?? kPrimaryColor,
             padding: _buttonPadding,
             shape: _buttonShape,
             elevation: 0,

@@ -1,4 +1,8 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../controllers/controllers.dart';
+import '../constants/constants.dart';
+import '../modals/modals.dart';
 import '../services/services.dart';
 import 'package:get/get.dart';
 
@@ -7,12 +11,10 @@ class WorkingTimeController extends GetxController {
   Rx<Duration> _workingTime = Duration(seconds: 0).obs;
   RxBool _isCompleted = false.obs;
   RxBool _activeTimer = true.obs;
-  RxBool _cancelTimer = false.obs;
   RxBool _timerPaused = false.obs;
+  late Timestamp startingTime;
 
   bool get timerPaused => _timerPaused.value;
-
-  bool get cancelTimer => _cancelTimer.value;
 
   bool get activeTimer => _activeTimer.value;
 
@@ -23,8 +25,6 @@ class WorkingTimeController extends GetxController {
   bool get isCompleted => _isCompleted.value;
 
   set timerPaused(bool value) => _timerPaused.value = value;
-
-  set cancelTimer(bool value) => _cancelTimer.value = value;
 
   set activeTimer(bool value) => _activeTimer.value = value;
 
@@ -38,6 +38,18 @@ class WorkingTimeController extends GetxController {
     if (workingTime < totalTime) {
       workingTime += Duration(seconds: 1);
     } else {
+      final ProjectController projectController = Get.find();
+      final ProjectsClient projectsClient = Get.find();
+      final WorkingModal workingModal = WorkingModal(
+        startTime: startingTime,
+        stopTime: Timestamp.now(),
+        milestoneIndex:
+            projectController.currentProject?.completedMilestones?.sum(),
+      );
+      print(workingModal);
+      projectsClient
+          .projects[projectController.currentProjectIndex].workingTime!
+          .add(workingModal);
       isCompleted = true;
     }
   }

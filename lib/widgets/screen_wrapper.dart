@@ -65,7 +65,7 @@ class _ScreenWrapperState extends State<ScreenWrapper> {
       floatingActionButton: Obx(() {
         return navBarController.showFAB
             ? FloatingActionButton(
-                backgroundColor: MyColors.primary,
+                backgroundColor: kPrimaryColor,
                 child: Icon(MyIcons.plus),
                 onPressed: () => Get.to(() => AddProject()),
               )

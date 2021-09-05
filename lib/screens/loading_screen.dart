@@ -17,7 +17,7 @@ class LoadingScreen extends StatelessWidget {
           SizedBox(
             height: size.width.fiftyPercent,
             width: size.width.fiftyPercent,
-            child: CircularProgressIndicator(color: MyColors.accent),
+            child: CircularProgressIndicator(color: kAccentColor),
           ),
           Text(
             message,

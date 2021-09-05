@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 class ProjectController extends GetxController {
   RxInt _selectedIndex = 0.obs;
   Rx<Project?> _currentProject = Rx<Project?>(null);
+  RxInt _currentProjectIndex = 0.obs;
   RxString _projectName = ''.obs;
   Rx<List<Milestone>> _milestones = Rx<List<Milestone>>([]);
   Rx<DateTime> _targetDate = DateTime.now().obs;
@@ -39,6 +40,10 @@ class ProjectController extends GetxController {
   Project? get currentProject => _currentProject.value;
 
   set currentProject(Project? project) => _currentProject.value = project;
+
+  int get currentProjectIndex => _currentProjectIndex.value;
+
+  set currentProjectIndex(int value) => _currentProjectIndex.value = value;
 
   // --------------------- Add Project Methods ---------------------
 
