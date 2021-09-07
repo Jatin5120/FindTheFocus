@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_the_focus/screens/question_screens/question_screens.dart';
 import '../screens/screens.dart';
 import '../widgets/widgets.dart';
 import '../constants/constants.dart';
@@ -16,6 +17,7 @@ class ScreenWrapper extends StatefulWidget {
 class _ScreenWrapperState extends State<ScreenWrapper> {
   final NavBarController navBarController = Get.find();
   final ProjectsClient projectsClient = Get.find();
+  final QuestionsController questionsController = Get.find();
 
   late Stream<QuerySnapshot<Map<String, dynamic>>> stream;
 
@@ -60,7 +62,9 @@ class _ScreenWrapperState extends State<ScreenWrapper> {
             ),
 
             /// Here goes the logic to navigate for questionss
-            child: _screens[navBarController.selectedIndex],
+            child: questionsController.isFirstLogin
+                ? QuestionsWrapper()
+                : _screens[navBarController.selectedIndex],
           );
         },
       ),

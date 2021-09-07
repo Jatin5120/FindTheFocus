@@ -36,6 +36,8 @@ const Color kWhiteColor = Color(0xFFFFFFFF);
 
 const Color kShadowColor = Color(0x330C0E1c);
 
+const Color kDividerColor = Color(0x88FFFFFF);
+
 const Color kSuccessColor = Color(0xFF00CD71);
 const Color kWarningColor = Color(0xFFFEC539);
 const Color kErrorColor = Color(0xFFFF4033);

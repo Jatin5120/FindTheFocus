@@ -1,5 +1,5 @@
-import 'package:find_the_focus/services/services.dart';
-
+import '../screens/screens.dart';
+import '../services/services.dart';
 import '../constants/constants.dart';
 import '../controllers/controllers.dart';
 import '../widgets/widgets.dart';
@@ -30,7 +30,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Find The Focus',
       theme: myTheme,
-      home: AuthenticationWrapper(),
+      home: ObjectiveQuestions(),
+      // home: AuthenticationWrapper(),
     );
   }
 }

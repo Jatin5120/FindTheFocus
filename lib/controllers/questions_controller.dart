@@ -11,13 +11,13 @@ final List<QuestionModal> _questions = [
   ),
   QuestionModal(
     question: "How often are you late for work or an appointment?",
-    answers: ['Quite often', 'Often', 'Sometimes', 'Rarely', 'Almost never'],
-    weightages: [],
+    answers: ['Often', 'Sometimes', 'Rarely'],
+    weightages: [5, 3, 1],
   ),
   QuestionModal(
     question: "How often do you catch yourself daydreaming at work?",
-    answers: ['Quite often', 'Often', 'Sometimes', 'Rarely', 'Almost never'],
-    weightages: [5, 4, 3, 2, 1],
+    answers: ['Often', 'Sometimes', 'Rarely'],
+    weightages: [5, 3, 1],
   ),
   QuestionModal(
     question:
@@ -32,31 +32,29 @@ final List<QuestionModal> _questions = [
       "I don't mind them, but I may end up needing a break from time to time.",
       "I can't stand them - they bore me out of my skull.",
     ],
-    weightages: [],
+    weightages: [5, 3, 1],
   ),
   QuestionModal(
     question:
         "You're on the phone with a friend just as your favorite TV show starts. How difficult would it be for you to pay attention to the conversation?",
     answers: [
-      "Extremely difficult",
       "Very difficult",
       "Somewhat difficult",
-      "Slightly difficult",
       "Not at all difficult",
     ],
-    weightages: [5, 4, 3, 2, 1],
+    weightages: [5, 3, 1],
   ),
   QuestionModal(
     question:
         "When reading a book or magazine, how often do you find yourself re-reading the same paragraph or skipping ahead?",
-    answers: ['Quite often', 'Often', 'Sometimes', 'Rarely', 'Almost never'],
-    weightages: [5, 4, 3, 2, 1],
+    answers: ['Often', 'Sometimes', 'Rarely'],
+    weightages: [5, 3, 1],
   ),
   QuestionModal(
     question:
         "Do you have a knack for noticing details (e.g. typos in a document)?",
-    answers: ["Yes", "No"],
-    weightages: [3, 1],
+    answers: ["Yes", "Sometimes", "No"],
+    weightages: [5, 3, 1],
   ),
   QuestionModal(
     question: "Do you lose your patience easily?",
@@ -65,8 +63,8 @@ final List<QuestionModal> _questions = [
   ),
   QuestionModal(
     question: "How often do you interrupt people during conversations?",
-    answers: ['Quite often', 'Often', 'Sometimes', 'Rarely', 'Almost never'],
-    weightages: [5, 4, 3, 2, 1],
+    answers: ['Often', 'Sometimes', 'Rarely'],
+    weightages: [5, 3, 1],
   ),
 ];
 
