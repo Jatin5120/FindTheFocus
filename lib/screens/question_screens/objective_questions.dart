@@ -20,8 +20,8 @@ class ObjectiveQuestions extends StatelessWidget {
               BoxConstraints(maxHeight: size.height, maxWidth: size.width),
           child: Stack(
             children: [
-              _Line(),
-              _TimeIcon(),
+              const _Line(),
+              const _TimeIcon(),
               PageView.builder(
                 pageSnapping: true,
                 scrollDirection: Axis.vertical,
@@ -54,7 +54,7 @@ class _TimeIcon extends StatelessWidget {
     return Positioned(
       left: size.width * 0.16,
       top: size.height * 0.1,
-      child: Icon(
+      child: const Icon(
         Icons.hourglass_full_rounded,
         size: 48,
       ),
@@ -72,7 +72,7 @@ class _Line extends StatelessWidget {
       top: 0,
       bottom: 0,
       left: size.width * 0.2,
-      child: VerticalDivider(
+      child: const VerticalDivider(
         color: kDividerColor,
         width: 16,
       ),

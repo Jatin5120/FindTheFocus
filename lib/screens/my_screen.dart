@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MyScreen extends StatelessWidget {
   const MyScreen({Key? key}) : super(key: key);
 
-  static List<Color> _colors = [
+  static final List<Color> _colors = [
     Colors.red,
     Colors.yellow,
     Colors.green,

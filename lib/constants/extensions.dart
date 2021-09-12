@@ -10,7 +10,6 @@ extension EmailValidator on String {
 
   bool isValidName() {
     bool match = RegExp(r"^[A-Za-z]\\w{5, 29}$").hasMatch(this);
-    print("$this --> $match");
     return match;
   }
 }
@@ -27,7 +26,7 @@ extension DateTimeParser on DateTime {
 
 extension ListSum on List<int?> {
   int sum() {
-    return this.reduce((i, j) => (i ?? 0) + (j ?? 0))!;
+    return reduce((i, j) => (i ?? 0) + (j ?? 0))!;
   }
 }
 
@@ -56,15 +55,15 @@ extension Percent on double {
 }
 
 extension TimestampParser on Timestamp {
-  String displayDate() => this.toDate().displayDate();
+  String displayDate() => toDate().displayDate();
 
-  String displayDateMonth() => this.toDate().displayDateMonth();
+  String displayDateMonth() => toDate().displayDateMonth();
 }
 
 extension ListItemSum on List<int> {
   int get sum {
     int total = 0;
-    this.map((value) => total += value);
+    map((value) => total += value);
     return total;
   }
 }

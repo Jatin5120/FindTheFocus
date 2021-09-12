@@ -28,7 +28,7 @@ class NavBarItem extends StatelessWidget {
         child: Container(
           height: size.height * 0.07,
           width: size.width * 0.25,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.transparent,
             // color: isSelected ? background[300] : Colors.transparent,
             // border: Border(
@@ -48,11 +48,11 @@ class NavBarItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               AnimatedContainer(
-                duration: Duration(milliseconds: 300),
+                duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
                 height: size.height * 0.004,
                 width: isSelected ? size.width * 0.075 : 0,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   borderRadius: kSmallRadius,
                   color: kWhiteColor,
                   // color: isSelected ? white : Colors.transparent,

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import '../../modals/modals.dart';
 import '../../screens/screens.dart';
 import '../../widgets/widgets.dart';
@@ -30,7 +32,7 @@ class CurrentProject extends StatelessWidget {
         child: Obx(() {
           return projectController.currentProject == null
               ? projectsClient.projects.isEmpty
-                  ? NoProjects()
+                  ? const NoProjects()
                   : ProjectDetailView(projectsClient.projects.first)
               : ProjectDetailView(projectController.currentProject!);
         }),
@@ -74,7 +76,7 @@ class ProjectDetailView extends StatelessWidget {
         ),
         Expanded(
           child: ListView.builder(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               itemCount: project.milestones?.length ?? 0,
               itemBuilder: (_, index) {
                 return _MileStoneSection(

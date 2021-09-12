@@ -11,7 +11,7 @@ class UserDataController extends GetxController {
 //   Rx<GoogleSignInAccount?> user =
 //       authenticationController.googleAccount.value.obs;
 
-  Rx<List<Project>?> _projects = Rx<List<Project>?>(null);
+  final Rx<List<Project>?> _projects = Rx<List<Project>?>(null);
 
   List<Project>? get projects => _projects.value;
 

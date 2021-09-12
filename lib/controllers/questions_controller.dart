@@ -70,7 +70,7 @@ final List<QuestionModal> _questions = [
 
 class QuestionsController extends GetxController {
   List<QuestionModal> questions = _questions;
-  RxBool _isFirstLogin = true.obs;
+  final RxBool _isFirstLogin = true.obs;
   late SharedPreferences prefs;
   static const _isFirstLoginKey = 'isFirstLogin';
 

@@ -5,15 +5,14 @@ import 'colors.dart';
 
 ThemeData myTheme = ThemeData(
   primaryColor: kPrimaryColor,
-  accentColor: kAccentColor,
   backgroundColor: kBackgroundColor,
   scaffoldBackgroundColor: kBackgroundColor,
   cardTheme: CardTheme(
     shadowColor: kShadowColor,
     color: kBackgroundColor[100],
   ),
-  iconTheme: IconThemeData(color: kWhiteColor),
-  inputDecorationTheme: InputDecorationTheme(
+  iconTheme: const IconThemeData(color: kWhiteColor),
+  inputDecorationTheme: const InputDecorationTheme(
     fillColor: kWhiteColor,
     filled: true,
     focusedBorder: OutlineInputBorder(
@@ -32,7 +31,7 @@ ThemeData myTheme = ThemeData(
       borderRadius: kLargeRadius,
     ),
   ),
-  snackBarTheme: SnackBarThemeData(
+  snackBarTheme: const SnackBarThemeData(
     backgroundColor: kAccentColor,
     behavior: SnackBarBehavior.floating,
   ),

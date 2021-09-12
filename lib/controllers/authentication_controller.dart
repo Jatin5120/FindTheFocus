@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -5,13 +7,14 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationController extends GetxController {
-  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   RxString userEmail = ''.obs;
   RxString userPassword = ''.obs;
-  Rx<GoogleSignInAccount?> _googleAccount = Rx<GoogleSignInAccount?>(null);
-  Rx<bool> _isLoggedIn = false.obs;
-  RxBool _hidePassword = true.obs;
+  final Rx<GoogleSignInAccount?> _googleAccount =
+      Rx<GoogleSignInAccount?>(null);
+  final Rx<bool> _isLoggedIn = false.obs;
+  final RxBool _hidePassword = true.obs;
 
   GoogleSignInAccount? get googleAccount => _googleAccount.value;
 

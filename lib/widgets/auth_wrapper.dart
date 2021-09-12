@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AuthenticationWrapper extends StatelessWidget {
-  final QuestionsController questionsController = Get.find();
+  static QuestionsController questionsController = Get.find();
+
+  const AuthenticationWrapper({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GetX<AuthenticationController>(builder: (controller) {
@@ -14,11 +17,13 @@ class AuthenticationWrapper extends StatelessWidget {
         controller.signInWithGoogle();
         if (controller.googleAccount != null) {
           Get.put(ProjectsClient());
-          return ScreenWrapper();
-        } else
-          return LoadingScreen('Setting up');
-      } else
+          return const ScreenWrapper();
+        } else {
+          return const LoadingScreen('Setting up');
+        }
+      } else {
         return LoginScreen();
+      }
     });
   }
 }

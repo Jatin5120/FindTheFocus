@@ -57,7 +57,7 @@ class _QuestionPageState extends State<QuestionPage> {
           SizedBox(height: size.height * 0.075),
           ItemFader(key: keys[0], child: _Number(widget.number)),
           ItemFader(key: keys[1], child: _Question(widget.question)),
-          Spacer(),
+          const Spacer(),
           ...widget.answers.map((String answer) {
             final int answerIndex = widget.answers.indexOf(answer);
             final int keyIndex = answerIndex + 2;
@@ -93,8 +93,8 @@ class _Option extends StatelessWidget {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        RenderBox object = context.findAncestorRenderObjectOfType<RenderBox>()!;
-        Offset globalPosition = object.localToGlobal(Offset.zero);
+        // RenderBox object = context.findAncestorRenderObjectOfType<RenderBox>()!;
+        // Offset globalPosition = object.localToGlobal(Offset.zero);
         // onOptionSelected(globalPosition);
         onOptionSelected();
       },
@@ -103,7 +103,7 @@ class _Option extends StatelessWidget {
             size.width * 0.2, 0, size.width * 0.1, size.height * 0.05),
         child: Row(
           children: [
-            Dot(),
+            const Dot(),
             SizedBox(width: size.width * 0.05),
             Expanded(
               child: Text(answer, style: Get.textTheme.headline6),
@@ -123,7 +123,7 @@ class Dot extends StatelessWidget {
     return Container(
       height: 16,
       width: 16,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: kWhiteColor,
         shape: BoxShape.circle,
       ),

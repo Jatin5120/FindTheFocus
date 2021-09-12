@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../screens/screens.dart';
@@ -28,23 +30,25 @@ class AllProjects extends StatelessWidget {
             stream: FirebaseFirestore.instance
                 .collection(MyCollections.projects)
                 .doc(_authenticationController.googleAccount!.id)
-                .collection(MyCollections.all_projects)
+                .collection(MyCollections.allProjects)
                 .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) return Text('Something went wrong');
-              if (snapshot.connectionState == ConnectionState.waiting)
-                return LoadingScreen('Fetching');
-              return projectsClient.projects.length == 0
-                  ? NoProjects()
+              if (snapshot.hasError) return const Text('Something went wrong');
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const LoadingScreen('Fetching');
+              }
+              return projectsClient.projects.isEmpty
+                  ? const NoProjects()
                   : ListView.builder(
-                      physics: BouncingScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       itemCount: projectsClient.projects.length + 1,
                       itemBuilder: (BuildContext context, int index) {
                         Project? project;
-                        if (index == projectsClient.projects.length)
+                        if (index == projectsClient.projects.length) {
                           project = null;
-                        else
+                        } else {
                           project = projectsClient.projects[index];
+                        }
                         return ProjectCard(project);
                       },
                     );
@@ -74,30 +78,28 @@ class ProjectCard extends StatelessWidget {
                   projectsClient.projects.indexOf(project!);
               print(projectController.currentProject?.projectName);
             },
-            child: Container(
-              child: AspectRatio(
-                aspectRatio: 3 / 2,
-                child: Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: kBackgroundColor[100],
-                    borderRadius: kLargeRadius,
-                    boxShadow: Utils.mediumShadow,
-                  ),
-                  margin: EdgeInsets.only(top: size.height * 0.06),
-                  padding: EdgeInsets.symmetric(
-                    vertical: size.height * 0.01,
-                    horizontal: size.width * 0.075,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _ProjectDetails(project!),
-                      _ProjectStats(project!),
-                    ],
-                  ),
+            child: AspectRatio(
+              aspectRatio: 3 / 2,
+              child: Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: kBackgroundColor[100],
+                  borderRadius: kLargeRadius,
+                  boxShadow: Utils.mediumShadow,
+                ),
+                margin: EdgeInsets.only(top: size.height * 0.06),
+                padding: EdgeInsets.symmetric(
+                  vertical: size.height * 0.01,
+                  horizontal: size.width * 0.075,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _ProjectDetails(project!),
+                    _ProjectStats(project!),
+                  ],
                 ),
               ),
             ),
@@ -146,7 +148,7 @@ class _ProjectDetails extends StatelessWidget {
 }
 
 class _ProjectStats extends StatefulWidget {
-  _ProjectStats(
+  const _ProjectStats(
     this.project, {
     Key? key,
   }) : super(key: key);

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class NavBarController extends GetxController {
-  RxInt _selectedIndex = 0.obs;
+  final RxInt _selectedIndex = 0.obs;
 
   int get selectedIndex => _selectedIndex.value;
 

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../controllers/controllers.dart';
@@ -7,11 +9,11 @@ import '../services/services.dart';
 import 'package:get/get.dart';
 
 class WorkingTimeController extends GetxController {
-  Rx<Duration> _totalTime = Duration(seconds: 0).obs;
-  Rx<Duration> _workingTime = Duration(seconds: 0).obs;
-  RxBool _isCompleted = false.obs;
-  RxBool _activeTimer = true.obs;
-  RxBool _timerPaused = false.obs;
+  final Rx<Duration> _totalTime = const Duration(seconds: 0).obs;
+  final Rx<Duration> _workingTime = const Duration(seconds: 0).obs;
+  final RxBool _isCompleted = false.obs;
+  final RxBool _activeTimer = true.obs;
+  final RxBool _timerPaused = false.obs;
   late Timestamp startingTime;
 
   bool get timerPaused => _timerPaused.value;
@@ -36,7 +38,7 @@ class WorkingTimeController extends GetxController {
 
   updateTime() {
     if (workingTime < totalTime) {
-      workingTime += Duration(seconds: 1);
+      workingTime += const Duration(seconds: 1);
     } else {
       final ProjectController projectController = Get.find();
       final ProjectsClient projectsClient = Get.find();

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:math';
 import '../../modals/modals.dart';
 import '../../controllers/controllers.dart';
@@ -28,80 +30,68 @@ class AddProject extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 1,
-                  child: Container(
-                    // color: error,
-                    child: Text(
-                      'Add New Project',
-                      style: Get.textTheme.headline4,
-                    ),
+                  child: Text(
+                    'Add New Project',
+                    style: Get.textTheme.headline4,
                   ),
                 ),
                 Expanded(
                   flex: 5,
-                  child: Container(
-                    // color: accent,
-                    child: Form(
-                      key: projectFormKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          ProjectNameField(),
-                          MilestoneField(),
-                          TargetDatePicker(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    // color: primary,
-                    child: MileStoneList(),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    // color: success,
+                  child: Form(
+                    key: projectFormKey,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Column(
-                          children: [
-                            MyButton(
-                              label: 'Create',
-                              onPressed: () {
-                                final bool isValid =
-                                    projectFormKey.currentState!.validate();
-                                if (isValid) {
-                                  projectController.createProject();
-                                  Get.back();
-                                }
-                              },
-                              isCTA: true,
-                              buttonSize: ButtonSize.large,
-                            ),
-                            SizedBox(
-                              height: size.height * 0.025,
-                            ),
-                            MyButton.outlined(
-                              label: 'Discard',
-                              onPressed: () {
-                                Get.back();
-                                projectController.discardProject();
-                              },
-                              backgroundColor: kErrorColor,
-                              isCTA: true,
-                              buttonSize: ButtonSize.medium,
-                            ),
-                          ],
-                        ),
+                        ProjectNameField(),
+                        const MilestoneField(),
+                        TargetDatePicker(),
                       ],
                     ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: MileStoneList(),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Column(
+                        children: [
+                          MyButton(
+                            label: 'Create',
+                            onPressed: () {
+                              final bool isValid =
+                                  projectFormKey.currentState!.validate();
+                              if (isValid) {
+                                projectController.createProject();
+                                Get.back();
+                              }
+                            },
+                            isCTA: true,
+                            buttonSize: ButtonSize.large,
+                          ),
+                          SizedBox(
+                            height: size.height * 0.025,
+                          ),
+                          MyButton.outlined(
+                            label: 'Discard',
+                            onPressed: () {
+                              Get.back();
+                              projectController.discardProject();
+                            },
+                            backgroundColor: kErrorColor,
+                            isCTA: true,
+                            buttonSize: ButtonSize.medium,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -125,19 +115,20 @@ class ProjectNameField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FormLabelText(label: 'Project Name'),
+        const FormLabelText(label: 'Project Name'),
         TextFormField(
           keyboardType: TextInputType.name,
           keyboardAppearance: Brightness.dark,
           style: Get.textTheme.subtitle1!.copyWith(color: kBlackColor),
           validator: (name) {
-            if (name?.length == 0 || name == null)
+            if (name!.isEmpty) {
               return "Project Name can't be Empty";
+            }
             // if (name.isValidName()) return 'Enter a Valid Project Name';
             projectController.projectName = name;
             return null;
           },
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             prefixIcon: Icon(
               Icons.badge_outlined,
               color: kPrimaryColor,
@@ -150,7 +141,7 @@ class ProjectNameField extends StatelessWidget {
 }
 
 class MilestoneField extends StatefulWidget {
-  MilestoneField({
+  const MilestoneField({
     Key? key,
   }) : super(key: key);
 
@@ -171,8 +162,10 @@ class _MilestoneFieldState extends State<MilestoneField> {
 
   bool milestonesContains(String value) {
     final List<bool> matchValues = [];
-    projectController.milestones.forEach((milestone) => matchValues
-        .add(milestone.milestoneName!.toLowerCase() == value.toLowerCase()));
+    for (var milestone in projectController.milestones) {
+      matchValues
+          .add(milestone.milestoneName!.toLowerCase() == value.toLowerCase());
+    }
     return matchValues.contains(true);
   }
 
@@ -180,7 +173,7 @@ class _MilestoneFieldState extends State<MilestoneField> {
     Widget content = isConfirmation
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [Text(message), Icon(Icons.thumb_up_outlined)],
+            children: [Text(message), const Icon(Icons.thumb_up_outlined)],
           )
         : Text(message);
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: content));
@@ -196,7 +189,7 @@ class _MilestoneFieldState extends State<MilestoneField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FormLabelText(label: 'Milestones'),
+        const FormLabelText(label: 'Milestones'),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -210,9 +203,9 @@ class _MilestoneFieldState extends State<MilestoneField> {
                 validator: (value) {
                   final String? milestoneName = value;
                   print("\n\n${'=' * 20} \n$milestoneName");
-                  if (milestoneName == null || milestoneName.isEmpty)
+                  if (milestoneName == null || milestoneName.isEmpty) {
                     return null;
-                  else if (milestonesContains(milestoneName)) {
+                  } else if (milestonesContains(milestoneName)) {
                     showSnackBar(
                         '$milestoneName is already present in Milestones');
                     return 'Enter a different Value';
@@ -229,7 +222,7 @@ class _MilestoneFieldState extends State<MilestoneField> {
                     return null;
                   }
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   prefixIcon: Icon(
                     MyIcons.task,
                     color: kPrimaryColor,
@@ -241,12 +234,12 @@ class _MilestoneFieldState extends State<MilestoneField> {
               onTap: () {
                 final String milestoneName = milestonesController.text;
                 print("\n\n${'=' * 20} \n$milestoneName");
-                if (milestoneName.isEmpty)
+                if (milestoneName.isEmpty) {
                   showSnackBar('Enter a milestone to add.');
-                else if (milestonesContains(milestoneName))
+                } else if (milestonesContains(milestoneName)) {
                   showSnackBar(
                       '$milestoneName is already present in Milestones');
-                else {
+                } else {
                   final Milestone milestone = Milestone(
                     milestoneName: milestoneName,
                     uniqueIndex: projectController.milestones.length,
@@ -261,13 +254,13 @@ class _MilestoneFieldState extends State<MilestoneField> {
               child: Tooltip(
                 message: 'Add Milestones to Project',
                 child: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: kAccentColor,
                     borderRadius: kMediumRadius,
                   ),
                   margin: EdgeInsets.only(left: size.width * 0.025),
                   padding: EdgeInsets.all(size.width * 0.025),
-                  child: Icon(MyIcons.plus),
+                  child: const Icon(MyIcons.plus),
                 ),
               ),
             )
@@ -285,7 +278,7 @@ class _MilestoneFieldState extends State<MilestoneField> {
                 height: 1,
               ),
               children: [
-                TextSpan(
+                const TextSpan(
                   text: 'Note: Enter each milestone separately. Press',
                 ),
                 TextSpan(
@@ -293,7 +286,7 @@ class _MilestoneFieldState extends State<MilestoneField> {
                   style:
                       Get.textTheme.bodyText1!.copyWith(color: kSubtitleColor),
                 ),
-                TextSpan(
+                const TextSpan(
                   text: 'to add Milestone.',
                 ),
               ],
@@ -317,7 +310,7 @@ class TargetDatePicker extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FormLabelText(label: 'Target Date'),
+        const FormLabelText(label: 'Target Date'),
         GestureDetector(
           onTap: () async {
             DateTime? date = await showDatePicker(
@@ -346,7 +339,7 @@ class TargetDatePicker extends StatelessWidget {
                 SizedBox(
                   width: padding,
                 ),
-                Icon(MyIcons.calender),
+                const Icon(MyIcons.calender),
               ],
             ),
           ),
@@ -367,8 +360,8 @@ class MileStoneList extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(top: size.height * 0.05),
       child: Obx(
-        () => projectController.milestones.length == 0
-            ? Text('No Milestones added for the project')
+        () => projectController.milestones.isEmpty
+            ? const Text('No Milestones added for the project')
             : Column(
                 children: [
                   Text(
@@ -379,7 +372,7 @@ class MileStoneList extends StatelessWidget {
                     builder: (controller) {
                       return Expanded(
                         child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
+                          physics: const BouncingScrollPhysics(),
                           itemCount: controller.milestones.length,
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,

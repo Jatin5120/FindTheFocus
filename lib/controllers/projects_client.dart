@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_the_focus/modals/modals.dart';
 import '../constants/constants.dart';
@@ -10,15 +12,15 @@ class ProjectsClient extends GetxController {
       FirebaseFirestore.instance.collection(MyCollections.projects);
   late CollectionReference _allProjectsCollection;
 
-  RxList<Project> _projects = <Project>[].obs;
+  final RxList<Project> _projects = <Project>[].obs;
 
   ProjectsClient() {
     _allProjectsCollection = _projectCollection
         .doc(_authenticationController.googleAccount!.id)
-        .collection(MyCollections.all_projects);
+        .collection(MyCollections.allProjects);
   }
 
-  List<Project> get projects => _projects.value;
+  List<Project> get projects => _projects;
 
   set projects(List<Project> value) => _projects.value = value;
 
@@ -29,11 +31,11 @@ class ProjectsClient extends GetxController {
     _allProjectsCollection.get().then((value) {
       final List<QueryDocumentSnapshot<Map<String, dynamic>>> docs =
           value.docs as List<QueryDocumentSnapshot<Map<String, dynamic>>>;
-      docs.forEach((element) {
+      for (var element in docs) {
         final Project project = Project.fromMap(element.data());
         print(project);
         projectList.add(project);
-      });
+      }
       projects = projectList.reversed.toList();
     });
     if (projects.isNotEmpty) projectController.currentProject = projects.first;

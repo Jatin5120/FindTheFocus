@@ -21,24 +21,24 @@ class _ScreenWrapperState extends State<ScreenWrapper> {
 
   late Stream<QuerySnapshot<Map<String, dynamic>>> stream;
 
-  List<IconData> _icons = [
+  final List<IconData> _icons = [
     MyIcons.dashboard,
     MyIcons.project,
     MyIcons.stats,
     MyIcons.user,
   ];
 
-  List<String> _labels = [
+  final List<String> _labels = [
     'Dashboard',
     'Projects',
     'Analytics',
     'Profile',
   ];
 
-  List<Widget> _screens = [
-    Dashboard(),
+  final List<Widget> _screens = [
+    const Dashboard(),
     ProjectScreen(),
-    AnalyticsScreen(),
+    const AnalyticsScreen(),
     ProfileScreen(),
   ];
 
@@ -63,7 +63,7 @@ class _ScreenWrapperState extends State<ScreenWrapper> {
 
             /// Here goes the logic to navigate for questionss
             child: questionsController.isFirstLogin
-                ? QuestionsWrapper()
+                ? const QuestionsWrapper()
                 : _screens[navBarController.selectedIndex],
           );
         },
@@ -72,10 +72,10 @@ class _ScreenWrapperState extends State<ScreenWrapper> {
         return navBarController.showFAB
             ? FloatingActionButton(
                 backgroundColor: kPrimaryColor,
-                child: Icon(MyIcons.plus),
+                child: const Icon(MyIcons.plus),
                 onPressed: () => Get.to(() => AddProject()),
               )
-            : SizedBox.shrink();
+            : const SizedBox.shrink();
       }),
       bottomNavigationBar: Card(
         margin: EdgeInsets.zero,

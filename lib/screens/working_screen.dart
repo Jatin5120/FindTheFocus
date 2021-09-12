@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
@@ -9,7 +11,8 @@ import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class WorkingProjectScreen extends StatefulWidget {
-  WorkingProjectScreen({Key? key, required this.project}) : super(key: key);
+  const WorkingProjectScreen({Key? key, required this.project})
+      : super(key: key);
 
   final Project project;
 
@@ -24,7 +27,7 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
 
   void startTimer() {
     workingTimeController.startingTime = Timestamp.now();
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (workingTimeController.isCompleted) {
         timer.cancel();
       } else {
@@ -64,9 +67,10 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
-    SystemChrome.setEnabledSystemUIOverlays([]);
+
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     workingTimeController.isCompleted = true;
-    workingTimeController.totalTime = Duration(minutes: 1);
+    workingTimeController.totalTime = const Duration(minutes: 1);
     workingTimeController.resetTime();
     startTimer();
   }
@@ -74,7 +78,8 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
   @override
   void dispose() {
     timer.cancel();
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
@@ -124,7 +129,7 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
                 ),
                 Expanded(
                   flex: 6,
-                  child: Container(
+                  child: SizedBox(
                     height: size.width.seventyFivePercent,
                     width: size.width.seventyFivePercent,
                     child: Obx(
@@ -142,7 +147,7 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
                                 workingTimeController.totalTime.inSeconds)
                             .clamp(0.0, 1.0),
                         center: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: kAccentColor,
                           ),
@@ -212,7 +217,7 @@ class _BuildExitAlertDialog extends StatelessWidget {
     return AlertDialog(
       elevation: kElevation,
       backgroundColor: Theme.of(context).cardTheme.color,
-      shape: RoundedRectangleBorder(borderRadius: kSmallRadius),
+      shape: kSmallButtonShape,
       title: Text(title ?? 'Are you Sure?'),
       content: Text(
         message!,

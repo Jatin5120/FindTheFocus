@@ -18,7 +18,7 @@ class ProfileScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Profile'),
+          const Text('Profile'),
           InteractiveViewer(
             child: CircleAvatar(
               backgroundImage: NetworkImage(user?.photoUrl ?? ''),
@@ -40,8 +40,8 @@ class ProfileScreen extends StatelessWidget {
               await authenticationController.signOut();
               navBarController.selectedIndex = 0;
             },
-            label: Text('Sign Out'),
-            icon: Icon(Icons.logout_outlined),
+            label: const Text('Sign Out'),
+            icon: const Icon(Icons.logout_outlined),
           )
         ],
       ),

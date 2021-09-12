@@ -12,7 +12,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   initializeControllers();
   await NotificationService().initializeNotification();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 void initializeControllers() async {
@@ -24,13 +24,15 @@ void initializeControllers() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Find The Focus',
       theme: myTheme,
-      home: ObjectiveQuestions(),
+      home: const ObjectiveQuestions(),
       // home: AuthenticationWrapper(),
     );
   }

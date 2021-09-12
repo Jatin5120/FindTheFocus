@@ -35,7 +35,7 @@ class LoginScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () => authenticationController.signInWithGoogle(),
                     child: Card(
-                      shape: StadiumBorder(),
+                      shape: const StadiumBorder(),
                       color: kWhiteColor,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,7 +50,7 @@ class LoginScreen extends StatelessWidget {
                             style: Get.textTheme.headline5
                                 ?.copyWith(color: kBlackColor),
                           ),
-                          SizedBox(width: 40),
+                          const SizedBox(width: 40),
                         ],
                       ),
                     ),

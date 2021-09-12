@@ -6,12 +6,12 @@ import '../constants/constants.dart';
 import 'package:get/get.dart';
 
 class ProjectController extends GetxController {
-  RxInt _selectedIndex = 0.obs;
-  Rx<Project?> _currentProject = Rx<Project?>(null);
-  RxInt _currentProjectIndex = 0.obs;
-  RxString _projectName = ''.obs;
-  Rx<List<Milestone>> _milestones = Rx<List<Milestone>>([]);
-  Rx<DateTime> _targetDate = DateTime.now().obs;
+  final RxInt _selectedIndex = 0.obs;
+  final Rx<Project?> _currentProject = Rx<Project?>(null);
+  final RxInt _currentProjectIndex = 0.obs;
+  final RxString _projectName = ''.obs;
+  final Rx<List<Milestone>> _milestones = Rx<List<Milestone>>([]);
+  final Rx<DateTime> _targetDate = DateTime.now().obs;
 
   // --------------------- Project Navigations Methods ---------------------
 
@@ -35,7 +35,7 @@ class ProjectController extends GetxController {
 
   // --------------------- State Management Methods ---------------------
 
-  set selectedIndex(int index) => this._selectedIndex.value = index;
+  set selectedIndex(int index) => _selectedIndex.value = index;
 
   Project? get currentProject => _currentProject.value;
 

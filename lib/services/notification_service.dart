@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:find_the_focus/constants/constants.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -14,17 +16,17 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
 
   Future<void> initializeNotification() async {
-    final AndroidInitializationSettings androidInitializationSettings =
+    const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings('notification_icon');
 
-    final IOSInitializationSettings iosInitializationSettings =
+    const IOSInitializationSettings iosInitializationSettings =
         IOSInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: false,
     );
 
-    final InitializationSettings initializationSettings =
+    const InitializationSettings initializationSettings =
         InitializationSettings(
       android: androidInitializationSettings,
       iOS: iosInitializationSettings,
@@ -40,7 +42,7 @@ class NotificationService {
   }
 
   Future<void> showNotification() async {
-    final AndroidNotificationDetails androidNotificationDetails =
+    const AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(
       kNotificationChannelID,
       kNotificationChannelName,
@@ -49,14 +51,14 @@ class NotificationService {
       priority: Priority.max,
     );
 
-    final IOSNotificationDetails iosNotificationDetails =
+    const IOSNotificationDetails iosNotificationDetails =
         IOSNotificationDetails(
       presentAlert: false,
       presentBadge: false,
       presentSound: false,
     );
 
-    final NotificationDetails notificationDetails = NotificationDetails(
+    const NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
       iOS: iosNotificationDetails,
     );

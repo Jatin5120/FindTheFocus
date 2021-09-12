@@ -4,7 +4,7 @@ import '../constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class SearchBar extends StatelessWidget {
-  SearchBar({Key? key, this.title}) : super(key: key);
+  const SearchBar({Key? key, this.title}) : super(key: key);
 
   final String? title;
 
@@ -28,14 +28,14 @@ class SearchBar extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(MyIcons.menu),
+                  icon: const Icon(MyIcons.menu),
                 ),
                 Text(
                   title ?? '',
                   style: Get.textTheme.bodyText1,
                 ),
                 IconButton(
-                  icon: Icon(MyIcons.search),
+                  icon: const Icon(MyIcons.search),
                   onPressed: () {},
                 ),
               ],

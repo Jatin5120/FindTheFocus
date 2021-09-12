@@ -16,7 +16,7 @@ class ProjectScreen extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: [
-          SearchBar(title: 'Projects'),
+          const SearchBar(title: 'Projects'),
           Container(
             decoration: BoxDecoration(
               borderRadius: kChipRadius,
@@ -33,10 +33,11 @@ class ProjectScreen extends StatelessWidget {
           ),
           Expanded(
             child: Obx(() {
-              if (projectController.selectedIndex == 0)
+              if (projectController.selectedIndex == 0) {
                 return CurrentProject();
-              else
+              } else {
                 return AllProjects();
+              }
             }),
           ),
         ],

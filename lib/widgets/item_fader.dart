@@ -47,7 +47,7 @@ class ItemFaderState extends State<ItemFader>
         double minTop = MediaQuery.of(context).padding.top + size.height * 0.15;
         return AnimatedBuilder(
           animation: _animationController,
-          child: Dot(),
+          child: const Dot(),
           builder: (_, child) {
             return Positioned(
               left: size.width * 0.2,

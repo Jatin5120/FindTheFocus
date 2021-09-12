@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import '../modals/modals.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -7,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Dashboard extends StatefulWidget {
-  Dashboard({Key? key}) : super(key: key);
+  const Dashboard({Key? key}) : super(key: key);
 
   @override
   _DashboardState createState() => _DashboardState();
@@ -22,7 +24,7 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
+      const SystemUiOverlayStyle(
         statusBarColor: kSecondaryColor,
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.dark,
@@ -33,7 +35,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   void dispose() {
     SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
+      const SystemUiOverlayStyle(
         statusBarColor: kBackgroundColor,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.light,
@@ -53,7 +55,7 @@ class _DashboardState extends State<Dashboard> {
           Expanded(
             flex: 2,
             child: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: size.width.sevenPercent,
@@ -62,24 +64,24 @@ class _DashboardState extends State<Dashboard> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _TitleText('Quick cards'),
+                    const _TitleText('Quick cards'),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _BuildQuickCard(
                           child: projectController.currentProject == null &&
                                   projectsClient.projects.isEmpty
-                              ? _NoProjectsCard()
+                              ? const _NoProjectsCard()
                               : Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   children: [
-                                    SizedBox.shrink(),
+                                    const SizedBox.shrink(),
                                     Text(
                                       'Recent work',
                                       style: Get.textTheme.caption,
                                     ),
-                                    SizedBox.shrink(),
+                                    const SizedBox.shrink(),
                                     Text(
                                       '2.3 Hr',
                                       style: Get.textTheme.headline4,
@@ -93,17 +95,17 @@ class _DashboardState extends State<Dashboard> {
                                         style: Get.textTheme.bodyText1,
                                       );
                                     }),
-                                    SizedBox.shrink(),
+                                    const SizedBox.shrink(),
                                   ],
                                 ),
                         ),
                         _BuildQuickCard(
                           child: projectController.currentProject == null &&
                                   projectsClient.projects.isEmpty
-                              ? _NoProjectsCard()
+                              ? const _NoProjectsCard()
                               : Column(
                                   children: [
-                                    Text('All stats'),
+                                    const Text('All stats'),
                                     Obx(() {
                                       final Project project =
                                           projectController.currentProject ??
@@ -118,7 +120,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                       ],
                     ),
-                    _TitleText('Navigate'),
+                    const _TitleText('Navigate'),
                     GestureDetector(
                       onTap: () {
                         navBarController.selectedIndex = 1;
@@ -170,7 +172,7 @@ class _NoProjectsCard extends StatelessWidget {
 }
 
 class _TitleText extends StatelessWidget {
-  _TitleText(
+  const _TitleText(
     this.title, {
     Key? key,
   }) : super(key: key);
@@ -194,7 +196,7 @@ class _TitleText extends StatelessWidget {
 }
 
 class _BuildQuickCard extends StatelessWidget {
-  _BuildQuickCard({
+  const _BuildQuickCard({
     required this.child,
     Key? key,
   }) : super(key: key);
@@ -231,7 +233,7 @@ class _DashboardHeader extends StatelessWidget {
     final double imageSize = 80 * (size.width / 414);
     final GoogleSignInAccount? user = authenticationController.googleAccount;
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: kSecondaryColor,
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(40),
@@ -253,7 +255,7 @@ class _DashboardHeader extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: null,
-                  child: Icon(MyIcons.setting, color: kSecondaryColor),
+                  child: const Icon(MyIcons.setting, color: kSecondaryColor),
                 ),
                 ClipRRect(
                   borderRadius: kChipRadius,
@@ -269,7 +271,7 @@ class _DashboardHeader extends StatelessWidget {
                   onTap: () {
                     print("Setting");
                   },
-                  child: Icon(MyIcons.setting, color: kBlackColor),
+                  child: const Icon(MyIcons.setting, color: kBlackColor),
                 ),
               ],
             ),
@@ -284,7 +286,7 @@ class _DashboardHeader extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: size.width.fivePercent),
             child: Row(
-              children: [
+              children: const [
                 _UserStatsElement(value: '7', title: 'Projects'),
                 _ElementDivider(),
                 _UserStatsElement(value: '11.6 Hr', title: 'Working time'),
