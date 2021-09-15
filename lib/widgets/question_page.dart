@@ -1,4 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'package:find_the_focus/constants/constants.dart';
+import 'package:find_the_focus/modals/modals.dart';
 import 'package:find_the_focus/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,14 +10,12 @@ class QuestionPage extends StatefulWidget {
   const QuestionPage({
     Key? key,
     required this.number,
-    required this.question,
-    required this.answers,
+    required this.questionModal,
     required this.onOptionSelected,
   }) : super(key: key);
 
   final int number;
-  final String question;
-  final List<String> answers;
+  final QuestionModal questionModal;
   final VoidCallback onOptionSelected;
 
   @override
@@ -23,7 +24,7 @@ class QuestionPage extends StatefulWidget {
 
 class _QuestionPageState extends State<QuestionPage> {
   late List<GlobalKey<ItemFaderState>> keys;
-  final Duration delayDuration = const Duration(milliseconds: 40);
+  final Duration delayDuration = const Duration(milliseconds: 50);
 
   @override
   void initState() {
@@ -56,16 +57,20 @@ class _QuestionPageState extends State<QuestionPage> {
         children: [
           SizedBox(height: size.height * 0.075),
           ItemFader(key: keys[0], child: _Number(widget.number)),
-          ItemFader(key: keys[1], child: _Question(widget.question)),
+          ItemFader(
+              key: keys[1], child: _Question(widget.questionModal.question)),
           const Spacer(),
-          ...widget.answers.map((String answer) {
-            final int answerIndex = widget.answers.indexOf(answer);
+          ...widget.questionModal.answers.map((String answer) {
+            final int answerIndex =
+                widget.questionModal.answers.indexOf(answer);
+            final int weightage = widget.questionModal.weightages[answerIndex];
             final int keyIndex = answerIndex + 2;
             return ItemFader(
               key: keys[keyIndex],
               child: _Option(
                 answer: answer,
-                onOptionSelected: widget.onOptionSelected,
+                weightage: weightage,
+                onOptionSelected: onTap,
               ),
             );
           }),
@@ -80,10 +85,12 @@ class _Option extends StatelessWidget {
   const _Option({
     Key? key,
     required this.answer,
+    required this.weightage,
     required this.onOptionSelected,
   }) : super(key: key);
 
   final String answer;
+  final int weightage;
   final VoidCallback onOptionSelected;
 
   @override
@@ -97,6 +104,7 @@ class _Option extends StatelessWidget {
         // Offset globalPosition = object.localToGlobal(Offset.zero);
         // onOptionSelected(globalPosition);
         onOptionSelected();
+        print("$weightage added");
       },
       child: Padding(
         padding: EdgeInsets.fromLTRB(

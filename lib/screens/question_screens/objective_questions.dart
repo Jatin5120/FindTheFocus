@@ -9,6 +9,10 @@ class ObjectiveQuestions extends StatelessWidget {
   const ObjectiveQuestions({Key? key}) : super(key: key);
 
   static QuestionsController questionsController = Get.find();
+  static PageController pageController = PageController();
+
+  static Duration transitionDuration = const Duration(milliseconds: 600);
+  static Curve transitionCurve = Curves.easeInOut;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +27,7 @@ class ObjectiveQuestions extends StatelessWidget {
               const _Line(),
               const _TimeIcon(),
               PageView.builder(
+                controller: pageController,
                 pageSnapping: true,
                 scrollDirection: Axis.vertical,
                 itemCount: questionsController.questions.length,
@@ -31,14 +36,54 @@ class ObjectiveQuestions extends StatelessWidget {
                       questionsController.questions[index];
                   return QuestionPage(
                     number: index + 1,
-                    question: questionModal.question,
-                    answers: questionModal.answers,
-                    onOptionSelected: () {},
+                    questionModal: questionModal,
+                    onOptionSelected: () {
+                      pageController.nextPage(
+                        duration: transitionDuration,
+                        curve: transitionCurve,
+                      );
+                    },
+                  );
+                },
+              ),
+              _ArrowButtton(
+                onTap: () {
+                  pageController.previousPage(
+                    duration: transitionDuration,
+                    curve: transitionCurve,
                   );
                 },
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ArrowButtton extends StatelessWidget {
+  const _ArrowButtton({Key? key, required this.onTap}) : super(key: key);
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return Positioned(
+      bottom: size.height * 0.025,
+      right: size.width * 0.05,
+      child: InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: kBackgroundColor[100],
+          ),
+          child: const Icon(Icons.arrow_upward_rounded, color: kWhiteColor),
         ),
       ),
     );

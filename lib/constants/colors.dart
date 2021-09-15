@@ -34,7 +34,7 @@ const Color kBlackColor = Color(0xFF000000);
 
 const Color kWhiteColor = Color(0xFFFFFFFF);
 
-const Color kShadowColor = Color(0x330C0E1c);
+const Color kShadowColor = Color(0x33000000);
 
 const Color kDividerColor = Color(0x88FFFFFF);
 
