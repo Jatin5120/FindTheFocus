@@ -1,4 +1,5 @@
 import 'package:find_the_focus/constants/colors.dart';
+import 'package:find_the_focus/constants/constants.dart';
 import 'package:find_the_focus/controllers/controllers.dart';
 import 'package:find_the_focus/modals/modals.dart';
 import 'package:find_the_focus/widgets/widgets.dart';
@@ -11,13 +12,13 @@ class ObjectiveQuestions extends StatelessWidget {
   static QuestionsController questionsController = Get.find();
   static PageController pageController = PageController();
 
-  static Duration transitionDuration = const Duration(milliseconds: 600);
   static Curve transitionCurve = Curves.easeInOut;
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
+      key: key,
       body: SafeArea(
         child: ConstrainedBox(
           constraints:
@@ -31,15 +32,17 @@ class ObjectiveQuestions extends StatelessWidget {
                 pageSnapping: true,
                 scrollDirection: Axis.vertical,
                 itemCount: questionsController.questions.length,
+                physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (_, index) {
                   final QuestionModal questionModal =
                       questionsController.questions[index];
                   return QuestionPage(
+                    key: key,
                     number: index + 1,
                     questionModal: questionModal,
                     onOptionSelected: () {
                       pageController.nextPage(
-                        duration: transitionDuration,
+                        duration: kAnimationDuration,
                         curve: transitionCurve,
                       );
                     },
@@ -49,7 +52,7 @@ class ObjectiveQuestions extends StatelessWidget {
               _ArrowButtton(
                 onTap: () {
                   pageController.previousPage(
-                    duration: transitionDuration,
+                    duration: kAnimationDuration,
                     curve: transitionCurve,
                   );
                 },

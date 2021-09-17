@@ -22,7 +22,8 @@ class QuestionPage extends StatefulWidget {
   _QuestionPageState createState() => _QuestionPageState();
 }
 
-class _QuestionPageState extends State<QuestionPage> {
+class _QuestionPageState extends State<QuestionPage>
+    with SingleTickerProviderStateMixin {
   late List<GlobalKey<ItemFaderState>> keys;
   final Duration delayDuration = const Duration(milliseconds: 50);
 
@@ -70,6 +71,7 @@ class _QuestionPageState extends State<QuestionPage> {
               child: _Option(
                 answer: answer,
                 weightage: weightage,
+                // onOptionSelected: onTap,
                 onOptionSelected: onTap,
               ),
             );
@@ -81,7 +83,7 @@ class _QuestionPageState extends State<QuestionPage> {
   }
 }
 
-class _Option extends StatelessWidget {
+class _Option extends StatefulWidget {
   const _Option({
     Key? key,
     required this.answer,
@@ -94,27 +96,73 @@ class _Option extends StatelessWidget {
   final VoidCallback onOptionSelected;
 
   @override
+  State<_Option> createState() => _OptionState();
+}
+
+class _OptionState extends State<_Option> with SingleTickerProviderStateMixin {
+  late AnimationController _dotAnimationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _dotAnimationController = AnimationController(
+      vsync: this,
+      duration: kAnimationDuration,
+    );
+  }
+
+  Future<void> animateDot(Offset startingOffset) async {
+    widget.onOptionSelected();
+    OverlayEntry entry = OverlayEntry(
+      builder: (context) {
+        double minTop = MediaQuery.of(context).padding.top +
+            MediaQuery.of(context).size.height * 0.1;
+        return AnimatedBuilder(
+          animation: _dotAnimationController,
+          child: const Dot(color: kWhiteColor),
+          builder: (BuildContext context, Widget? child) {
+            final Size size = MediaQuery.of(context).size;
+            return Positioned(
+              left: size.width * 0.2,
+              top: minTop +
+                  (startingOffset.dy - minTop) *
+                      (1 - _dotAnimationController.value),
+              child: child!,
+            );
+          },
+        );
+      },
+    );
+    Overlay.of(context)!.insert(entry);
+    await _dotAnimationController.forward(from: 0);
+    entry.remove();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () {
-        // RenderBox object = context.findAncestorRenderObjectOfType<RenderBox>()!;
-        // Offset globalPosition = object.localToGlobal(Offset.zero);
-        // onOptionSelected(globalPosition);
-        onOptionSelected();
-        print("$weightage added");
+        RenderBox box = context.findRenderObject() as RenderBox;
+        Offset offset = box.localToGlobal(Offset.zero);
+        animateDot(offset);
+        print("${widget.weightage} added");
       },
       child: Padding(
         padding: EdgeInsets.fromLTRB(
-            size.width * 0.2, 0, size.width * 0.1, size.height * 0.05),
+          size.width * 0.2,
+          0,
+          size.width * 0.1,
+          size.height * 0.075,
+        ),
         child: Row(
           children: [
             const Dot(),
             SizedBox(width: size.width * 0.05),
             Expanded(
-              child: Text(answer, style: Get.textTheme.headline6),
+              child: Text(widget.answer, style: Get.textTheme.headline6),
             ),
           ],
         ),
@@ -124,15 +172,17 @@ class _Option extends StatelessWidget {
 }
 
 class Dot extends StatelessWidget {
-  const Dot({Key? key}) : super(key: key);
+  const Dot({Key? key, this.color = kDisabledColor}) : super(key: key);
+
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 16,
       width: 16,
-      decoration: const BoxDecoration(
-        color: kWhiteColor,
+      decoration: BoxDecoration(
+        color: color,
         shape: BoxShape.circle,
       ),
     );

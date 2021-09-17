@@ -30,6 +30,12 @@ class ItemFaderState extends State<ItemFader>
     );
   }
 
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   void show() {
     setState(() => position = 1);
     _animationController.forward();
@@ -38,30 +44,6 @@ class ItemFaderState extends State<ItemFader>
   void hide() {
     setState(() => position = -1);
     _animationController.reverse();
-  }
-
-  Future<void> animateDot(Offset startOffset) async {
-    OverlayEntry entry = OverlayEntry(
-      builder: (context) {
-        final Size size = MediaQuery.of(context).size;
-        double minTop = MediaQuery.of(context).padding.top + size.height * 0.15;
-        return AnimatedBuilder(
-          animation: _animationController,
-          child: const Dot(),
-          builder: (_, child) {
-            return Positioned(
-              left: size.width * 0.2,
-              top: minTop +
-                  (startOffset.dy - minTop) * (1 - _animationController.value),
-              child: child!,
-            );
-          },
-        );
-      },
-    );
-    Overlay.of(context)!.insert(entry);
-    await _animationController.forward(from: 0);
-    entry.remove();
   }
 
   @override
