@@ -11,11 +11,10 @@ class AuthenticationWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetX<AuthenticationController>(builder: (controller) {
-      questionsController.checkFirstLogin();
-      if (controller.isLoggedIn) {
-        controller.signInWithGoogle();
-        if (controller.googleAccount != null) {
+    return GetX<AuthenticationController>(builder: (authenticationController) {
+      if (authenticationController.isLoggedIn) {
+        authenticationController.signInWithGoogle();
+        if (authenticationController.googleAccount != null) {
           Get.put(ProjectsClient());
           return const ScreenWrapper();
         } else {

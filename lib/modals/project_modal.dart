@@ -1,95 +1,91 @@
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'modals.dart';
 
 class Project {
+  /// ID associated with Google account to identify projects of user
+  final String userID;
+
+  /// Unique ID associated with project
+  final String projectID;
+
   ///The name of the project this will be displayed in the [CurrentProject] screen
   ///if it is the current project. Also it will used to display the statistics in
   ///the [Analytics] screen.
-  String? projectName;
+  final String projectName;
 
-  ///This is [List] of Milestones which one can add, this will make the work statistics
-  ///more organised and clear to understand the time spent while working.
-  List<Milestone?>? milestones;
+  /// number id associated with each project to sort them in app
+  final int projectNumber;
 
   ///The starting date will be added automatically when the user adds the project
-  Timestamp? startingDate;
-  // DateTime? startingDate;
+  /// startDateEpoch will be DateTime stored as milliseconds
+  final int startDateEpoch;
 
   ///The target date is an of the project is an optional information to be provided
   ///but it can act as a alarm to tell the user about the due date.
-  Timestamp? targetDate;
-
-  ///The total working time will be recorded as the user starts the timer when the
-  ///work is started. This will be used in [Analytics panel].
-  List<WorkingModal>? workingTime;
+  final int? targetDateEpoch;
 
   ///isCompleted is a boolean value with a default value as [false] used to flag
   ///whether the project is completed or not
-  bool? isCompleted;
+  final bool isCompleted;
 
-  List<int?>? completedMilestones;
+  /// boolean value which will denote wheather the project is having milestones or not
+  final bool haveMilestones;
 
   Project({
+    required this.userID,
+    required this.projectID,
     required this.projectName,
-    this.milestones,
-    this.startingDate,
-    this.targetDate,
-    this.workingTime,
-    this.isCompleted = false,
-    this.completedMilestones,
-  }) {
-    if (milestones != null) {
-      completedMilestones = List.generate(milestones!.length, (index) => 0);
-    } else {
-      completedMilestones = null;
-    }
-    workingTime = [];
-  }
+    required this.projectNumber,
+    required this.startDateEpoch,
+    this.targetDateEpoch,
+    required this.isCompleted,
+    required this.haveMilestones,
+  });
 
   Project copyWith({
+    String? userID,
+    String? projectID,
     String? projectName,
-    List<Milestone?>? milestones,
-    Timestamp? startingDate,
-    Timestamp? targetDate,
-    List<WorkingModal>? workingTime,
+    int? projectNumber,
+    int? startDateEpoch,
+    int? targetDateEpoch,
     bool? isCompleted,
-    List<int?>? completedMilestones,
+    bool? haveMilestones,
   }) {
     return Project(
+      userID: userID ?? this.userID,
+      projectID: projectID ?? this.projectID,
       projectName: projectName ?? this.projectName,
-      milestones: milestones ?? this.milestones,
-      startingDate: startingDate ?? this.startingDate,
-      targetDate: targetDate ?? this.targetDate,
-      workingTime: workingTime ?? this.workingTime,
+      projectNumber: projectNumber ?? this.projectNumber,
+      startDateEpoch: startDateEpoch ?? this.startDateEpoch,
+      targetDateEpoch: targetDateEpoch ?? this.targetDateEpoch,
       isCompleted: isCompleted ?? this.isCompleted,
-      completedMilestones: completedMilestones ?? this.completedMilestones,
+      haveMilestones: haveMilestones ?? this.haveMilestones,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
+      'userID': userID,
+      'projectID': projectID,
       'projectName': projectName,
-      'milestones': milestones?.map((milestone) => milestone!.toMap()).toList(),
-      'startingDate': startingDate,
-      'targetDate': targetDate,
-      'workingTime': workingTime?.map((element) => element.toMap()).toList(),
+      'projectNumber': projectNumber,
+      'startDateEpoch': startDateEpoch,
+      'targetDateEpoch': targetDateEpoch,
       'isCompleted': isCompleted,
-      'completedMilestones': completedMilestones?.toList(),
+      'haveMilestones': haveMilestones,
     };
   }
 
   factory Project.fromMap(Map<String, dynamic> map) {
     return Project(
+      userID: map['userID'],
+      projectID: map['projectID'],
       projectName: map['projectName'],
-      milestones: List<Milestone?>.from(
-          map['milestones'].map((milestone) => Milestone.fromMap(milestone))),
-      startingDate: map['startingDate'],
-      targetDate: map['targetDate'],
-      workingTime: List<WorkingModal>.from(map['workingTime']),
+      projectNumber: map['projectNumber'],
+      startDateEpoch: map['startDateEpoch'],
+      targetDateEpoch: map['targetDateEpoch'],
       isCompleted: map['isCompleted'],
-      completedMilestones: List<int?>.from(map['completedMilestones']),
+      haveMilestones: map['haveMilestones'],
     );
   }
 
@@ -100,7 +96,7 @@ class Project {
 
   @override
   String toString() {
-    return 'Project(projectName: $projectName, milestones: $milestones, startingDate: $startingDate, targetDate: $targetDate, workingTime: $workingTime, isCompleted: $isCompleted, completedMilestones: $completedMilestones)';
+    return 'Project(userID: $userID, projectID: $projectID, projectName: $projectName, projectNumber: $projectNumber, startDateEpoch: $startDateEpoch, targetDateEpoch: $targetDateEpoch, isCompleted: $isCompleted, haveMilestones: $haveMilestones)';
   }
 
   @override
@@ -108,23 +104,25 @@ class Project {
     if (identical(this, other)) return true;
 
     return other is Project &&
+        other.userID == userID &&
+        other.projectID == projectID &&
         other.projectName == projectName &&
-        listEquals(other.milestones, milestones) &&
-        other.startingDate == startingDate &&
-        other.targetDate == targetDate &&
-        listEquals(other.workingTime, workingTime) &&
+        other.projectNumber == projectNumber &&
+        other.startDateEpoch == startDateEpoch &&
+        other.targetDateEpoch == targetDateEpoch &&
         other.isCompleted == isCompleted &&
-        listEquals(other.completedMilestones, completedMilestones);
+        other.haveMilestones == haveMilestones;
   }
 
   @override
   int get hashCode {
-    return projectName.hashCode ^
-        milestones.hashCode ^
-        startingDate.hashCode ^
-        targetDate.hashCode ^
-        workingTime.hashCode ^
+    return userID.hashCode ^
+        projectID.hashCode ^
+        projectName.hashCode ^
+        projectNumber.hashCode ^
+        startDateEpoch.hashCode ^
+        targetDateEpoch.hashCode ^
         isCompleted.hashCode ^
-        completedMilestones.hashCode;
+        haveMilestones.hashCode;
   }
 }

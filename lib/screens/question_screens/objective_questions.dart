@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:find_the_focus/constants/colors.dart';
 import 'package:find_the_focus/constants/constants.dart';
 import 'package:find_the_focus/controllers/controllers.dart';
@@ -41,6 +43,9 @@ class ObjectiveQuestions extends StatelessWidget {
                     number: index + 1,
                     questionModal: questionModal,
                     onOptionSelected: () {
+                      if (index == 9) {
+                        questionsController.isQuestionsCompleted = true;
+                      }
                       pageController.nextPage(
                         duration: kAnimationDuration,
                         curve: transitionCurve,
@@ -49,15 +54,57 @@ class ObjectiveQuestions extends StatelessWidget {
                   );
                 },
               ),
-              _ArrowButtton(
-                onTap: () {
-                  pageController.previousPage(
-                    duration: kAnimationDuration,
-                    curve: transitionCurve,
-                  );
+              Obx(
+                () {
+                  if (questionsController.isQuestionsCompleted) {
+                    Future.delayed(const Duration(seconds: 2), () {
+                      Get.off(() => const ScreenWrapper());
+                    });
+                    return const _DoneButton();
+                  } else {
+                    return _ArrowButtton(
+                      onTap: () {
+                        pageController.previousPage(
+                          duration: kAnimationDuration,
+                          curve: transitionCurve,
+                        );
+                      },
+                    );
+                  }
                 },
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DoneButton extends StatelessWidget {
+  const _DoneButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return Center(
+      child: Container(
+        width: size.width.fiftyPercent,
+        height: size.height.twentyPercent,
+        decoration: BoxDecoration(
+          borderRadius: kCardRadius,
+          color: kBackgroundColor[100]!,
+        ),
+        padding: EdgeInsets.all(size.width.tenPercent),
+        child: Container(
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: kSuccessColor,
+          ),
+          alignment: Alignment.center,
+          child: const Icon(
+            MyIcons.check,
+            size: 32,
           ),
         ),
       ),
@@ -86,7 +133,7 @@ class _ArrowButtton extends StatelessWidget {
             shape: BoxShape.circle,
             color: kBackgroundColor[100],
           ),
-          child: const Icon(Icons.arrow_upward_rounded, color: kWhiteColor),
+          child: const Icon(Icons.arrow_upward_rounded),
         ),
       ),
     );
@@ -103,7 +150,7 @@ class _TimeIcon extends StatelessWidget {
       left: size.width * 0.16,
       top: size.height * 0.1,
       child: const Icon(
-        Icons.hourglass_full_rounded,
+        Icons.track_changes_rounded,
         size: 48,
       ),
     );

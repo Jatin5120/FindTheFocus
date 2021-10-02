@@ -1,4 +1,5 @@
 import 'package:find_the_focus/controllers/controllers.dart';
+import 'question_screens.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,6 +10,6 @@ class QuestionsWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const ObjectiveQuestions();
   }
 }

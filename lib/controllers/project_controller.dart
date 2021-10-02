@@ -1,6 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:find_the_focus/controllers/controllers.dart';
-
 import '../modals/modals.dart';
 import '../constants/constants.dart';
 import 'package:get/get.dart';
@@ -60,24 +57,22 @@ class ProjectController extends GetxController {
 
   set targetDate(DateTime date) => _targetDate.value = date;
 
-  void createProject() {
-    final ProjectsClient projectsClient = Get.find();
-    Project project = Project(
-      projectName: projectName,
-      milestones: milestones,
-      startingDate: Timestamp.now(),
-      targetDate:
-          targetDate == DateTime.now() ? null : Timestamp.fromDate(targetDate),
-    );
-    projectsClient.projects.add(project);
-    projectsClient.projects.obs.refresh();
-    currentProject = project;
-    projectsClient.post();
-  }
-
   // --------------------- Display Methods ---------------------
 
   String get displayeTargetDate => _targetDate.value.displayDate();
+
+  String get displayeTargetDateMonth => _targetDate.value.displayDateMonth();
+
+  // --------------------- Compare Methods ---------------------
+
+  bool milestonesContains(String value) {
+    final List<bool> matchValues = [];
+    for (Milestone milestone in milestones) {
+      matchValues
+          .add(milestone.milestoneName.toLowerCase() == value.toLowerCase());
+    }
+    return matchValues.contains(true);
+  }
 
   // --------------------- Discard Project Methods ---------------------
 

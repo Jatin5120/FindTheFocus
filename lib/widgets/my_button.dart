@@ -2,6 +2,39 @@ import 'package:flutter/material.dart';
 import '../constants/constants.dart';
 import 'package:get/get.dart';
 
+class LongButton extends StatelessWidget {
+  const LongButton({
+    Key? key,
+    required this.label,
+    required this.onPressed,
+    this.buttonSize = ButtonSize.medium,
+    this.isCTA = false,
+    this.backgroundColor = kPrimaryColor,
+    this.elevation = 10,
+  }) : super(key: key);
+
+  final ButtonSize? buttonSize;
+  final String? label;
+  final VoidCallback? onPressed;
+  final bool? isCTA;
+  final Color? backgroundColor;
+  final double? elevation;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.maxFinite,
+      child: MyButton(
+        label: label,
+        onPressed: onPressed,
+        buttonSize: ButtonSize.large,
+        backgroundColor: backgroundColor,
+        elevation: elevation,
+      ),
+    );
+  }
+}
+
 // ignore: must_be_immutable
 class MyButton extends StatelessWidget {
   /// This is default Constructor of [MyButton] class

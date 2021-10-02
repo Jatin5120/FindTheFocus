@@ -3,7 +3,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../controllers/controllers.dart';
-import '../constants/constants.dart';
 import '../modals/modals.dart';
 import '../services/services.dart';
 import 'package:get/get.dart';
@@ -43,15 +42,15 @@ class WorkingTimeController extends GetxController {
       final ProjectController projectController = Get.find();
       final ProjectsClient projectsClient = Get.find();
       final WorkingModal workingModal = WorkingModal(
-        startTime: startingTime,
-        stopTime: Timestamp.now(),
-        milestoneIndex:
-            projectController.currentProject?.completedMilestones?.sum(),
+        startTimeEpoch: startingTime.millisecondsSinceEpoch,
+        endTimeEpoch: Timestamp.now().millisecondsSinceEpoch,
       );
       print(workingModal);
-      projectsClient
-          .projects[projectController.currentProjectIndex].workingTime!
-          .add(workingModal);
+      //TODO: Add working time
+
+      // projectsClient
+      //     .projects[projectController.currentProjectIndex].workingTime!
+      //     .add(workingModal);
       isCompleted = true;
     }
   }

@@ -14,19 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "886158223317-754qfd7fnlf04u50q8sj47rmf88mn1u2.apps.googleusercontent.com",
+          "client_id": "886158223317-5k0bsremlcv2lmdaioe71i8ptjuj2eus.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.find_the_focus",
-            "certificate_hash": "fc630e3a9bc848be7bac4ef4633def43b17ba6ba"
-          }
-        },
-        {
-          "client_id": "886158223317-i7pa735bauuvoi9nigdlmgn4t52bo375.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.find_the_focus",
-            "certificate_hash": "db24600b094a3ef34f1c8f02a645afca7d69ce57"
+            "certificate_hash": "7c63edfd8291cb925dd0c063f6a5fb0ec6a2bab2"
           }
         },
         {

@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_the_focus/modals/modals.dart';
+import 'package:find_the_focus/services/firebase_services.dart';
 import '../constants/constants.dart';
 import 'controllers.dart';
 import 'package:get/get.dart';
@@ -9,7 +10,7 @@ import 'package:get/get.dart';
 class ProjectsClient extends GetxController {
   final AuthenticationController _authenticationController = Get.find();
   final CollectionReference _projectCollection =
-      FirebaseFirestore.instance.collection(MyCollections.projects);
+      FirebaseFirestore.instance.collection(kProjectsCollection);
   late CollectionReference _allProjectsCollection;
 
   final RxList<Project> _projects = <Project>[].obs;
@@ -17,7 +18,7 @@ class ProjectsClient extends GetxController {
   ProjectsClient() {
     _allProjectsCollection = _projectCollection
         .doc(_authenticationController.googleAccount!.id)
-        .collection(MyCollections.allProjects);
+        .collection(kAllProjectsCollection);
   }
 
   List<Project> get projects => _projects;
@@ -41,12 +42,26 @@ class ProjectsClient extends GetxController {
     if (projects.isNotEmpty) projectController.currentProject = projects.first;
   }
 
-  void post() {
-    print('Project to add -> ${projects.last}');
-    _allProjectsCollection
-        .doc('${projects.length - 1}')
-        .set(projects.last.toMap())
-        .then((value) => print('${projects.last.projectName} Added'))
-        .catchError((error) => print("Failed to add: $error"));
+  Future<void> createProject() async {
+    final ProjectController projectController = Get.find();
+    final UserDataController userDataController = Get.find();
+    Project project = Project(
+      userID: userDataController.user.uid,
+      projectID: '',
+      projectName: projectController.projectName,
+      haveMilestones: false,
+      isCompleted: false,
+      projectNumber: 1,
+      startDateEpoch: Timestamp.now().millisecondsSinceEpoch,
+      targetDateEpoch: projectController.targetDate == DateTime.now()
+          ? null
+          : Timestamp.fromDate(projectController.targetDate)
+              .millisecondsSinceEpoch,
+    );
+    projects.add(project);
+    projects.obs.refresh();
+    projectController.currentProject = project;
+    await FirebaseService.addProject(project);
+    // post();
   }
 }

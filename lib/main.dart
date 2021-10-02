@@ -1,4 +1,3 @@
-import '../screens/screens.dart';
 import '../services/services.dart';
 import '../constants/constants.dart';
 import '../controllers/controllers.dart';
@@ -16,11 +15,13 @@ Future<void> main() async {
 }
 
 void initializeControllers() async {
-  Get.put(AuthenticationController());
-  Get.put(NavBarController());
-  Get.put(ProjectController());
-  Get.put(WorkingTimeController());
-  Get.put(QuestionsController());
+  Get.lazyPut(() => AuthenticationController());
+  Get.lazyPut(() => NavBarController());
+  Get.lazyPut(() => ProjectController());
+  Get.lazyPut(() => WorkingTimeController());
+  Get.lazyPut(() => ProjectsClient());
+  Get.lazyPut(() => QuestionsController());
+  Get.lazyPut(() => UserDataController());
 }
 
 class MyApp extends StatelessWidget {
@@ -32,8 +33,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Find The Focus',
       theme: myTheme,
-      home: const ObjectiveQuestions(),
-      // home: AuthenticationWrapper(),
+      // home: const ObjectiveQuestions(),
+      home: const AuthenticationWrapper(),
     );
   }
 }

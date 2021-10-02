@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
@@ -16,7 +18,7 @@ extension EmailValidator on String {
 
 extension DateTimeParser on DateTime {
   String displayDateMonth() {
-    return DateFormat('dd MMM').format(this);
+    return DateFormat('MMM dd').format(this);
   }
 
   String displayDate() {
@@ -24,16 +26,14 @@ extension DateTimeParser on DateTime {
   }
 }
 
-extension ListSum on List<int?> {
-  int sum() {
-    return reduce((i, j) => (i ?? 0) + (j ?? 0))!;
-  }
-}
-
 extension Percent on double {
   double get onePercent => this * 0.01;
 
   double get twoPercent => this * 0.02;
+
+  double get twoDotFivePercent => this * 0.025;
+
+  double get threePercent => this * 0.03;
 
   double get fivePercent => this * 0.05;
 
@@ -66,4 +66,8 @@ extension ListItemSum on List<int> {
     map((value) => total += value);
     return total;
   }
+}
+
+extension Value on List {
+  int get uniqueValueIndex => Random().nextInt(length);
 }

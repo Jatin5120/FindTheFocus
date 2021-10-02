@@ -52,7 +52,7 @@ class ProjectDetailView extends StatelessWidget {
     return Column(
       children: [
         Text(
-          project.projectName!,
+          project.projectName,
           style: Get.textTheme.headline5,
         ),
         AspectRatio(
@@ -65,7 +65,7 @@ class ProjectDetailView extends StatelessWidget {
             ),
             margin: EdgeInsets.symmetric(vertical: size.height * 0.05),
             alignment: Alignment.center,
-            child: Text('${project.projectName!} Statistics'),
+            child: Text('${project.projectName} Statistics'),
           ),
         ),
         _MileStoneSection(
@@ -74,17 +74,19 @@ class ProjectDetailView extends StatelessWidget {
           style: Get.textTheme.headline6,
           padding: EdgeInsets.only(bottom: size.height * 0.025),
         ),
-        Expanded(
-          child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: project.milestones?.length ?? 0,
-              itemBuilder: (_, index) {
-                return _MileStoneSection(
-                  milestone: project.milestones![index]!.milestoneName!,
-                  time: 'Time $index',
-                );
-              }),
-        ),
+        //TODO: Milestone list
+
+        // Expanded(
+        //   child: ListView.builder(
+        //       physics: const BouncingScrollPhysics(),
+        //       itemCount: project.milestones?.length ?? 0,
+        //       itemBuilder: (_, index) {
+        //         return _MileStoneSection(
+        //           milestone: project.milestones![index]!.milestoneName,
+        //           time: 'Time $index',
+        //         );
+        //       }),
+        // ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: MyButton.outlined(

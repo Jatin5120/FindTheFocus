@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
-import 'dart:math';
-import '../../modals/modals.dart';
+import 'package:find_the_focus/screens/projects/projects.dart';
 import '../../controllers/controllers.dart';
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
@@ -9,15 +8,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddProject extends StatelessWidget {
-  AddProject({Key? key}) : super(key: key);
-  final GlobalKey<FormState> projectFormKey = GlobalKey<FormState>();
-  final ProjectController projectController = Get.find();
+  const AddProject({Key? key}) : super(key: key);
+
+  static GlobalKey<FormState> projectFormKey = GlobalKey<FormState>();
+
+  static ProjectController projectController = Get.find();
+  static ProjectsClient projectsClient = Get.find();
 
   @override
   Widget build(BuildContext context) {
     final Size size = Utils.size(context);
     return GestureDetector(
-      // onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       // onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -36,24 +38,19 @@ class AddProject extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  flex: 5,
+                  flex: 3,
                   child: Form(
                     key: projectFormKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        ProjectNameField(),
-                        const MilestoneField(),
-                        TargetDatePicker(),
+                        _ProjectNameField(),
+                        SizedBox(height: size.height.fivePercent),
+                        _TargetDatePicker(),
                       ],
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: MileStoneList(),
                 ),
                 Expanded(
                   flex: 2,
@@ -63,22 +60,6 @@ class AddProject extends StatelessWidget {
                     children: [
                       Column(
                         children: [
-                          MyButton(
-                            label: 'Create',
-                            onPressed: () {
-                              final bool isValid =
-                                  projectFormKey.currentState!.validate();
-                              if (isValid) {
-                                projectController.createProject();
-                                Get.back();
-                              }
-                            },
-                            isCTA: true,
-                            buttonSize: ButtonSize.large,
-                          ),
-                          SizedBox(
-                            height: size.height * 0.025,
-                          ),
                           MyButton.outlined(
                             label: 'Discard',
                             onPressed: () {
@@ -87,7 +68,23 @@ class AddProject extends StatelessWidget {
                             },
                             backgroundColor: kErrorColor,
                             isCTA: true,
-                            buttonSize: ButtonSize.medium,
+                            buttonSize: ButtonSize.large,
+                          ),
+                          SizedBox(
+                            height: size.height.twoPercent,
+                          ),
+                          LongButton(
+                            label: 'Create',
+                            onPressed: () async {
+                              final bool isValid =
+                                  projectFormKey.currentState!.validate();
+                              if (isValid) {
+                                await projectsClient.createProject();
+                                Get.off(() => const AddMilestone());
+                              }
+                            },
+                            isCTA: true,
+                            buttonSize: ButtonSize.large,
                           ),
                         ],
                       ),
@@ -103,8 +100,8 @@ class AddProject extends StatelessWidget {
   }
 }
 
-class ProjectNameField extends StatelessWidget {
-  ProjectNameField({
+class _ProjectNameField extends StatelessWidget {
+  _ProjectNameField({
     Key? key,
   }) : super(key: key);
 
@@ -140,166 +137,8 @@ class ProjectNameField extends StatelessWidget {
   }
 }
 
-class MilestoneField extends StatefulWidget {
-  const MilestoneField({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  _MilestoneFieldState createState() => _MilestoneFieldState();
-}
-
-class _MilestoneFieldState extends State<MilestoneField> {
-  final ProjectController projectController = Get.find();
-
-  late TextEditingController milestonesController;
-
-  @override
-  void initState() {
-    super.initState();
-    milestonesController = TextEditingController();
-  }
-
-  bool milestonesContains(String value) {
-    final List<bool> matchValues = [];
-    for (var milestone in projectController.milestones) {
-      matchValues
-          .add(milestone.milestoneName!.toLowerCase() == value.toLowerCase());
-    }
-    return matchValues.contains(true);
-  }
-
-  showSnackBar(String message, [bool isConfirmation = false]) {
-    Widget content = isConfirmation
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [Text(message), const Icon(Icons.thumb_up_outlined)],
-          )
-        : Text(message);
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: content));
-  }
-
-  int getColorIndex() {
-    return Random().nextInt(kGraphColors.length);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final Size size = Utils.size(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const FormLabelText(label: 'Milestones'),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Flexible(
-              child: TextFormField(
-                controller: milestonesController,
-                keyboardType: TextInputType.name,
-                keyboardAppearance: Brightness.dark,
-                style: Get.textTheme.subtitle1!.copyWith(color: kBlackColor),
-                validator: (value) {
-                  final String? milestoneName = value;
-                  print("\n\n${'=' * 20} \n$milestoneName");
-                  if (milestoneName == null || milestoneName.isEmpty) {
-                    return null;
-                  } else if (milestonesContains(milestoneName)) {
-                    showSnackBar(
-                        '$milestoneName is already present in Milestones');
-                    return 'Enter a different Value';
-                  } else {
-                    final Milestone milestone = Milestone(
-                      milestoneName: milestoneName,
-                      uniqueIndex: projectController.milestones.length,
-                      colorIndex: getColorIndex(),
-                    );
-                    projectController.milestones.add(milestone);
-                    projectController.milestones.obs.refresh();
-                    showSnackBar("'$milestoneName' Added to milestones");
-                    milestonesController.text = '';
-                    return null;
-                  }
-                },
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(
-                    MyIcons.task,
-                    color: kPrimaryColor,
-                  ),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                final String milestoneName = milestonesController.text;
-                print("\n\n${'=' * 20} \n$milestoneName");
-                if (milestoneName.isEmpty) {
-                  showSnackBar('Enter a milestone to add.');
-                } else if (milestonesContains(milestoneName)) {
-                  showSnackBar(
-                      '$milestoneName is already present in Milestones');
-                } else {
-                  final Milestone milestone = Milestone(
-                    milestoneName: milestoneName,
-                    uniqueIndex: projectController.milestones.length,
-                    colorIndex: getColorIndex(),
-                  );
-                  projectController.milestones.add(milestone);
-                  projectController.milestones.obs.refresh();
-                  showSnackBar('$milestoneName Added');
-                  milestonesController.text = '';
-                }
-              },
-              child: Tooltip(
-                message: 'Add Milestones to Project',
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: kAccentColor,
-                    borderRadius: kMediumRadius,
-                  ),
-                  margin: EdgeInsets.only(left: size.width * 0.025),
-                  padding: EdgeInsets.all(size.width * 0.025),
-                  child: const Icon(MyIcons.plus),
-                ),
-              ),
-            )
-          ],
-        ),
-        Padding(
-          padding: EdgeInsets.only(
-            left: size.width.twoPercent,
-            top: size.height.onePercent,
-          ),
-          child: RichText(
-            text: TextSpan(
-              style: Get.textTheme.overline!.copyWith(
-                color: kSubtitleColor,
-                height: 1,
-              ),
-              children: [
-                const TextSpan(
-                  text: 'Note: Enter each milestone separately. Press',
-                ),
-                TextSpan(
-                  text: ' + ',
-                  style:
-                      Get.textTheme.bodyText1!.copyWith(color: kSubtitleColor),
-                ),
-                const TextSpan(
-                  text: 'to add Milestone.',
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class TargetDatePicker extends StatelessWidget {
-  TargetDatePicker({Key? key}) : super(key: key);
+class _TargetDatePicker extends StatelessWidget {
+  _TargetDatePicker({Key? key}) : super(key: key);
 
   final ProjectController projectController = Get.find();
 
@@ -332,10 +171,12 @@ class TargetDatePicker extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Obx(() => Text(
-                      projectController.displayeTargetDate,
-                      style: Get.textTheme.headline6,
-                    )),
+                Obx(
+                  () => Text(
+                    projectController.displayeTargetDateMonth,
+                    style: Get.textTheme.headline6,
+                  ),
+                ),
                 SizedBox(
                   width: padding,
                 ),
@@ -345,52 +186,6 @@ class TargetDatePicker extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class MileStoneList extends StatelessWidget {
-  MileStoneList({Key? key}) : super(key: key);
-
-  final ProjectController projectController = Get.find();
-
-  @override
-  Widget build(BuildContext context) {
-    final Size size = Utils.size(context);
-    return Container(
-      padding: EdgeInsets.only(top: size.height * 0.05),
-      child: Obx(
-        () => projectController.milestones.isEmpty
-            ? const Text('No Milestones added for the project')
-            : Column(
-                children: [
-                  Text(
-                    'Added Milestones',
-                    style: Get.textTheme.bodyText1,
-                  ),
-                  GetX<ProjectController>(
-                    builder: (controller) {
-                      return Expanded(
-                        child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: controller.milestones.length,
-                          keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
-                          itemBuilder: (BuildContext context, int index) {
-                            final String milestone =
-                                controller.milestones[index].milestoneName!;
-                            return Text(
-                              '• $milestone',
-                              style: Get.textTheme.subtitle1,
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-      ),
     );
   }
 }

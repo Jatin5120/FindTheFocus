@@ -1,5 +1,9 @@
 // ignore_for_file: avoid_print
 
+import 'dart:developer';
+
+import 'package:find_the_focus/controllers/controllers.dart';
+import 'package:find_the_focus/services/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -51,8 +55,10 @@ class AuthenticationController extends GetxController {
     }
   }
 
-  Future<UserCredential?> signInWithGoogle() async {
+  Future<void> signInWithGoogle() async {
     try {
+      final UserDataController userDataController = Get.find();
+
       _googleAccount.value = await _googleSignIn.signIn();
 
       if (_googleAccount.value != null) {
@@ -66,16 +72,26 @@ class AuthenticationController extends GetxController {
         );
         print(
             "\n\nSigned in with Google --> ${_firebaseAuth.currentUser?.displayName}");
+
+        final UserCredential userCredential =
+            await _firebaseAuth.signInWithCredential(googleAuthCredential);
+
+        userDataController.user = userCredential.user!;
+
+        userDataController.isNewUser =
+            userCredential.additionalUserInfo?.isNewUser ?? true;
+
         setUserLoggedIn();
-        return await _firebaseAuth.signInWithCredential(googleAuthCredential);
+
+        if (userDataController.isNewUser) {
+          log("New User Added");
+          FirebaseService.addNewUser();
+        }
       }
-      return null;
     } on PlatformException catch (e) {
       print("\n\nPlatformException --->" + e.message.toString());
-      return null;
     } catch (e) {
       print("\n\nNo id selected -> $e");
-      return null;
     }
   }
 /*

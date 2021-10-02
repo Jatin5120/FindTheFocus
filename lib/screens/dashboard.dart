@@ -2,7 +2,6 @@
 
 import '../modals/modals.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import '../controllers/controllers.dart';
 import '../constants/constants.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +90,7 @@ class _DashboardState extends State<Dashboard> {
                                           projectController.currentProject ??
                                               projectsClient.projects[0];
                                       return Text(
-                                        project.projectName ?? '',
+                                        project.projectName,
                                         style: Get.textTheme.bodyText1,
                                       );
                                     }),
@@ -104,6 +103,8 @@ class _DashboardState extends State<Dashboard> {
                                   projectsClient.projects.isEmpty
                               ? const _NoProjectsCard()
                               : Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text('All stats'),
                                     Obx(() {
@@ -111,10 +112,11 @@ class _DashboardState extends State<Dashboard> {
                                           projectController.currentProject ??
                                               projectsClient.projects[0];
                                       return Text(
-                                        project.projectName ?? '',
+                                        project.projectName,
                                         style: Get.textTheme.headline6,
                                       );
                                     }),
+                                    const SizedBox.shrink(),
                                   ],
                                 ),
                         ),
@@ -208,7 +210,9 @@ class _BuildQuickCard extends StatelessWidget {
     final Size size = Utils.size(context);
     return Container(
       decoration: BoxDecoration(
-          color: kBackgroundColor[100], borderRadius: kCardRadius),
+        color: kBackgroundColor[100],
+        borderRadius: kCardRadius,
+      ),
       height: size.height.fifteenPercent,
       width: size.width.fortyPercent,
       padding: EdgeInsets.symmetric(
@@ -221,17 +225,14 @@ class _BuildQuickCard extends StatelessWidget {
 }
 
 class _DashboardHeader extends StatelessWidget {
-  _DashboardHeader({
-    Key? key,
-  }) : super(key: key);
+  _DashboardHeader({Key? key}) : super(key: key);
 
-  final AuthenticationController authenticationController = Get.find();
+  final UserDataController userDataController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     final Size size = Utils.size(context);
-    final double imageSize = 80 * (size.width / 414);
-    final GoogleSignInAccount? user = authenticationController.googleAccount;
+    final double imageSize = size.height.tenPercent;
     return Container(
       decoration: const BoxDecoration(
         color: kSecondaryColor,
@@ -260,9 +261,8 @@ class _DashboardHeader extends StatelessWidget {
                 ClipRRect(
                   borderRadius: kChipRadius,
                   child: Image.network(
-                    user?.photoUrl ?? '',
+                    userDataController.user.photoURL ?? '',
                     fit: BoxFit.cover,
-                    // scale: scale,
                     width: imageSize,
                     height: imageSize,
                   ),
@@ -278,21 +278,36 @@ class _DashboardHeader extends StatelessWidget {
           ),
           SizedBox(height: size.height.onePercent),
           Text(
-            user?.displayName ?? 'User',
-            style: Get.textTheme.headline5!
-                .copyWith(color: kBlackColor, fontWeight: FontWeight.w700),
+            userDataController.user.displayName ?? 'User',
+            style: Get.textTheme.headline5!.copyWith(
+              color: kBlackColor,
+              fontWeight: FontWeight.w700,
+            ),
           ),
           SizedBox(height: size.height.onePercent),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: size.width.fivePercent),
-            child: Row(
-              children: const [
-                _UserStatsElement(value: '7', title: 'Projects'),
-                _ElementDivider(),
-                _UserStatsElement(value: '11.6 Hr', title: 'Working time'),
-                _ElementDivider(),
-                _UserStatsElement(value: '4', title: 'Level'),
-              ],
+            child: Obx(
+              () => Row(
+                children: [
+                  _UserStatsElement(
+                    value:
+                        userDataController.userModal.totalProjects.toString(),
+                    title: 'Projects',
+                  ),
+                  const _ElementDivider(),
+                  _UserStatsElement(
+                    value: userDataController.userModal.totalWorkDuration
+                        .toString(),
+                    title: 'Working time',
+                  ),
+                  const _ElementDivider(),
+                  _UserStatsElement(
+                    value: userDataController.userModal.level.toString(),
+                    title: 'Level',
+                  ),
+                ],
+              ),
             ),
           ),
           SizedBox(height: size.height.onePercent),

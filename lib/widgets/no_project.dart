@@ -26,7 +26,7 @@ class NoProjects extends StatelessWidget {
               height: size.width / 2,
               width: size.width / 2,
               child: GestureDetector(
-                onTap: () => Get.to(() => AddProject()),
+                onTap: () => Get.to(() => const AddProject()),
                 child: SvgPicture.asset('assets/images/add_files.svg'),
               ),
             ),
@@ -39,7 +39,7 @@ class NoProjects extends StatelessWidget {
             SizedBox(height: size.height.fivePercent),
             MyButton(
               label: 'Create Project',
-              onPressed: () => Get.to(() => AddProject()),
+              onPressed: () => Get.to(() => const AddProject()),
               buttonSize: ButtonSize.large,
             ),
           ],

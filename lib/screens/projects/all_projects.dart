@@ -28,9 +28,9 @@ class AllProjects extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: size.width.fivePercent),
         child: StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection(MyCollections.projects)
+                .collection(kProjectsCollection)
                 .doc(_authenticationController.googleAccount!.id)
-                .collection(MyCollections.allProjects)
+                .collection(kAllProjectsCollection)
                 .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (snapshot.hasError) return const Text('Something went wrong');
@@ -117,24 +117,29 @@ class _ProjectDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String startDate =
+        DateTime.fromMillisecondsSinceEpoch(project.startDateEpoch)
+            .displayDateMonth();
+    final String endDate =
+        DateTime.fromMillisecondsSinceEpoch(project.targetDateEpoch ?? 0)
+            .displayDateMonth();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          project.projectName!,
+          project.projectName,
           style: Get.textTheme.headline6,
         ),
-        if (project.startingDate != null)
-          Text(
-            'Starting date:  ${project.startingDate!.displayDateMonth()}',
-            style: Get.textTheme.caption!.copyWith(color: kTextColor[700]),
-          ),
         Text(
-          'Target date:  ${project.targetDate!.displayDateMonth()}',
-          // 'Target date:  ${project.targetDate!.displayDateMonth()}',
-          style: Get.textTheme.subtitle2!.copyWith(color: kTextColor[500]),
+          'Starting date:  $startDate',
+          style: Get.textTheme.caption!.copyWith(color: kTextColor[700]),
         ),
+        if (project.targetDateEpoch != null)
+          Text(
+            'Target date:  $endDate',
+            style: Get.textTheme.subtitle2!.copyWith(color: kTextColor[500]),
+          ),
         MyButton.outlined(
           label: 'Start',
           onPressed: () {},
@@ -152,6 +157,7 @@ class _ProjectStats extends StatefulWidget {
     this.project, {
     Key? key,
   }) : super(key: key);
+
   final Project project;
 
   @override
@@ -166,13 +172,13 @@ class __ProjectStatsState extends State<_ProjectStats> {
   @override
   void initState() {
     super.initState();
-    if (widget.project.milestones != null) {
-      _completedMilestones = widget.project.completedMilestones!.sum();
-      _totalMilestones = widget.project.milestones!.length;
-      mileStoneValue = '$_completedMilestones / $_totalMilestones';
-    } else {
-      mileStoneValue = 'No MileStones Added';
-    }
+    // if (widget.project.milestones != null) {
+    //   _completedMilestones = widget.project.completedMilestones!.sum();
+    //   _totalMilestones = widget.project.milestones!.length;
+    //   mileStoneValue = '$_completedMilestones / $_totalMilestones';
+    // } else {
+    //   mileStoneValue = 'No MileStones Added';
+    // }
   }
 
   @override

@@ -1,4 +1,3 @@
-import 'package:find_the_focus/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class ItemFader extends StatefulWidget {

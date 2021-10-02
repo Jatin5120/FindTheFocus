@@ -1,47 +1,38 @@
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WorkingModal {
-  ///Start Time denotes the time stamp when the working on the project is started
-  Timestamp? startTime;
+  ///Start Time denotes the time stamp in epochs when the working on the project is started
+  final int startTimeEpoch;
 
-  ///Stop Time denotes the time stamp when the working on the project is stopped
-  Timestamp? stopTime;
-
-  ///Milestone index is the index of the milestone which is currently active
-  int? milestoneIndex;
+  ///Stop Time denotes the time stamp in epochs when the working on the project is stopped
+  final int endTimeEpoch;
 
   WorkingModal({
-    this.startTime,
-    this.stopTime,
-    this.milestoneIndex,
+    required this.startTimeEpoch,
+    required this.endTimeEpoch,
   });
 
   WorkingModal copyWith({
-    Timestamp? startTime,
-    Timestamp? stopTime,
-    int? milestoneIndex,
+    int? startTimeEpoch,
+    int? endTimeEpoch,
   }) {
     return WorkingModal(
-      startTime: startTime ?? this.startTime,
-      stopTime: stopTime ?? this.stopTime,
-      milestoneIndex: milestoneIndex ?? this.milestoneIndex,
+      startTimeEpoch: startTimeEpoch ?? this.startTimeEpoch,
+      endTimeEpoch: endTimeEpoch ?? this.endTimeEpoch,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'startTime': startTime,
-      'stopTime': stopTime,
-      'milestoneIndex': milestoneIndex,
+      'startTimeEpoch': startTimeEpoch,
+      'endTimeEpoch': endTimeEpoch,
     };
   }
 
   factory WorkingModal.fromMap(Map<String, dynamic> map) {
     return WorkingModal(
-      startTime: map['startTime'],
-      stopTime: map['stopTime'],
-      milestoneIndex: map['milestoneIndex'],
+      startTimeEpoch: map['startTimeEpoch'],
+      endTimeEpoch: map['endTimeEpoch'],
     );
   }
 
@@ -52,19 +43,17 @@ class WorkingModal {
 
   @override
   String toString() =>
-      'WorkingModal(startTime: $startTime, stopTime: $stopTime, milestoneIndex: $milestoneIndex)';
+      'WorkingModal(startTimeEpoch: $startTimeEpoch, endTimeEpoch: $endTimeEpoch)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return other is WorkingModal &&
-        other.startTime == startTime &&
-        other.stopTime == stopTime &&
-        other.milestoneIndex == milestoneIndex;
+        other.startTimeEpoch == startTimeEpoch &&
+        other.endTimeEpoch == endTimeEpoch;
   }
 
   @override
-  int get hashCode =>
-      startTime.hashCode ^ stopTime.hashCode ^ milestoneIndex.hashCode;
+  int get hashCode => startTimeEpoch.hashCode ^ endTimeEpoch.hashCode;
 }

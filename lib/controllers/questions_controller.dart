@@ -70,23 +70,11 @@ final List<QuestionModal> _questions = [
 
 class QuestionsController extends GetxController {
   List<QuestionModal> questions = _questions;
-  final RxBool _isFirstLogin = true.obs;
+  final RxBool _isQuestionsCompleted = false.obs;
+
   late SharedPreferences prefs;
-  static const _isFirstLoginKey = 'isFirstLogin';
 
-  Future<bool> checkFirstLogin() async {
-    prefs = await SharedPreferences.getInstance();
-    isFirstLogin = prefs.getBool(_isFirstLoginKey) ?? false;
-    return _isFirstLogin.value;
-  }
+  bool get isQuestionsCompleted => _isQuestionsCompleted.value;
 
-  Future<void> setFirstLogin() async {
-    prefs = await SharedPreferences.getInstance();
-    isFirstLogin = false;
-    prefs.setBool(_isFirstLoginKey, isFirstLogin);
-  }
-
-  bool get isFirstLogin => _isFirstLogin.value;
-
-  set isFirstLogin(bool value) => _isFirstLogin.value = value;
+  set isQuestionsCompleted(bool value) => _isQuestionsCompleted.value = value;
 }

@@ -123,7 +123,7 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
               children: [
                 Expanded(
                   child: Text(
-                    widget.project.projectName ?? 'Project',
+                    widget.project.projectName,
                     style: Get.textTheme.headline4,
                   ),
                 ),
