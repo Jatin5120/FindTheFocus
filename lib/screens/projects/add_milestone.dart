@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'package:find_the_focus/services/services.dart';
+
 import '../../constants/constants.dart';
 import '../../controllers/controllers.dart';
 import '../../modals/modals.dart';
@@ -52,7 +54,10 @@ class AddMilestone extends StatelessWidget {
                       Row(
                         children: [
                           _MilestoneField(milestonesController),
-                          _AddButton(milestonesController, _formKey),
+                          _AddButton(
+                            milestonesController: milestonesController,
+                            formKey: _formKey,
+                          ),
                         ],
                       ),
                     ],
@@ -65,7 +70,9 @@ class AddMilestone extends StatelessWidget {
               ),
               LongButton(
                 label: 'Finish',
-                onPressed: () {
+                onPressed: () async {
+                  await FirebaseService.addMilestones(
+                      projectController.projectID);
                   Get.back();
                 },
               ),
@@ -78,9 +85,9 @@ class AddMilestone extends StatelessWidget {
 }
 
 class _AddButton extends StatelessWidget {
-  const _AddButton(
-    this.milestonesController,
-    this.formKey, {
+  const _AddButton({
+    required this.milestonesController,
+    required this.formKey,
     Key? key,
   }) : super(key: key);
 
@@ -92,10 +99,9 @@ class _AddButton extends StatelessWidget {
 
   addMilestone() {
     final String milestoneName = milestonesController.text;
-    //TODO: Add milestone
     final Milestone milestone = Milestone(
       userID: userDataController.user.uid,
-      projectID: '',
+      projectID: projectController.projectID,
       milestoneID: '',
       milestoneName: milestoneName,
       isCompleted: false,

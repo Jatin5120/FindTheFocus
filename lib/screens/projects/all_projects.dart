@@ -11,11 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AllProjects extends StatelessWidget {
-  AllProjects({Key? key}) : super(key: key);
+  const AllProjects({Key? key}) : super(key: key);
 
-  final AuthenticationController _authenticationController = Get.find();
-  final ProjectController projectController = Get.find();
-  final ProjectsClient projectsClient = Get.find();
+  static AuthenticationController authenticationController = Get.find();
+  static ProjectController projectController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class AllProjects extends StatelessWidget {
         child: StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection(kProjectsCollection)
-                .doc(_authenticationController.googleAccount!.id)
+                .doc(authenticationController.googleAccount!.id)
                 .collection(kAllProjectsCollection)
                 .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -37,17 +36,17 @@ class AllProjects extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const LoadingScreen('Fetching');
               }
-              return projectsClient.projects.isEmpty
+              return projectController.projects.isEmpty
                   ? const NoProjects()
                   : ListView.builder(
                       physics: const BouncingScrollPhysics(),
-                      itemCount: projectsClient.projects.length + 1,
+                      itemCount: projectController.projects.length + 1,
                       itemBuilder: (BuildContext context, int index) {
                         Project? project;
-                        if (index == projectsClient.projects.length) {
+                        if (index == projectController.projects.length) {
                           project = null;
                         } else {
-                          project = projectsClient.projects[index];
+                          project = projectController.projects[index];
                         }
                         return ProjectCard(project);
                       },
@@ -59,11 +58,10 @@ class AllProjects extends StatelessWidget {
 }
 
 class ProjectCard extends StatelessWidget {
-  ProjectCard(this.project, {Key? key}) : super(key: key);
+  const ProjectCard(this.project, {Key? key}) : super(key: key);
 
   final Project? project;
-  final ProjectController projectController = Get.find();
-  final ProjectsClient projectsClient = Get.find();
+  static ProjectController projectController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +73,7 @@ class ProjectCard extends StatelessWidget {
               projectController.currentProject = project;
               projectController.selectedIndex = 0;
               projectController.currentProjectIndex =
-                  projectsClient.projects.indexOf(project!);
+                  projectController.projects.indexOf(project!);
               print(projectController.currentProject?.projectName);
             },
             child: AspectRatio(
@@ -184,7 +182,7 @@ class __ProjectStatsState extends State<_ProjectStats> {
   @override
   Widget build(BuildContext context) {
     final Size size = Utils.size(context);
-    final double side = size.width * 0.2;
+    final double side = size.width.fifteenPercent;
     final int backIndex = Random().nextInt(kGraphColors.length);
     int foreIndex = Random().nextInt(kGraphColors.length);
     while (backIndex == foreIndex) {
@@ -195,26 +193,31 @@ class __ProjectStatsState extends State<_ProjectStats> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Container(
+        SizedBox(
           height: side,
           width: side,
-          alignment: Alignment.center,
-          child: _completedMilestones == 0
-              ? Text(
-                  'No record',
-                  style: Get.textTheme.bodyText2!.copyWith(
-                    color: kTextColor[500],
-                  ),
-                )
-              : CircularProgressIndicator(
-                  backgroundColor: kGraphColors[backIndex],
-                  color: kGraphColors[foreIndex],
-                  strokeWidth: side * 0.2,
-                  value: progress,
-                ),
+          child: CircularProgressIndicator(
+            backgroundColor: kGraphColors[backIndex],
+            color: kGraphColors[foreIndex],
+            strokeWidth: side.twentyPercent,
+            value: progress,
+          ),
+          // child: _completedMilestones == 0
+          //     ? Text(
+          //         'No record',
+          //         style: Get.textTheme.bodyText2!.copyWith(
+          //           color: kTextColor[500],
+          //         ),
+          //       )
+          //     : CircularProgressIndicator(
+          //         backgroundColor: kGraphColors[backIndex],
+          //         color: kGraphColors[foreIndex],
+          //         strokeWidth: side * 0.2,
+          //         value: progress,
+          //       ),
         ),
-        Text(
-          mileStoneValue,
+        const Text(
+          'mileStoneValue',
         ),
       ],
     );

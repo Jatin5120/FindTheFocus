@@ -17,7 +17,6 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final NavBarController navBarController = Get.find();
   final ProjectController projectController = Get.find();
-  final ProjectsClient projectsClient = Get.find();
 
   @override
   void initState() {
@@ -69,7 +68,7 @@ class _DashboardState extends State<Dashboard> {
                       children: [
                         _BuildQuickCard(
                           child: projectController.currentProject == null &&
-                                  projectsClient.projects.isEmpty
+                                  projectController.projects.isEmpty
                               ? const _NoProjectsCard()
                               : Column(
                                   mainAxisAlignment:
@@ -88,7 +87,7 @@ class _DashboardState extends State<Dashboard> {
                                     Obx(() {
                                       final Project project =
                                           projectController.currentProject ??
-                                              projectsClient.projects[0];
+                                              projectController.projects[0];
                                       return Text(
                                         project.projectName,
                                         style: Get.textTheme.bodyText1,
@@ -100,7 +99,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         _BuildQuickCard(
                           child: projectController.currentProject == null &&
-                                  projectsClient.projects.isEmpty
+                                  projectController.projects.isEmpty
                               ? const _NoProjectsCard()
                               : Column(
                                   mainAxisAlignment:
@@ -110,7 +109,7 @@ class _DashboardState extends State<Dashboard> {
                                     Obx(() {
                                       final Project project =
                                           projectController.currentProject ??
-                                              projectsClient.projects[0];
+                                              projectController.projects[0];
                                       return Text(
                                         project.projectName,
                                         style: Get.textTheme.headline6,

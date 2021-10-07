@@ -15,13 +15,13 @@ Future<void> main() async {
 }
 
 void initializeControllers() async {
-  Get.lazyPut(() => AuthenticationController());
-  Get.lazyPut(() => NavBarController());
-  Get.lazyPut(() => ProjectController());
-  Get.lazyPut(() => WorkingTimeController());
-  Get.lazyPut(() => ProjectsClient());
-  Get.lazyPut(() => QuestionsController());
-  Get.lazyPut(() => UserDataController());
+  Get.put(AuthenticationController());
+  Get.put(NavBarController());
+  Get.put(ProjectController());
+  Get.put(WorkingTimeController());
+  Get.put(ProjectsClient());
+  Get.put(QuestionsController());
+  Get.put(UserDataController());
 }
 
 class MyApp extends StatelessWidget {

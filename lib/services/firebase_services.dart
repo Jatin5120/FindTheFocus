@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,7 +16,9 @@ class FirebaseService {
 
   static final FirebaseFirestore _firebaseFirestore =
       FirebaseFirestore.instance;
+
   static final UserDataController _userDataController = Get.find();
+  static final ProjectController _projectController = Get.find();
 
   static final CollectionReference _userCollection =
       _firebaseFirestore.collection(kUserCollection);
@@ -28,6 +31,7 @@ class FirebaseService {
 
   static Future getData() async {
     _userDataController.userModal = await getUserData();
+    getProjects();
   }
 
   static Future<UserModal> getUserData() async {
@@ -37,6 +41,35 @@ class FirebaseService {
     final Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     print("UserData --> $data");
     return UserModal.fromMap(data);
+  }
+
+  static Future getProjects() async {
+    QuerySnapshot snapShot = await _projectCollection
+        .where('userID', isEqualTo: _userDataController.user.uid)
+        .get();
+    final List<QueryDocumentSnapshot> docs = snapShot.docs;
+    for (QueryDocumentSnapshot doc in docs) {
+      final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      final Project project = Project.fromMap(data);
+
+      _projectController.projects.add(project);
+      getMilestones(project.projectID);
+
+      log(project.toString());
+    }
+  }
+
+  static Future getMilestones(String projectID) async {
+    QuerySnapshot snapShot = await _milestonesCollection
+        .where('projectID', isEqualTo: projectID)
+        .get();
+    final List<QueryDocumentSnapshot> docs = snapShot.docs;
+    for (QueryDocumentSnapshot doc in docs) {
+      final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+      final Milestone milestone = Milestone.fromMap(data);
+
+      log(milestone.toString());
+    }
   }
 
   static Future addNewUser() async {
@@ -73,6 +106,7 @@ class FirebaseService {
       DocumentReference _reference =
           await _projectCollection.add(project.toMap());
 
+      _projectController.projectID = _reference.id;
       await _reference.update({'projectID': _reference.id});
 
       DocumentReference _userReference =
@@ -90,14 +124,20 @@ class FirebaseService {
     }
   }
 
-  static Future addMilestone(Milestone milestone) async {
+  static Future addMilestones(String projectID) async {
     try {
-      Get.dialog(const LoadingDialog(message: 'Adding Milestone'));
+      Get.dialog(const LoadingDialog(message: 'Adding Milestones'));
 
-      DocumentReference _reference =
-          await _milestonesCollection.add(milestone.toMap());
+      if (_projectController.milestones.isNotEmpty) {
+        _projectCollection.doc(projectID).update({'haveMilestones': true});
 
-      await _reference.update({'milestoneID': _reference.id});
+        for (Milestone milestone in _projectController.milestones) {
+          DocumentReference _reference =
+              await _milestonesCollection.add(milestone.toMap());
+
+          await _reference.update({'milestoneID': _reference.id});
+        }
+      }
     } on SocketException {
       print('Internet Connection Problem');
     } catch (e) {
@@ -111,10 +151,5 @@ class FirebaseService {
     _currentProjectCollection
         .doc(_userDataController.user.uid)
         .set({'projectID': projectID});
-  }
-
-  static Future<dynamic> getProject() async {
-    QuerySnapshot data = await _projectCollection.get();
-    print(data);
   }
 }

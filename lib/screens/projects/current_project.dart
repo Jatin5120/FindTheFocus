@@ -9,10 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CurrentProject extends StatelessWidget {
-  CurrentProject({Key? key}) : super(key: key);
+  const CurrentProject({Key? key}) : super(key: key);
 
-  final ProjectController projectController = Get.find();
-  final ProjectsClient projectsClient = Get.find();
+  static ProjectController projectController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +30,9 @@ class CurrentProject extends StatelessWidget {
         alignment: Alignment.center,
         child: Obx(() {
           return projectController.currentProject == null
-              ? projectsClient.projects.isEmpty
+              ? projectController.projects.isEmpty
                   ? const NoProjects()
-                  : ProjectDetailView(projectsClient.projects.first)
+                  : ProjectDetailView(projectController.projects.first)
               : ProjectDetailView(projectController.currentProject!);
         }),
       ),

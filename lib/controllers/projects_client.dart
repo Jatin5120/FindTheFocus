@@ -13,17 +13,11 @@ class ProjectsClient extends GetxController {
       FirebaseFirestore.instance.collection(kProjectsCollection);
   late CollectionReference _allProjectsCollection;
 
-  final RxList<Project> _projects = <Project>[].obs;
-
   ProjectsClient() {
     _allProjectsCollection = _projectCollection
         .doc(_authenticationController.googleAccount!.id)
         .collection(kAllProjectsCollection);
   }
-
-  List<Project> get projects => _projects;
-
-  set projects(List<Project> value) => _projects.value = value;
 
   void get() {
     final ProjectController projectController = Get.find();
@@ -37,9 +31,11 @@ class ProjectsClient extends GetxController {
         print(project);
         projectList.add(project);
       }
-      projects = projectList.reversed.toList();
+      projectController.projects = projectList.reversed.toList();
     });
-    if (projects.isNotEmpty) projectController.currentProject = projects.first;
+    if (projectController.projects.isNotEmpty) {
+      projectController.currentProject = projectController.projects.first;
+    }
   }
 
   Future<void> createProject() async {
@@ -58,10 +54,9 @@ class ProjectsClient extends GetxController {
           : Timestamp.fromDate(projectController.targetDate)
               .millisecondsSinceEpoch,
     );
-    projects.add(project);
-    projects.obs.refresh();
+    projectController.projects.add(project);
+    projectController.projects.obs.refresh();
     projectController.currentProject = project;
     await FirebaseService.addProject(project);
-    // post();
   }
 }
