@@ -1,8 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'dart:math';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../screens/screens.dart';
 import '../../controllers/controllers.dart';
 import '../../constants/constants.dart';
 import '../../modals/modals.dart';
@@ -25,56 +23,45 @@ class AllProjects extends StatelessWidget {
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: size.width.fivePercent),
-        child: StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection(kProjectsCollection)
-                .doc(authenticationController.googleAccount!.id)
-                .collection(kAllProjectsCollection)
-                .snapshots(),
-            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) return const Text('Something went wrong');
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const LoadingScreen('Fetching');
-              }
-              return projectController.projects.isEmpty
-                  ? const NoProjects()
-                  : ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: projectController.projects.length + 1,
-                      itemBuilder: (BuildContext context, int index) {
-                        Project? project;
-                        if (index == projectController.projects.length) {
-                          project = null;
-                        } else {
-                          project = projectController.projects[index];
-                        }
-                        return ProjectCard(project);
-                      },
-                    );
-            }),
+        child: Obx(
+          () => projectController.projects.isEmpty
+              ? const NoProjects()
+              : ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: projectController.projects.length + 1,
+                  itemBuilder: (BuildContext context, int index) {
+                    LocalProjectModal? localProject;
+                    if (index == projectController.projects.length) {
+                      localProject = null;
+                    } else {
+                      localProject = projectController.projects[index];
+                    }
+                    return ProjectCard(localProject);
+                  },
+                ),
+        ),
       ),
     );
   }
 }
 
 class ProjectCard extends StatelessWidget {
-  const ProjectCard(this.project, {Key? key}) : super(key: key);
+  const ProjectCard(this.localProject, {Key? key}) : super(key: key);
 
-  final Project? project;
+  final LocalProjectModal? localProject;
   static ProjectController projectController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     final Size size = Utils.size(context);
-    return project == null
+    return localProject == null
         ? SizedBox(height: size.height.tenPercent)
         : GestureDetector(
             onTap: () {
-              projectController.currentProject = project;
+              projectController.currentProject = localProject;
               projectController.selectedIndex = 0;
               projectController.currentProjectIndex =
-                  projectController.projects.indexOf(project!);
-              print(projectController.currentProject?.projectName);
+                  projectController.projects.indexOf(localProject!);
             },
             child: AspectRatio(
               aspectRatio: 3 / 2,
@@ -95,8 +82,8 @@ class ProjectCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    _ProjectDetails(project!),
-                    _ProjectStats(project!),
+                    _ProjectDetails(localProject!),
+                    _ProjectStats(localProject!),
                   ],
                 ),
               ),
@@ -107,33 +94,33 @@ class ProjectCard extends StatelessWidget {
 
 class _ProjectDetails extends StatelessWidget {
   const _ProjectDetails(
-    this.project, {
+    this.localProject, {
     Key? key,
   }) : super(key: key);
 
-  final Project project;
+  final LocalProjectModal localProject;
 
   @override
   Widget build(BuildContext context) {
     final String startDate =
-        DateTime.fromMillisecondsSinceEpoch(project.startDateEpoch)
+        DateTime.fromMillisecondsSinceEpoch(localProject.startDateEpoch)
             .displayDateMonth();
     final String endDate =
-        DateTime.fromMillisecondsSinceEpoch(project.targetDateEpoch ?? 0)
+        DateTime.fromMillisecondsSinceEpoch(localProject.targetDateEpoch ?? 0)
             .displayDateMonth();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          project.projectName,
+          localProject.projectName,
           style: Get.textTheme.headline6,
         ),
         Text(
           'Starting date:  $startDate',
           style: Get.textTheme.caption!.copyWith(color: kTextColor[700]),
         ),
-        if (project.targetDateEpoch != null)
+        if (localProject.targetDateEpoch != null)
           Text(
             'Target date:  $endDate',
             style: Get.textTheme.subtitle2!.copyWith(color: kTextColor[500]),
@@ -152,11 +139,11 @@ class _ProjectDetails extends StatelessWidget {
 
 class _ProjectStats extends StatefulWidget {
   const _ProjectStats(
-    this.project, {
+    this.localProject, {
     Key? key,
   }) : super(key: key);
 
-  final Project project;
+  final LocalProjectModal localProject;
 
   @override
   __ProjectStatsState createState() => __ProjectStatsState();
@@ -170,13 +157,15 @@ class __ProjectStatsState extends State<_ProjectStats> {
   @override
   void initState() {
     super.initState();
-    // if (widget.project.milestones != null) {
-    //   _completedMilestones = widget.project.completedMilestones!.sum();
-    //   _totalMilestones = widget.project.milestones!.length;
-    //   mileStoneValue = '$_completedMilestones / $_totalMilestones';
-    // } else {
-    //   mileStoneValue = 'No MileStones Added';
-    // }
+    if (widget.localProject.haveMilestones) {
+      _totalMilestones = widget.localProject.milestones.length;
+      _completedMilestones = widget.localProject.milestones
+          .where((milestone) => milestone.isCompleted == true)
+          .length;
+      mileStoneValue = '$_completedMilestones / $_totalMilestones';
+    } else {
+      mileStoneValue = 'No Milestones Added';
+    }
   }
 
   @override
@@ -196,6 +185,7 @@ class __ProjectStatsState extends State<_ProjectStats> {
         SizedBox(
           height: side,
           width: side,
+          // TODO: Implement Donut chart from charts_flutter
           child: CircularProgressIndicator(
             backgroundColor: kGraphColors[backIndex],
             color: kGraphColors[foreIndex],
@@ -203,10 +193,12 @@ class __ProjectStatsState extends State<_ProjectStats> {
             value: progress,
           ),
           // child: _completedMilestones == 0
-          //     ? Text(
-          //         'No record',
-          //         style: Get.textTheme.bodyText2!.copyWith(
-          //           color: kTextColor[500],
+          //     ? Center(
+          //         child: Text(
+          //           'No record',
+          //           style: Get.textTheme.bodyText2!.copyWith(
+          //             color: kTextColor[500],
+          //           ),
           //         ),
           //       )
           //     : CircularProgressIndicator(
@@ -216,8 +208,8 @@ class __ProjectStatsState extends State<_ProjectStats> {
           //         value: progress,
           //       ),
         ),
-        const Text(
-          'mileStoneValue',
+        Text(
+          mileStoneValue,
         ),
       ],
     );

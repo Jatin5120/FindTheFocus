@@ -1,6 +1,4 @@
 // ignore_for_file: avoid_print
-
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -52,24 +50,39 @@ class FirebaseService {
       final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       final Project project = Project.fromMap(data);
 
-      _projectController.projects.add(project);
-      getMilestones(project.projectID);
+      final List<Milestone> _milestones =
+          await getMilestones(project.projectID);
 
-      log(project.toString());
+      final LocalProjectModal localProjectModal = LocalProjectModal(
+        userID: project.userID,
+        projectID: project.projectID,
+        projectName: project.projectName,
+        projectNumber: project.projectNumber,
+        startDateEpoch: project.startDateEpoch,
+        isCompleted: project.isCompleted,
+        haveMilestones: project.haveMilestones,
+        milestones: _milestones,
+      );
+      _projectController.projects.add(localProjectModal);
     }
+    _projectController.projects.sort(
+        (first, second) => second.projectNumber.compareTo(first.projectNumber));
   }
 
-  static Future getMilestones(String projectID) async {
+  static Future<List<Milestone>> getMilestones(String projectID) async {
     QuerySnapshot snapShot = await _milestonesCollection
         .where('projectID', isEqualTo: projectID)
         .get();
     final List<QueryDocumentSnapshot> docs = snapShot.docs;
+    final List<Milestone> _milestones = <Milestone>[];
+
     for (QueryDocumentSnapshot doc in docs) {
       final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
       final Milestone milestone = Milestone.fromMap(data);
 
-      log(milestone.toString());
+      _milestones.add(milestone);
     }
+    return _milestones;
   }
 
   static Future addNewUser() async {

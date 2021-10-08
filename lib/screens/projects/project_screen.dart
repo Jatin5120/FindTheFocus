@@ -34,9 +34,9 @@ class ProjectScreen extends StatelessWidget {
           Expanded(
             child: Obx(() {
               if (projectController.selectedIndex == 0) {
-                return CurrentProject();
+                return const CurrentProject();
               } else {
-                return AllProjects();
+                return const AllProjects();
               }
             }),
           ),

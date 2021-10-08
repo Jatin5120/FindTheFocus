@@ -15,13 +15,13 @@ Future<void> main() async {
 }
 
 void initializeControllers() async {
+  Get.put(UserDataController());
   Get.put(AuthenticationController());
   Get.put(NavBarController());
   Get.put(ProjectController());
   Get.put(WorkingTimeController());
   Get.put(ProjectsClient());
   Get.put(QuestionsController());
-  Get.put(UserDataController());
 }
 
 class MyApp extends StatelessWidget {

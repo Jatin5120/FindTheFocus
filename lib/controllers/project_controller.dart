@@ -4,13 +4,13 @@ import 'package:get/get.dart';
 
 class ProjectController extends GetxController {
   final RxInt _selectedIndex = 0.obs;
-  final Rx<Project?> _currentProject = Rx<Project?>(null);
+  final Rx<LocalProjectModal?> _currentProject = Rx<LocalProjectModal?>(null);
   final RxInt _currentProjectIndex = 0.obs;
   final RxString _projectName = ''.obs;
   final RxString _projectID = ''.obs;
   final Rx<List<Milestone>> _milestones = Rx<List<Milestone>>([]);
   final Rx<DateTime> _targetDate = DateTime.now().obs;
-  final RxList<Project> _projects = <Project>[].obs;
+  final RxList<LocalProjectModal> _projects = <LocalProjectModal>[].obs;
 
   // --------------------- Project Navigations Methods ---------------------
 
@@ -36,16 +36,17 @@ class ProjectController extends GetxController {
 
   set selectedIndex(int index) => _selectedIndex.value = index;
 
-  Project? get currentProject => _currentProject.value;
-  set currentProject(Project? project) => _currentProject.value = project;
+  LocalProjectModal? get currentProject => _currentProject.value;
+  set currentProject(LocalProjectModal? project) =>
+      _currentProject.value = project;
 
   int get currentProjectIndex => _currentProjectIndex.value;
   set currentProjectIndex(int value) => _currentProjectIndex.value = value;
 
   // --------------------- Add Project Methods ---------------------
 
-  List<Project> get projects => _projects;
-  set projects(List<Project> value) => _projects.value = value;
+  List<LocalProjectModal> get projects => _projects;
+  set projects(List<LocalProjectModal> value) => _projects.value = value;
 
   String get projectName => _projectName.value;
   set projectName(String name) => _projectName.value = name;

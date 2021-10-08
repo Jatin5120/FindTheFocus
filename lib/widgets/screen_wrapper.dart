@@ -47,7 +47,6 @@ class _ScreenWrapperState extends State<ScreenWrapper> {
   void initState() {
     super.initState();
     FirebaseService.getData();
-    projectsClient.get();
   }
 
   @override

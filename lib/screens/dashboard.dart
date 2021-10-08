@@ -85,11 +85,11 @@ class _DashboardState extends State<Dashboard> {
                                       style: Get.textTheme.headline4,
                                     ),
                                     Obx(() {
-                                      final Project project =
+                                      final LocalProjectModal localProject =
                                           projectController.currentProject ??
                                               projectController.projects[0];
                                       return Text(
-                                        project.projectName,
+                                        localProject.projectName,
                                         style: Get.textTheme.bodyText1,
                                       );
                                     }),
@@ -107,11 +107,11 @@ class _DashboardState extends State<Dashboard> {
                                   children: [
                                     const Text('All stats'),
                                     Obx(() {
-                                      final Project project =
+                                      final LocalProjectModal localProject =
                                           projectController.currentProject ??
                                               projectController.projects[0];
                                       return Text(
-                                        project.projectName,
+                                        localProject.projectName,
                                         style: Get.textTheme.headline6,
                                       );
                                     }),

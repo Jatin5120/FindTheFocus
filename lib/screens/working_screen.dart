@@ -11,10 +11,10 @@ import 'package:get/get.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class WorkingProjectScreen extends StatefulWidget {
-  const WorkingProjectScreen({Key? key, required this.project})
+  const WorkingProjectScreen({Key? key, required this.localProject})
       : super(key: key);
 
-  final Project project;
+  final LocalProjectModal localProject;
 
   @override
   _WorkingProjectScreenState createState() => _WorkingProjectScreenState();
@@ -123,7 +123,7 @@ class _WorkingProjectScreenState extends State<WorkingProjectScreen>
               children: [
                 Expanded(
                   child: Text(
-                    widget.project.projectName,
+                    widget.localProject.projectName,
                     style: Get.textTheme.headline4,
                   ),
                 ),

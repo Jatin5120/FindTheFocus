@@ -41,9 +41,9 @@ class CurrentProject extends StatelessWidget {
 }
 
 class ProjectDetailView extends StatelessWidget {
-  const ProjectDetailView(this.project, {Key? key}) : super(key: key);
+  const ProjectDetailView(this.localProject, {Key? key}) : super(key: key);
 
-  final Project project;
+  final LocalProjectModal localProject;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class ProjectDetailView extends StatelessWidget {
     return Column(
       children: [
         Text(
-          project.projectName,
+          localProject.projectName,
           style: Get.textTheme.headline5,
         ),
         AspectRatio(
@@ -64,7 +64,7 @@ class ProjectDetailView extends StatelessWidget {
             ),
             margin: EdgeInsets.symmetric(vertical: size.height * 0.05),
             alignment: Alignment.center,
-            child: Text('${project.projectName} Statistics'),
+            child: Text('${localProject.projectName} Statistics'),
           ),
         ),
         _MileStoneSection(
@@ -73,25 +73,36 @@ class ProjectDetailView extends StatelessWidget {
           style: Get.textTheme.headline6,
           padding: EdgeInsets.only(bottom: size.height * 0.025),
         ),
-        //TODO: Milestone list
+        Expanded(
+          child: ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemCount: localProject.milestones.length,
+            itemBuilder: (_, index) {
+              final Milestone milestone = localProject.milestones[index];
+              int time = 0;
 
-        // Expanded(
-        //   child: ListView.builder(
-        //       physics: const BouncingScrollPhysics(),
-        //       itemCount: project.milestones?.length ?? 0,
-        //       itemBuilder: (_, index) {
-        //         return _MileStoneSection(
-        //           milestone: project.milestones![index]!.milestoneName,
-        //           time: 'Time $index',
-        //         );
-        //       }),
-        // ),
+              for (WorkingModal workingModal in milestone.workingTimes) {
+                final DateTime startTime = DateTime.fromMicrosecondsSinceEpoch(
+                    workingModal.startTimeEpoch);
+                final DateTime endTime = DateTime.fromMicrosecondsSinceEpoch(
+                    workingModal.endTimeEpoch);
+                final Duration duration = endTime.difference(startTime);
+                time += duration.inMinutes;
+              }
+
+              return _MileStoneSection(
+                milestone: milestone.milestoneName,
+                time: '$time min',
+              );
+            },
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: MyButton.outlined(
             label: 'Start',
             onPressed: () =>
-                Get.to(() => WorkingProjectScreen(project: project)),
+                Get.to(() => WorkingProjectScreen(localProject: localProject)),
             icon: MyIcons.play,
             backgroundColor: kSuccessColor,
             buttonSize: ButtonSize.large,
