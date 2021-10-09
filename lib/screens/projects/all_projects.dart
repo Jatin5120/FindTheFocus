@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'dart:math';
+import 'package:fl_chart/fl_chart.dart';
+
 import '../../controllers/controllers.dart';
 import '../../constants/constants.dart';
 import '../../modals/modals.dart';
@@ -153,6 +155,38 @@ class __ProjectStatsState extends State<_ProjectStats> {
   late int _completedMilestones;
   late int _totalMilestones;
   late String mileStoneValue;
+  late List<PieChartSectionData> _sections;
+
+  double getTime(List<WorkingModal> workingTimes) {
+    double total = 0;
+    for (WorkingModal workingModal in workingTimes) {
+      final startTime =
+          DateTime.fromMillisecondsSinceEpoch(workingModal.startTimeEpoch);
+      final endTime =
+          DateTime.fromMillisecondsSinceEpoch(workingModal.endTimeEpoch);
+
+      total += endTime.difference(startTime).inMinutes;
+    }
+    return total;
+  }
+
+  setSection(double radius) {
+    _sections = widget.localProject.milestones
+        .asMap()
+        .map<int, PieChartSectionData>((key, milestone) {
+          final value = PieChartSectionData(
+            color: kGraphColors[milestone.colorIndex],
+            // value: getTime(milestone.workingTimes),
+            value: 12,
+            title: milestone.milestoneName,
+            showTitle: false,
+            radius: radius,
+          );
+          return MapEntry(key, value);
+        })
+        .values
+        .toList();
+  }
 
   @override
   void initState() {
@@ -171,42 +205,20 @@ class __ProjectStatsState extends State<_ProjectStats> {
   @override
   Widget build(BuildContext context) {
     final Size size = Utils.size(context);
-    final double side = size.width.fifteenPercent;
-    final int backIndex = Random().nextInt(kGraphColors.length);
-    int foreIndex = Random().nextInt(kGraphColors.length);
-    while (backIndex == foreIndex) {
-      foreIndex = Random().nextInt(kGraphColors.length);
-    }
-    final double progress = Random().nextDouble();
-
+    final double side = size.width.twentyFivePercent;
+    setSection(side / 4);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         SizedBox(
           height: side,
           width: side,
-          // TODO: Implement Donut chart from charts_flutter
-          child: CircularProgressIndicator(
-            backgroundColor: kGraphColors[backIndex],
-            color: kGraphColors[foreIndex],
-            strokeWidth: side.twentyPercent,
-            value: progress,
+          child: PieChart(
+            PieChartData(
+              sections: _sections,
+              startDegreeOffset: 90,
+            ),
           ),
-          // child: _completedMilestones == 0
-          //     ? Center(
-          //         child: Text(
-          //           'No record',
-          //           style: Get.textTheme.bodyText2!.copyWith(
-          //             color: kTextColor[500],
-          //           ),
-          //         ),
-          //       )
-          //     : CircularProgressIndicator(
-          //         backgroundColor: kGraphColors[backIndex],
-          //         color: kGraphColors[foreIndex],
-          //         strokeWidth: side * 0.2,
-          //         value: progress,
-          //       ),
         ),
         Text(
           mileStoneValue,

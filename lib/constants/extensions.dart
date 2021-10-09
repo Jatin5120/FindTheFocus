@@ -45,6 +45,8 @@ extension Percent on double {
 
   double get twentyPercent => this * 0.2;
 
+  double get twentyFivePercent => this * 0.25;
+
   double get thirtyThreePercent => this * 0.33;
 
   double get fortyPercent => this * 0.4;

@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'package:fl_chart/fl_chart.dart';
+
 import '../../modals/modals.dart';
 import '../../screens/screens.dart';
 import '../../widgets/widgets.dart';
@@ -54,19 +56,7 @@ class ProjectDetailView extends StatelessWidget {
           localProject.projectName,
           style: Get.textTheme.headline5,
         ),
-        AspectRatio(
-          aspectRatio: 4 / 3,
-          child: Container(
-            decoration: BoxDecoration(
-              color: kBackgroundColor[300],
-              borderRadius: kLargeRadius,
-              boxShadow: Utils.largeShadow,
-            ),
-            margin: EdgeInsets.symmetric(vertical: size.height * 0.05),
-            alignment: Alignment.center,
-            child: Text('${localProject.projectName} Statistics'),
-          ),
-        ),
+        BarStats(localProject),
         _MileStoneSection(
           milestone: 'Milestones',
           time: 'Time',
@@ -109,6 +99,65 @@ class ProjectDetailView extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+class BarStats extends StatelessWidget {
+  const BarStats(
+    this.localProject, {
+    Key? key,
+  }) : super(key: key);
+
+  final LocalProjectModal localProject;
+
+  List<BarChartGroupData> getBarData() {
+    List<BarChartGroupData> _barGroups = <BarChartGroupData>[];
+
+    for (Milestone milestone in localProject.milestones) {
+      int value = localProject.milestones.indexOf(milestone) + 1;
+      BarChartGroupData barChartGroupData = BarChartGroupData(
+        x: value,
+        barRods: [
+          BarChartRodData(
+            y: value.toDouble(),
+            width: 12,
+            colors: [kGraphColors[milestone.colorIndex]],
+          ),
+        ],
+      );
+      _barGroups.add(barChartGroupData);
+    }
+
+    return _barGroups;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = Utils.size(context);
+    return AspectRatio(
+      aspectRatio: 4 / 3,
+      child: Container(
+        decoration: BoxDecoration(
+          color: kBackgroundColor[300],
+          borderRadius: kLargeRadius,
+          boxShadow: Utils.largeShadow,
+        ),
+        margin: EdgeInsets.symmetric(vertical: size.height * 0.05),
+        padding: EdgeInsets.symmetric(
+          vertical: size.height.twoDotFivePercent,
+          horizontal: size.width.sevenPercent,
+        ),
+        alignment: Alignment.center,
+        child: BarChart(
+          BarChartData(
+            borderData: FlBorderData(show: false),
+            gridData: FlGridData(show: false),
+            barGroups: getBarData(),
+            titlesData: FlTitlesData(show: false),
+          ),
+        ),
+      ),
     );
   }
 }
