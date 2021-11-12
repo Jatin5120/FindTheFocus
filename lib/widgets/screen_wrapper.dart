@@ -36,10 +36,10 @@ class _ScreenWrapperState extends State<ScreenWrapper> {
     'Profile',
   ];
 
-  final List<Widget> _screens = [
-    const Dashboard(),
+  static const List<Widget> _screens = [
+    Dashboard(),
     ProjectScreen(),
-    const AnalyticsScreen(),
+    AnalyticsScreen(),
     ProfileScreen(),
   ];
 
@@ -52,45 +52,47 @@ class _ScreenWrapperState extends State<ScreenWrapper> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return userDataController.isNewUser
-        ? const QuestionsWrapper()
-        : Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: Obx(
-              () {
-                final bool isDashboard = navBarController.selectedIndex == 0;
-                return Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: isDashboard ? 0 : size.width * 0.05,
-                  ),
-                  child: _screens[navBarController.selectedIndex],
-                );
-              },
-            ),
-            floatingActionButton: Obx(() {
-              return navBarController.showFAB
-                  ? FloatingActionButton(
-                      backgroundColor: kPrimaryColor,
-                      child: const Icon(MyIcons.plus),
-                      onPressed: () => Get.to(() => const AddProject()),
-                    )
-                  : const SizedBox.shrink();
-            }),
-            bottomNavigationBar: Card(
-              margin: EdgeInsets.zero,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  for (int i = 0; i < _icons.length; i++) ...[
-                    NavBarItem(
-                      icon: _icons[i],
-                      index: i,
-                      label: _labels[i],
+    return Obx(
+      () => userDataController.isNewUser
+          ? const QuestionsWrapper()
+          : Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: Obx(
+                () {
+                  final bool isDashboard = navBarController.selectedIndex == 0;
+                  return Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isDashboard ? 0 : size.width * 0.05,
                     ),
-                  ]
-                ],
+                    child: _screens[navBarController.selectedIndex],
+                  );
+                },
+              ),
+              floatingActionButton: Obx(() {
+                return navBarController.showFAB
+                    ? FloatingActionButton(
+                        backgroundColor: kPrimaryColor,
+                        child: const Icon(MyIcons.plus),
+                        onPressed: () => Get.to(() => const AddProject()),
+                      )
+                    : const SizedBox.shrink();
+              }),
+              bottomNavigationBar: Card(
+                margin: EdgeInsets.zero,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (int i = 0; i < _icons.length; i++) ...[
+                      NavBarItem(
+                        icon: _icons[i],
+                        index: i,
+                        label: _labels[i],
+                      ),
+                    ]
+                  ],
+                ),
               ),
             ),
-          );
+    );
   }
 }

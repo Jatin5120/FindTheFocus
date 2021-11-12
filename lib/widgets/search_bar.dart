@@ -26,17 +26,17 @@ class SearchBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(MyIcons.menu),
+                const IconButton(
+                  onPressed: null,
+                  icon: Icon(MyIcons.menu),
                 ),
                 Text(
                   title ?? '',
                   style: Get.textTheme.bodyText1,
                 ),
-                IconButton(
-                  icon: const Icon(MyIcons.search),
-                  onPressed: () {},
+                const IconButton(
+                  icon: Icon(MyIcons.search),
+                  onPressed: null,
                 ),
               ],
             ),

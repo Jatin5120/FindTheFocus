@@ -5,9 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class LoginScreen extends StatelessWidget {
-  LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({Key? key}) : super(key: key);
 
-  final AuthenticationController authenticationController = Get.find();
+  static AuthenticationController authenticationController = Get.find();
 
   @override
   Widget build(BuildContext context) {

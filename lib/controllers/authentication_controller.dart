@@ -11,14 +11,22 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationController extends GetxController {
+  static final StorageController _storageController = Get.find();
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  RxString userEmail = ''.obs;
-  RxString userPassword = ''.obs;
+  final RxString userEmail = ''.obs;
+  final RxString userPassword = ''.obs;
   final Rx<GoogleSignInAccount?> _googleAccount =
       Rx<GoogleSignInAccount?>(null);
   final Rx<bool> _isLoggedIn = false.obs;
   final RxBool _hidePassword = true.obs;
+
+  @override
+  onInit() {
+    super.onInit();
+    isLoggedIn = _storageController.isUserLoggedIn;
+  }
 
   GoogleSignInAccount? get googleAccount => _googleAccount.value;
 
@@ -82,6 +90,8 @@ class AuthenticationController extends GetxController {
             userCredential.additionalUserInfo?.isNewUser ?? true;
 
         setUserLoggedIn();
+
+        _storageController.writeUserLoggedIn(true);
 
         if (userDataController.isNewUser) {
           log("New User Added");

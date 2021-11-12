@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class ProfileScreen extends StatelessWidget {
-  ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({Key? key}) : super(key: key);
 
-  final AuthenticationController authenticationController = Get.find();
-  final NavBarController navBarController = Get.find();
+  static AuthenticationController authenticationController = Get.find();
+  static NavBarController navBarController = Get.find();
 
   @override
   Widget build(BuildContext context) {

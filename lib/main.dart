@@ -1,3 +1,5 @@
+import 'package:get_storage/get_storage.dart';
+
 import '../services/services.dart';
 import '../constants/constants.dart';
 import '../controllers/controllers.dart';
@@ -9,12 +11,14 @@ import 'package:get/get.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await GetStorage.init();
   initializeControllers();
   await NotificationService().initializeNotification();
   runApp(const MyApp());
 }
 
 void initializeControllers() async {
+  Get.put(StorageController());
   Get.put(UserDataController());
   Get.put(AuthenticationController());
   Get.put(NavBarController());

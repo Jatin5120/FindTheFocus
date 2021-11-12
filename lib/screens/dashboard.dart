@@ -49,7 +49,7 @@ class _DashboardState extends State<Dashboard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(child: _DashboardHeader()),
+          const Expanded(child: _DashboardHeader()),
           Expanded(
             flex: 2,
             child: SingleChildScrollView(
@@ -224,9 +224,9 @@ class _BuildQuickCard extends StatelessWidget {
 }
 
 class _DashboardHeader extends StatelessWidget {
-  _DashboardHeader({Key? key}) : super(key: key);
+  const _DashboardHeader({Key? key}) : super(key: key);
 
-  final UserDataController userDataController = Get.find();
+  static UserDataController userDataController = Get.find();
 
   @override
   Widget build(BuildContext context) {

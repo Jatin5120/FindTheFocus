@@ -18,10 +18,10 @@ class AuthenticationWrapper extends StatelessWidget {
           Get.put(ProjectsClient());
           return const ScreenWrapper();
         } else {
-          return const LoadingScreen('Setting up');
+          return const LoadingScreen();
         }
       } else {
-        return LoginScreen();
+        return const LoginScreen();
       }
     });
   }

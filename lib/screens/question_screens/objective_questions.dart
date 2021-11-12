@@ -12,6 +12,9 @@ class ObjectiveQuestions extends StatelessWidget {
   const ObjectiveQuestions({Key? key}) : super(key: key);
 
   static QuestionsController questionsController = Get.find();
+  static UserDataController userDataController = Get.find();
+  static StorageController storageController = Get.find();
+
   static PageController pageController = PageController();
 
   static Curve transitionCurve = Curves.easeInOut;
@@ -57,8 +60,9 @@ class ObjectiveQuestions extends StatelessWidget {
               Obx(
                 () {
                   if (questionsController.isQuestionsCompleted) {
-                    Future.delayed(const Duration(seconds: 2), () {
-                      Get.off(() => const ScreenWrapper());
+                    Future.delayed(kDelayDuration, () {
+                      storageController.writeNewUser(false);
+                      userDataController.isNewUser = false;
                     });
                     return const _DoneButton();
                   } else {

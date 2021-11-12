@@ -20,3 +20,5 @@ const double kMediumBorderWidth = 1;
 const double kLargeBorderWidth = 2;
 
 const Duration kAnimationDuration = Duration(milliseconds: 600);
+
+const Duration kDelayDuration = Duration(seconds: 2);

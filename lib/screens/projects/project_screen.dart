@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ProjectScreen extends StatelessWidget {
-  ProjectScreen({Key? key}) : super(key: key);
+  const ProjectScreen({Key? key}) : super(key: key);
 
-  final ProjectController projectController = Get.find();
+  static ProjectController projectController = Get.find();
 
   @override
   Widget build(BuildContext context) {

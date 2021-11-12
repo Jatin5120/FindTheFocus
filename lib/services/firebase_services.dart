@@ -32,6 +32,9 @@ class FirebaseService {
     getProjects();
   }
 
+  static Stream<DocumentSnapshot<Object?>> kStreamUser() =>
+      _userCollection.doc(_userDataController.user.uid).snapshots();
+
   static Future<UserModal> getUserData() async {
     final DocumentReference reference =
         _userCollection.doc(_userDataController.user.uid);
