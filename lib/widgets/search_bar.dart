@@ -28,14 +28,14 @@ class SearchBar extends StatelessWidget {
               children: [
                 const IconButton(
                   onPressed: null,
-                  icon: Icon(MyIcons.menu),
+                  icon: Icon(MyIcons.menu, color: kWhiteColor),
                 ),
                 Text(
                   title ?? '',
-                  style: Get.textTheme.bodyText1,
+                  style: Get.textTheme.headline6,
                 ),
                 const IconButton(
-                  icon: Icon(MyIcons.search),
+                  icon: Icon(MyIcons.search, color: kWhiteColor),
                   onPressed: null,
                 ),
               ],

@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_the_focus/screens/question_screens/question_screens.dart';
-import 'package:find_the_focus/services/services.dart';
 import '../screens/screens.dart';
 import '../widgets/widgets.dart';
 import '../constants/constants.dart';
@@ -8,28 +6,21 @@ import '../controllers/controllers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ScreenWrapper extends StatefulWidget {
+class ScreenWrapper extends StatelessWidget {
   const ScreenWrapper({Key? key}) : super(key: key);
 
-  @override
-  _ScreenWrapperState createState() => _ScreenWrapperState();
-}
+  static final NavBarController _navBarController = Get.find();
+  static final ProjectsClient _projectsClient = Get.find();
+  static final UserDataController _userDataController = Get.find();
 
-class _ScreenWrapperState extends State<ScreenWrapper> {
-  final NavBarController navBarController = Get.find();
-  final ProjectsClient projectsClient = Get.find();
-  final UserDataController userDataController = Get.find();
-
-  late Stream<QuerySnapshot<Map<String, dynamic>>> stream;
-
-  final List<IconData> _icons = [
+  static const List<IconData> _icons = [
     MyIcons.dashboard,
     MyIcons.project,
     MyIcons.stats,
     MyIcons.user,
   ];
 
-  final List<String> _labels = [
+  static const List<String> _labels = [
     'Dashboard',
     'Projects',
     'Analytics',
@@ -44,32 +35,26 @@ class _ScreenWrapperState extends State<ScreenWrapper> {
   ];
 
   @override
-  void initState() {
-    super.initState();
-    FirebaseService.getData();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Obx(
-      () => userDataController.isNewUser
+      () => _userDataController.isNewUser
           ? const QuestionsWrapper()
           : Scaffold(
               resizeToAvoidBottomInset: false,
               body: Obx(
                 () {
-                  final bool isDashboard = navBarController.selectedIndex == 0;
+                  final bool isDashboard = _navBarController.selectedIndex == 0;
                   return Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: isDashboard ? 0 : size.width * 0.05,
                     ),
-                    child: _screens[navBarController.selectedIndex],
+                    child: _screens[_navBarController.selectedIndex],
                   );
                 },
               ),
               floatingActionButton: Obx(() {
-                return navBarController.showFAB
+                return _navBarController.showFAB
                     ? FloatingActionButton(
                         backgroundColor: kPrimaryColor,
                         child: const Icon(MyIcons.plus),

@@ -10,6 +10,11 @@ class ProjectScreen extends StatelessWidget {
 
   static ProjectController projectController = Get.find();
 
+  static const List<String> _labels = [
+    'Current Project',
+    'All Projects',
+  ];
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -26,8 +31,9 @@ class ProjectScreen extends StatelessWidget {
             padding: EdgeInsets.all(size.height * 0.005),
             child: Row(
               children: [
-                ProjectChip(index: 0, label: 'Current Project'),
-                ProjectChip(index: 1, label: 'All Projects'),
+                for (int i = 0; i < _labels.length; i++) ...[
+                  ProjectChip(index: i, label: _labels[i]),
+                ],
               ],
             ),
           ),

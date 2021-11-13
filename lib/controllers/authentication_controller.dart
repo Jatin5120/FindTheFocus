@@ -30,8 +30,6 @@ class AuthenticationController extends GetxController {
 
   GoogleSignInAccount? get googleAccount => _googleAccount.value;
 
-  void setUserLoggedIn() => isLoggedIn = _firebaseAuth.currentUser != null;
-
   bool get isLoggedIn => _isLoggedIn.value;
 
   set isLoggedIn(bool value) => _isLoggedIn.value = value;
@@ -67,11 +65,11 @@ class AuthenticationController extends GetxController {
     try {
       final UserDataController userDataController = Get.find();
 
-      _googleAccount.value = await _googleSignIn.signIn();
+      googleAccount = await _googleSignIn.signIn();
 
       if (_googleAccount.value != null) {
         final GoogleSignInAuthentication googleAuth =
-            await _googleAccount.value!.authentication;
+            await googleAccount!.authentication;
 
         final OAuthCredential googleAuthCredential =
             GoogleAuthProvider.credential(
@@ -79,7 +77,7 @@ class AuthenticationController extends GetxController {
           idToken: googleAuth.idToken,
         );
         print(
-            "\n\nSigned in with Google --> ${_firebaseAuth.currentUser?.displayName}");
+            "Signed in with Google --> ${_firebaseAuth.currentUser?.displayName}");
 
         final UserCredential userCredential =
             await _firebaseAuth.signInWithCredential(googleAuthCredential);
@@ -88,8 +86,6 @@ class AuthenticationController extends GetxController {
 
         userDataController.isNewUser =
             userCredential.additionalUserInfo?.isNewUser ?? true;
-
-        setUserLoggedIn();
 
         _storageController.writeUserLoggedIn(true);
 
@@ -136,6 +132,5 @@ class AuthenticationController extends GetxController {
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
     _googleAccount.value = await _googleSignIn.signOut();
-    setUserLoggedIn();
   }
 }

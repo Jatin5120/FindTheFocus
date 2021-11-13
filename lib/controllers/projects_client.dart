@@ -11,7 +11,7 @@ class ProjectsClient extends GetxController {
     final ProjectController projectController = Get.find();
     final UserDataController userDataController = Get.find();
     Project project = Project(
-      userID: userDataController.user.uid,
+      userID: userDataController.user!.uid,
       projectID: '',
       projectName: projectController.projectName,
       haveMilestones: false,

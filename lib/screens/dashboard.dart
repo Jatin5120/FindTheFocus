@@ -1,5 +1,10 @@
 // ignore_for_file: avoid_print
 
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_the_focus/services/firebase_services.dart';
+
 import '../modals/modals.dart';
 import 'package:flutter/services.dart';
 import '../controllers/controllers.dart';
@@ -232,87 +237,94 @@ class _DashboardHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = Utils.size(context);
     final double imageSize = size.height.tenPercent;
-    return Container(
-      decoration: const BoxDecoration(
-        color: kSecondaryColor,
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(40),
-        ),
-      ),
-      height: size.height.thirtyThreePercent,
-      width: double.maxFinite,
-      padding: EdgeInsets.symmetric(vertical: size.height.twoPercent),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(height: size.height.onePercent),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: size.width.sevenPercent),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: null,
-                  child: const Icon(MyIcons.setting, color: kSecondaryColor),
-                ),
-                ClipRRect(
-                  borderRadius: kChipRadius,
-                  child: Image.network(
-                    userDataController.user.photoURL ?? '',
-                    fit: BoxFit.cover,
-                    width: imageSize,
-                    height: imageSize,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    print("Setting");
-                  },
-                  child: const Icon(MyIcons.setting, color: kBlackColor),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: size.height.onePercent),
-          Text(
-            userDataController.user.displayName ?? 'User',
-            style: Get.textTheme.headline5!.copyWith(
-              color: kBlackColor,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          SizedBox(height: size.height.onePercent),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: size.width.fivePercent),
-            child: Obx(
-              () => Row(
-                children: [
-                  _UserStatsElement(
-                    value:
-                        userDataController.userModal.totalProjects.toString(),
-                    title: 'Projects',
-                  ),
-                  const _ElementDivider(),
-                  _UserStatsElement(
-                    value: userDataController.userModal.totalWorkDuration
-                        .toString(),
-                    title: 'Working time',
-                  ),
-                  const _ElementDivider(),
-                  _UserStatsElement(
-                    value: userDataController.userModal.level.toString(),
-                    title: 'Level',
-                  ),
-                ],
+    return StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseService.kUserStream,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return const SizedBox();
+          if (snapshot.hasError) return const SizedBox();
+          UserModal userModal =
+              UserModal.fromMap(snapshot.data!.data() as Map<String, dynamic>);
+          return Container(
+            decoration: const BoxDecoration(
+              color: kSecondaryColor,
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(40),
               ),
             ),
-          ),
-          SizedBox(height: size.height.onePercent),
-        ],
-      ),
-    );
+            height: size.height.thirtyThreePercent,
+            width: double.maxFinite,
+            padding: EdgeInsets.symmetric(vertical: size.height.twoPercent),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: size.height.onePercent),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: size.width.sevenPercent),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: null,
+                        child:
+                            const Icon(MyIcons.setting, color: kSecondaryColor),
+                      ),
+                      ClipRRect(
+                        borderRadius: kChipRadius,
+                        child: Image.network(
+                          userDataController.user?.photoURL ?? '',
+                          fit: BoxFit.cover,
+                          width: imageSize,
+                          height: imageSize,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          print("Setting");
+                        },
+                        child: const Icon(MyIcons.setting, color: kBlackColor),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: size.height.onePercent),
+                Text(
+                  userModal.username,
+                  style: Get.textTheme.headline5!.copyWith(
+                    color: kBlackColor,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SizedBox(height: size.height.onePercent),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: size.width.fivePercent),
+                  child: Row(
+                    children: [
+                      _UserStatsElement(
+                        value: userModal.totalProjects.toString(),
+                        title: 'Projects',
+                      ),
+                      const _ElementDivider(),
+                      _UserStatsElement(
+                        value: userModal.totalWorkDuration.toString(),
+                        title: 'Working time',
+                      ),
+                      const _ElementDivider(),
+                      _UserStatsElement(
+                        value: userModal.level.toString(),
+                        title: 'Level',
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: size.height.onePercent),
+              ],
+            ),
+          );
+        });
   }
 }
 

@@ -9,7 +9,7 @@ class UserDataController extends GetxController {
 
   final Rx<List<Project>?> _projects = Rx<List<Project>?>(null);
   final RxBool _isNewUser = true.obs;
-  late User user;
+  final Rx<User?> _user = Rx<User?>(null);
   final Rx<UserModal> _userModal = Rx<UserModal>(UserModal.empty());
 
   @override
@@ -17,6 +17,9 @@ class UserDataController extends GetxController {
     super.onInit();
     isNewUser = _storageController.isNewUser;
   }
+
+  User? get user => _user.value;
+  set user(User? user) => _user.value = user;
 
   UserModal get userModal => _userModal.value;
   set userModal(UserModal userModal) => _userModal.value = userModal;

@@ -100,7 +100,7 @@ class _AddButton extends StatelessWidget {
   addMilestone() {
     final String milestoneName = milestonesController.text;
     final Milestone milestone = Milestone(
-      userID: userDataController.user.uid,
+      userID: userDataController.user!.uid,
       projectID: projectController.projectID,
       milestoneID: '',
       milestoneName: milestoneName,

@@ -25,11 +25,9 @@ class CurrentProject extends StatelessWidget {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: size.width * 0.05,
-          vertical: size.height * 0.03,
+          horizontal: size.width.fivePercent,
+          vertical: size.height.threePercent,
         ),
-        color: kBackgroundColor[500],
-        alignment: Alignment.center,
         child: Obx(() {
           return projectController.currentProject == null
               ? projectController.projects.isEmpty

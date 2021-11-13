@@ -32,12 +32,22 @@ class FirebaseService {
     getProjects();
   }
 
-  static Stream<DocumentSnapshot<Object?>> kStreamUser() =>
-      _userCollection.doc(_userDataController.user.uid).snapshots();
+  static Stream<DocumentSnapshot<Object?>> get kUserStream =>
+      _userCollection.doc(_userDataController.user!.uid).snapshots();
+
+  static Stream<QuerySnapshot<Object?>> get kProjectsStream =>
+      _projectCollection
+          .where('userID', isEqualTo: _userDataController.user!.uid)
+          .snapshots();
+
+  static Stream<QuerySnapshot<Object?>> kMilestonesStream(String projectID) =>
+      _milestonesCollection
+          .where('projectID', isEqualTo: projectID)
+          .snapshots();
 
   static Future<UserModal> getUserData() async {
     final DocumentReference reference =
-        _userCollection.doc(_userDataController.user.uid);
+        _userCollection.doc(_userDataController.user!.uid);
     DocumentSnapshot snapshot = await reference.get();
     final Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     print("UserData --> $data");
@@ -46,7 +56,7 @@ class FirebaseService {
 
   static Future getProjects() async {
     QuerySnapshot snapShot = await _projectCollection
-        .where('userID', isEqualTo: _userDataController.user.uid)
+        .where('userID', isEqualTo: _userDataController.user!.uid)
         .get();
     final List<QueryDocumentSnapshot> docs = snapShot.docs;
     for (QueryDocumentSnapshot doc in docs) {
@@ -89,7 +99,7 @@ class FirebaseService {
   }
 
   static Future addNewUser() async {
-    final User user = _userDataController.user;
+    final User user = _userDataController.user!;
 
     final UserModal userModal = UserModal(
       username: user.displayName!,
@@ -104,7 +114,7 @@ class FirebaseService {
 
     try {
       await _userCollection
-          .doc(_userDataController.user.uid)
+          .doc(_userDataController.user!.uid)
           .set(userModal.toMap());
 
       _userDataController.userModal = await getUserData();
@@ -126,7 +136,7 @@ class FirebaseService {
       await _reference.update({'projectID': _reference.id});
 
       DocumentReference _userReference =
-          _userCollection.doc(_userDataController.user.uid);
+          _userCollection.doc(_userDataController.user!.uid);
 
       final UserModal userModal = await getUserData();
 
@@ -165,7 +175,7 @@ class FirebaseService {
 
   static Future makeCurrentProject(String projectID) async {
     _currentProjectCollection
-        .doc(_userDataController.user.uid)
+        .doc(_userDataController.user!.uid)
         .set({'projectID': projectID});
   }
 }

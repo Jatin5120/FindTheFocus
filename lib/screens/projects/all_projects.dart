@@ -1,14 +1,14 @@
 // ignore_for_file: avoid_print
-
-import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
-
-import '../../controllers/controllers.dart';
-import '../../constants/constants.dart';
-import '../../modals/modals.dart';
-import '../../widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../constants/constants.dart';
+import '../../controllers/controllers.dart';
+import '../../modals/modals.dart';
+import '../../services/firebase_services.dart';
+import '../../widgets/widgets.dart';
 
 class AllProjects extends StatelessWidget {
   const AllProjects({Key? key}) : super(key: key);
@@ -24,24 +24,65 @@ class AllProjects extends StatelessWidget {
         if (details.delta.dx > 12) projectController.selectedIndex = 0;
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: size.width.fivePercent),
-        child: Obx(
-          () => projectController.projects.isEmpty
-              ? const NoProjects()
-              : ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: projectController.projects.length + 1,
-                  itemBuilder: (BuildContext context, int index) {
-                    LocalProjectModal? localProject;
-                    if (index == projectController.projects.length) {
-                      localProject = null;
-                    } else {
-                      localProject = projectController.projects[index];
-                    }
-                    return ProjectCard(localProject);
-                  },
-                ),
+        padding: EdgeInsets.symmetric(
+          horizontal: size.width.fivePercent,
+          vertical: size.height.threePercent,
         ),
+        child: StreamBuilder<QuerySnapshot>(
+            stream: FirebaseService.kProjectsStream,
+            builder: (context, projectSnapshot) {
+              if (!projectSnapshot.hasData) {
+                return const SizedBox();
+              }
+              List<QueryDocumentSnapshot> projectDocs =
+                  projectSnapshot.data!.docs;
+
+              if (projectDocs.isEmpty) {
+                return const NoProjects();
+              }
+              return ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: projectDocs.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == projectDocs.length) {
+                    return SizedBox(height: size.height.tenPercent);
+                  }
+                  final Project project = Project.fromMap(
+                    projectDocs[index].data() as Map<String, dynamic>,
+                  );
+                  return StreamBuilder<QuerySnapshot>(
+                      stream:
+                          FirebaseService.kMilestonesStream(project.projectID),
+                      builder: (context, milestoneSnapshot) {
+                        if (!milestoneSnapshot.hasData) {
+                          return const SizedBox();
+                        }
+                        List<QueryDocumentSnapshot> milestoneDocs =
+                            milestoneSnapshot.data!.docs;
+
+                        List<Milestone> milestones = milestoneDocs
+                            .map(
+                              (doc) => Milestone.fromMap(
+                                  doc.data() as Map<String, dynamic>),
+                            )
+                            .toList();
+
+                        LocalProjectModal? localProject = LocalProjectModal(
+                          userID: project.userID,
+                          projectID: project.projectID,
+                          projectName: project.projectName,
+                          projectNumber: project.projectNumber,
+                          startDateEpoch: project.startDateEpoch,
+                          isCompleted: project.isCompleted,
+                          haveMilestones: project.haveMilestones,
+                          milestones: milestones,
+                        );
+
+                        return ProjectCard(localProject);
+                      });
+                },
+              );
+            }),
       ),
     );
   }
@@ -50,47 +91,42 @@ class AllProjects extends StatelessWidget {
 class ProjectCard extends StatelessWidget {
   const ProjectCard(this.localProject, {Key? key}) : super(key: key);
 
-  final LocalProjectModal? localProject;
+  final LocalProjectModal localProject;
   static ProjectController projectController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     final Size size = Utils.size(context);
-    return localProject == null
-        ? SizedBox(height: size.height.tenPercent)
-        : GestureDetector(
-            onTap: () {
-              projectController.currentProject = localProject;
-              projectController.selectedIndex = 0;
-              projectController.currentProjectIndex =
-                  projectController.projects.indexOf(localProject!);
-            },
-            child: AspectRatio(
-              aspectRatio: 3 / 2,
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: kBackgroundColor[100],
-                  borderRadius: kLargeRadius,
-                  boxShadow: Utils.mediumShadow,
-                ),
-                margin: EdgeInsets.only(top: size.height * 0.06),
-                padding: EdgeInsets.symmetric(
-                  vertical: size.height * 0.01,
-                  horizontal: size.width * 0.075,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _ProjectDetails(localProject!),
-                    _ProjectStats(localProject!),
-                  ],
-                ),
-              ),
-            ),
-          );
+    return GestureDetector(
+      onTap: () {
+        projectController.currentProject = localProject;
+        projectController.selectedIndex = 0;
+        projectController.currentProjectIndex =
+            projectController.projects.indexOf(localProject);
+      },
+      child: AspectRatio(
+        aspectRatio: 3 / 2,
+        child: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: kBackgroundColor[100],
+            borderRadius: kLargeRadius,
+            boxShadow: Utils.mediumShadow,
+          ),
+          margin: EdgeInsets.only(top: size.height.fivePercent),
+          padding: EdgeInsets.all(size.width.sevenPercent),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _ProjectDetails(localProject),
+              _ProjectStats(localProject),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -205,7 +241,7 @@ class __ProjectStatsState extends State<_ProjectStats> {
   @override
   Widget build(BuildContext context) {
     final Size size = Utils.size(context);
-    final double side = size.width.twentyFivePercent;
+    final double side = size.width.twentyPercent;
     setSection(side / 4);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
