@@ -43,15 +43,7 @@ class ScreenWrapper extends StatelessWidget {
           : Scaffold(
               resizeToAvoidBottomInset: false,
               body: Obx(
-                () {
-                  final bool isDashboard = _navBarController.selectedIndex == 0;
-                  return Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: isDashboard ? 0 : size.width * 0.05,
-                    ),
-                    child: _screens[_navBarController.selectedIndex],
-                  );
-                },
+                () => _screens[_navBarController.selectedIndex],
               ),
               floatingActionButton: Obx(() {
                 return _navBarController.showFAB

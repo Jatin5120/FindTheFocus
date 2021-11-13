@@ -21,13 +21,20 @@ class ProjectScreen extends StatelessWidget {
     return SafeArea(
       child: Column(
         children: [
-          const SearchBar(title: 'Projects'),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width.fivePercent),
+            child: const SearchBar(title: 'Projects'),
+          ),
           Container(
             decoration: BoxDecoration(
               borderRadius: kChipRadius,
               color: kBackgroundColor[700],
             ),
             constraints: BoxConstraints(maxHeight: size.height * 0.05),
+            margin: EdgeInsets.symmetric(
+              horizontal: size.width.fivePercent,
+              vertical: 4,
+            ),
             padding: EdgeInsets.all(size.height * 0.005),
             child: Row(
               children: [

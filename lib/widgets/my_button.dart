@@ -151,7 +151,7 @@ class MyButton extends StatelessWidget {
         setValues(
           style: Get.textTheme.subtitle2!,
           padding: size.width / 30,
-          shape: kSmallButtonShape,
+          shape: kSmallShape,
         );
         break;
       case ButtonSize.medium:
@@ -159,7 +159,7 @@ class MyButton extends StatelessWidget {
           space: size.width / 50,
           style: Get.textTheme.headline6!,
           padding: size.width / 20,
-          shape: kMediumButtonShape,
+          shape: kMediumShape,
           important: isCTA,
         );
         break;
@@ -168,7 +168,7 @@ class MyButton extends StatelessWidget {
           space: size.width / 30,
           style: Get.textTheme.headline5!,
           padding: size.width / 10,
-          shape: kLargeButtonShape,
+          shape: kLargeShape,
           important: isCTA,
         );
         break;
@@ -177,7 +177,7 @@ class MyButton extends StatelessWidget {
           space: size.width / 30,
           style: Get.textTheme.headline6!,
           padding: size.width / 20,
-          shape: kMediumButtonShape,
+          shape: kMediumShape,
         );
     }
   }

@@ -18,21 +18,21 @@ class LoadingScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const CircularProgressIndicator(color: kAccentColor),
-            const SizedBox(width: 24),
-            Text(
-              'Setting up',
-              style: Get.textTheme.headline5,
-            ),
-          ],
-        ),
-      ),
+      // bottomNavigationBar: Padding(
+      //   padding: const EdgeInsets.symmetric(vertical: 16),
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     crossAxisAlignment: CrossAxisAlignment.center,
+      //     children: [
+      //       const CircularProgressIndicator(color: kAccentColor),
+      //       const SizedBox(width: 24),
+      //       Text(
+      //         'Setting up',
+      //         style: Get.textTheme.headline5,
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

@@ -13,7 +13,6 @@ class AddProject extends StatelessWidget {
   static GlobalKey<FormState> projectFormKey = GlobalKey<FormState>();
 
   static ProjectController projectController = Get.find();
-  static ProjectsClient projectsClient = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +78,7 @@ class AddProject extends StatelessWidget {
                               final bool isValid =
                                   projectFormKey.currentState!.validate();
                               if (isValid) {
-                                await projectsClient.createProject();
-                                Get.off(() => const AddMilestone());
+                                Get.dialog(const _ConfirmationDialog());
                               }
                             },
                             isCTA: true,
@@ -96,6 +94,41 @@ class AddProject extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _ConfirmationDialog extends StatelessWidget {
+  const _ConfirmationDialog({Key? key}) : super(key: key);
+
+  static ProjectsClient projectsClient = Get.find();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Add Project'),
+      content: const Text(
+        "Are you sue to Add Project? You won't be able to change it later",
+      ),
+      backgroundColor: kBackgroundColor.shade300,
+      titleTextStyle: Get.textTheme.headline6,
+      contentTextStyle: Get.textTheme.subtitle1,
+      elevation: kElevation,
+      shape: kMediumShape,
+      actions: [
+        MyButton.secondary(
+          label: 'Let me check',
+          onPressed: () => Get.back(),
+        ),
+        MyButton(
+          label: 'Yes, Create',
+          onPressed: () async {
+            Get.back();
+            await projectsClient.createProject();
+            Get.off(() => const AddMilestone());
+          },
+        ),
+      ],
     );
   }
 }

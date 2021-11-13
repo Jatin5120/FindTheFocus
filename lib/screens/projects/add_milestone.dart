@@ -183,9 +183,9 @@ class _MilestoneField extends StatelessWidget {
 }
 
 class _MileStoneList extends StatelessWidget {
-  _MileStoneList({Key? key}) : super(key: key);
+  const _MileStoneList({Key? key}) : super(key: key);
 
-  final ProjectController projectController = Get.find();
+  static ProjectController projectController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -208,14 +208,22 @@ class _MileStoneList extends StatelessWidget {
                         child: ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           itemCount: controller.milestones.length,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 16,
+                          ),
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,
                           itemBuilder: (BuildContext context, int index) {
                             final String milestone =
                                 controller.milestones[index].milestoneName;
-                            return Text(
-                              '• $milestone',
-                              style: Get.textTheme.subtitle1,
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: Text(
+                                '• $milestone',
+                                style: Get.textTheme.subtitle1,
+                              ),
                             );
                           },
                         ),

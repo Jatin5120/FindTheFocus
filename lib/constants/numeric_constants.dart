@@ -8,11 +8,11 @@ const BorderRadius kLargeRadius = BorderRadius.all(Radius.circular(16));
 const BorderRadius kChipRadius = BorderRadius.all(Radius.circular(28));
 const BorderRadius kCardRadius = BorderRadius.all(Radius.circular(24));
 
-const OutlinedBorder kSmallButtonShape =
+const OutlinedBorder kSmallShape =
     RoundedRectangleBorder(borderRadius: kSmallRadius);
-const OutlinedBorder kMediumButtonShape =
+const OutlinedBorder kMediumShape =
     RoundedRectangleBorder(borderRadius: kMediumRadius);
-const OutlinedBorder kLargeButtonShape =
+const OutlinedBorder kLargeShape =
     RoundedRectangleBorder(borderRadius: kLargeRadius);
 
 const double kSmallBorderWidth = 0.5;

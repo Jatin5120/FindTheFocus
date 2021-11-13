@@ -217,7 +217,7 @@ class _BuildExitAlertDialog extends StatelessWidget {
     return AlertDialog(
       elevation: kElevation,
       backgroundColor: Theme.of(context).cardTheme.color,
-      shape: kSmallButtonShape,
+      shape: kSmallShape,
       title: Text(title ?? 'Are you Sure?'),
       content: Text(
         message!,

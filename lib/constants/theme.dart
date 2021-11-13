@@ -1,5 +1,6 @@
 import 'package:find_the_focus/constants/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'colors.dart';
 
@@ -30,6 +31,12 @@ ThemeData myTheme = ThemeData(
     enabledBorder: OutlineInputBorder(
       borderRadius: kLargeRadius,
     ),
+  ),
+  dialogTheme: DialogTheme(
+    backgroundColor: kBackgroundColor.shade300,
+    titleTextStyle: Get.textTheme.headline6,
+    contentTextStyle: Get.textTheme.subtitle1,
+    elevation: kElevation,
   ),
   snackBarTheme: const SnackBarThemeData(
     backgroundColor: kAccentColor,

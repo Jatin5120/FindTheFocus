@@ -23,67 +23,59 @@ class AllProjects extends StatelessWidget {
       onPanUpdate: (details) {
         if (details.delta.dx > 12) projectController.selectedIndex = 0;
       },
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: size.width.fivePercent,
-          vertical: size.height.threePercent,
-        ),
-        child: StreamBuilder<QuerySnapshot>(
-            stream: FirebaseService.kProjectsStream,
-            builder: (context, projectSnapshot) {
-              if (!projectSnapshot.hasData) {
-                return const SizedBox();
-              }
-              List<QueryDocumentSnapshot> projectDocs =
-                  projectSnapshot.data!.docs;
+      child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseService.kProjectsStream,
+          builder: (context, projectSnapshot) {
+            if (!projectSnapshot.hasData) {
+              return const SizedBox();
+            }
+            List<QueryDocumentSnapshot> projectDocs =
+                projectSnapshot.data!.docs;
 
-              if (projectDocs.isEmpty) {
-                return const NoProjects();
-              }
-              return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: projectDocs.length + 1,
-                itemBuilder: (BuildContext context, int index) {
-                  if (index == projectDocs.length) {
-                    return SizedBox(height: size.height.tenPercent);
-                  }
-                  final Project project = Project.fromMap(
-                    projectDocs[index].data() as Map<String, dynamic>,
-                  );
-                  return StreamBuilder<QuerySnapshot>(
-                      stream:
-                          FirebaseService.kMilestonesStream(project.projectID),
-                      builder: (context, milestoneSnapshot) {
-                        if (!milestoneSnapshot.hasData) {
-                          return const SizedBox();
-                        }
-                        List<QueryDocumentSnapshot> milestoneDocs =
-                            milestoneSnapshot.data!.docs;
+            if (projectDocs.isEmpty) {
+              return const NoProjects();
+            }
+            return ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: projectDocs.length,
+              padding: const EdgeInsets.only(top: 16, bottom: 56),
+              itemBuilder: (BuildContext context, int index) {
+                final Project project = Project.fromMap(
+                  projectDocs[index].data() as Map<String, dynamic>,
+                );
+                return StreamBuilder<QuerySnapshot>(
+                    stream:
+                        FirebaseService.kMilestonesStream(project.projectID),
+                    builder: (context, milestoneSnapshot) {
+                      if (!milestoneSnapshot.hasData) {
+                        return const SizedBox();
+                      }
+                      List<QueryDocumentSnapshot> milestoneDocs =
+                          milestoneSnapshot.data!.docs;
 
-                        List<Milestone> milestones = milestoneDocs
-                            .map(
-                              (doc) => Milestone.fromMap(
-                                  doc.data() as Map<String, dynamic>),
-                            )
-                            .toList();
+                      List<Milestone> milestones = milestoneDocs
+                          .map(
+                            (doc) => Milestone.fromMap(
+                                doc.data() as Map<String, dynamic>),
+                          )
+                          .toList();
 
-                        LocalProjectModal? localProject = LocalProjectModal(
-                          userID: project.userID,
-                          projectID: project.projectID,
-                          projectName: project.projectName,
-                          projectNumber: project.projectNumber,
-                          startDateEpoch: project.startDateEpoch,
-                          isCompleted: project.isCompleted,
-                          haveMilestones: project.haveMilestones,
-                          milestones: milestones,
-                        );
+                      LocalProjectModal? localProject = LocalProjectModal(
+                        userID: project.userID,
+                        projectID: project.projectID,
+                        projectName: project.projectName,
+                        projectNumber: project.projectNumber,
+                        startDateEpoch: project.startDateEpoch,
+                        isCompleted: project.isCompleted,
+                        haveMilestones: project.haveMilestones,
+                        milestones: milestones,
+                      );
 
-                        return ProjectCard(localProject);
-                      });
-                },
-              );
-            }),
-      ),
+                      return ProjectCard(localProject);
+                    });
+              },
+            );
+          }),
     );
   }
 }
@@ -104,25 +96,30 @@ class ProjectCard extends StatelessWidget {
         projectController.currentProjectIndex =
             projectController.projects.indexOf(localProject);
       },
-      child: AspectRatio(
-        aspectRatio: 3 / 2,
-        child: Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: kBackgroundColor[100],
-            borderRadius: kLargeRadius,
-            boxShadow: Utils.mediumShadow,
-          ),
-          margin: EdgeInsets.only(top: size.height.fivePercent),
-          padding: EdgeInsets.all(size.width.sevenPercent),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _ProjectDetails(localProject),
-              _ProjectStats(localProject),
-            ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: size.width.sevenPercent,
+          vertical: size.height.twoDotFivePercent,
+        ),
+        child: AspectRatio(
+          aspectRatio: 3 / 2,
+          child: Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: kBackgroundColor[100],
+              borderRadius: kLargeRadius,
+              boxShadow: Utils.mediumShadow,
+            ),
+            padding: EdgeInsets.all(size.width.sevenPercent),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _ProjectDetails(localProject),
+                _ProjectStats(localProject),
+              ],
+            ),
           ),
         ),
       ),
