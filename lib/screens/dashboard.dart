@@ -240,7 +240,7 @@ class _DashboardHeader extends StatelessWidget {
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const SizedBox();
           if (snapshot.hasError) return const SizedBox();
-          UserModal userModal =
+          userDataController.userModal =
               UserModal.fromMap(snapshot.data!.data() as Map<String, dynamic>);
           return Container(
             decoration: const BoxDecoration(
@@ -289,7 +289,7 @@ class _DashboardHeader extends StatelessWidget {
                 ),
                 SizedBox(height: size.height.onePercent),
                 Text(
-                  userModal.username,
+                  userDataController.userModal.username,
                   style: Get.textTheme.headline5!.copyWith(
                     color: kBlackColor,
                     fontWeight: FontWeight.w700,
@@ -302,17 +302,19 @@ class _DashboardHeader extends StatelessWidget {
                   child: Row(
                     children: [
                       _UserStatsElement(
-                        value: userModal.totalProjects.toString(),
+                        value: userDataController.userModal.totalProjects
+                            .toString(),
                         title: 'Projects',
                       ),
                       const _ElementDivider(),
                       _UserStatsElement(
-                        value: userModal.totalWorkDuration.toString(),
+                        value: userDataController.userModal.totalWorkDuration
+                            .toString(),
                         title: 'Working time',
                       ),
                       const _ElementDivider(),
                       _UserStatsElement(
-                        value: userModal.level.toString(),
+                        value: userDataController.userModal.level.toString(),
                         title: 'Level',
                       ),
                     ],

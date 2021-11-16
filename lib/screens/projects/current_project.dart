@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:find_the_focus/services/firebase_services.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 import '../../modals/modals.dart';
@@ -28,13 +30,32 @@ class CurrentProject extends StatelessWidget {
           horizontal: size.width.fivePercent,
           vertical: size.height.threePercent,
         ),
-        child: Obx(() {
-          return projectController.currentProject == null
-              ? projectController.projects.isEmpty
-                  ? const NoProjects()
-                  : ProjectDetailView(projectController.projects.first)
-              : ProjectDetailView(projectController.currentProject!);
-        }),
+        child: FutureBuilder(
+          future: FirebaseService.kCurrentProjectDOcument,
+          builder: (context, future) {
+            if (!future.hasData) return const SizedBox();
+
+            Map<String, dynamic> project = future.data as Map<String, dynamic>;
+
+            return StreamBuilder<DocumentSnapshot>(
+              stream:
+                  FirebaseService.kCurrentProjectStream(project['projectID']),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const SizedBox();
+                return Obx(
+                  () {
+                    return projectController.currentProject == null
+                        ? projectController.projects.isEmpty
+                            ? const NoProjects()
+                            : ProjectDetailView(
+                                projectController.projects.first)
+                        : ProjectDetailView(projectController.currentProject!);
+                  },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

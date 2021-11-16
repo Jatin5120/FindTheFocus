@@ -2,12 +2,14 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:find_the_focus/constants/collections.dart';
-import 'package:find_the_focus/controllers/controllers.dart';
-import 'package:find_the_focus/modals/modals.dart';
-import 'package:find_the_focus/widgets/widgets.dart';
+import 'package:find_the_focus/services/dialog_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+
+import '../constants/collections.dart';
+import '../controllers/controllers.dart';
+import '../modals/modals.dart';
+import '../widgets/widgets.dart';
 
 class FirebaseService {
   const FirebaseService._();
@@ -18,6 +20,8 @@ class FirebaseService {
   static final UserDataController _userDataController = Get.find();
   static final ProjectController _projectController = Get.find();
 
+  /// -------------------- [References] --------------------------
+
   static final CollectionReference _userCollection =
       _firebaseFirestore.collection(kUserCollection);
   static final CollectionReference _milestonesCollection =
@@ -27,10 +31,10 @@ class FirebaseService {
   static final CollectionReference _currentProjectCollection =
       _firebaseFirestore.collection(kCurrentProjectCollection);
 
-  static Future getData() async {
-    _userDataController.userModal = await getUserData();
-    getProjects();
-  }
+  static final DocumentReference _currentProjectDocument =
+      _currentProjectCollection.doc(_userDataController.user!.uid);
+
+  /// -------------------- [Streams] --------------------------
 
   static Stream<DocumentSnapshot<Object?>> get kUserStream =>
       _userCollection.doc(_userDataController.user!.uid).snapshots();
@@ -45,58 +49,17 @@ class FirebaseService {
           .where('projectID', isEqualTo: projectID)
           .snapshots();
 
-  static Future<UserModal> getUserData() async {
-    final DocumentReference reference =
-        _userCollection.doc(_userDataController.user!.uid);
-    DocumentSnapshot snapshot = await reference.get();
-    final Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-    print("UserData --> $data");
-    return UserModal.fromMap(data);
-  }
+  static Future<DocumentSnapshot<Object?>> get kCurrentProjectDOcument =>
+      _currentProjectDocument.get();
 
-  static Future getProjects() async {
-    QuerySnapshot snapShot = await _projectCollection
-        .where('userID', isEqualTo: _userDataController.user!.uid)
-        .get();
-    final List<QueryDocumentSnapshot> docs = snapShot.docs;
-    for (QueryDocumentSnapshot doc in docs) {
-      final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      final Project project = Project.fromMap(data);
+  static Stream<DocumentSnapshot<Object?>> kCurrentProjectStream(
+          String projectID) =>
+      _projectCollection.doc(projectID).snapshots();
 
-      final List<Milestone> _milestones =
-          await getMilestones(project.projectID);
+  /// -------------------- [Methods] --------------------------
 
-      final LocalProjectModal localProjectModal = LocalProjectModal(
-        userID: project.userID,
-        projectID: project.projectID,
-        projectName: project.projectName,
-        projectNumber: project.projectNumber,
-        startDateEpoch: project.startDateEpoch,
-        isCompleted: project.isCompleted,
-        haveMilestones: project.haveMilestones,
-        milestones: _milestones,
-      );
-      _projectController.projects.add(localProjectModal);
-    }
-    _projectController.projects.sort(
-        (first, second) => second.projectNumber.compareTo(first.projectNumber));
-  }
-
-  static Future<List<Milestone>> getMilestones(String projectID) async {
-    QuerySnapshot snapShot = await _milestonesCollection
-        .where('projectID', isEqualTo: projectID)
-        .get();
-    final List<QueryDocumentSnapshot> docs = snapShot.docs;
-    final List<Milestone> _milestones = <Milestone>[];
-
-    for (QueryDocumentSnapshot doc in docs) {
-      final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-      final Milestone milestone = Milestone.fromMap(data);
-
-      _milestones.add(milestone);
-    }
-    return _milestones;
-  }
+  static Future<void> setCurrentProject(String projectID) =>
+      _currentProjectDocument.set({'projectID': projectID});
 
   static Future addNewUser() async {
     final User user = _userDataController.user!;
@@ -116,8 +79,6 @@ class FirebaseService {
       await _userCollection
           .doc(_userDataController.user!.uid)
           .set(userModal.toMap());
-
-      _userDataController.userModal = await getUserData();
     } on SocketException {
       print('Internet Connection Problem');
     } catch (e) {
@@ -127,7 +88,7 @@ class FirebaseService {
 
   static Future addProject(Project project) async {
     try {
-      Get.dialog(const LoadingDialog(message: 'Creating Project'));
+      DialogService.showLoadingDialog('Creating Project');
 
       DocumentReference _reference =
           await _projectCollection.add(project.toMap());
@@ -138,21 +99,25 @@ class FirebaseService {
       DocumentReference _userReference =
           _userCollection.doc(_userDataController.user!.uid);
 
-      final UserModal userModal = await getUserData();
-
-      _userReference.update({'totalProjects': userModal.totalProjects + 1});
+      _userReference.update({
+        'totalProjects': _userDataController.userModal.totalProjects + 1,
+      });
     } on SocketException {
       print('Internet Connection Problem');
+      DialogService.showErrorDialog(
+        title: 'Error uploading',
+        message: 'Please Check your internet connectivity',
+      );
     } catch (e) {
       print("Error --> $e");
     } finally {
-      Get.back();
+      DialogService.closeDialog();
     }
   }
 
   static Future addMilestones(String projectID) async {
     try {
-      Get.dialog(const LoadingDialog(message: 'Adding Milestones'));
+      DialogService.showLoadingDialog('Adding Milestones');
 
       if (_projectController.milestones.isNotEmpty) {
         _projectCollection.doc(projectID).update({'haveMilestones': true});
@@ -166,16 +131,14 @@ class FirebaseService {
       }
     } on SocketException {
       print('Internet Connection Problem');
+      DialogService.showErrorDialog(
+        title: 'Error uploading Milestones',
+        message: 'Please Check your internet connectivity',
+      );
     } catch (e) {
       print("Error --> $e");
     } finally {
-      Get.back();
+      DialogService.closeDialog();
     }
-  }
-
-  static Future makeCurrentProject(String projectID) async {
-    _currentProjectCollection
-        .doc(_userDataController.user!.uid)
-        .set({'projectID': projectID});
   }
 }
