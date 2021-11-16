@@ -87,12 +87,13 @@ class ProjectDetailView extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: MyButton.outlined(
+          child: Button.outlined(
             label: 'Start',
-            onPressed: () =>
+            onTap: () =>
                 Get.to(() => WorkingProjectScreen(localProject: localProject)),
-            icon: MyIcons.play,
-            backgroundColor: kSuccessColor,
+            //TODO: Add icon to button
+            // icon: MyIcons.play,
+            buttonColor: kSuccessColor,
             buttonSize: ButtonSize.large,
           ),
         )
@@ -144,7 +145,7 @@ class BarStats extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: size.height * 0.05),
         padding: EdgeInsets.symmetric(
           vertical: size.height.twoDotFivePercent,
-          horizontal: size.width.sevenPercent,
+          horizontal: size.width.sevenPointFivePercent,
         ),
         alignment: Alignment.center,
         child: BarChart(

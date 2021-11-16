@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:find_the_focus/screens/projects/projects.dart';
+import 'package:find_the_focus/services/services.dart';
 import '../../controllers/controllers.dart';
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
@@ -13,6 +14,7 @@ class AddProject extends StatelessWidget {
   static GlobalKey<FormState> projectFormKey = GlobalKey<FormState>();
 
   static ProjectController projectController = Get.find();
+  static ProjectsClient projectsClient = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -59,30 +61,46 @@ class AddProject extends StatelessWidget {
                     children: [
                       Column(
                         children: [
-                          MyButton.outlined(
+                          Button.outlined(
                             label: 'Discard',
-                            onPressed: () {
+                            onTap: () {
                               Get.back();
                               projectController.discardProject();
                             },
-                            backgroundColor: kErrorColor,
-                            isCTA: true,
+                            buttonColor: kErrorColor,
                             buttonSize: ButtonSize.large,
                           ),
                           SizedBox(
                             height: size.height.twoPercent,
                           ),
-                          LongButton(
+                          Button(
                             label: 'Create',
-                            onPressed: () async {
+                            buttonSize: ButtonSize.large,
+                            onTap: () async {
                               final bool isValid =
                                   projectFormKey.currentState!.validate();
                               if (isValid) {
-                                Get.dialog(const _ConfirmationDialog());
+                                DialogService.showConfirmationDialog(
+                                  title: "Add Project",
+                                  description:
+                                      "Are you sure to Add Project? You won't be able to change it later",
+                                  actions: [
+                                    const Button.secondary(
+                                      label: 'No, Let me check again',
+                                      onTap: DialogService.closeDialog,
+                                    ),
+                                    Button(
+                                      label: 'Yes, Create',
+                                      onTap: () async {
+                                        DialogService.closeDialog();
+                                        await projectsClient.createProject();
+                                        Get.off(() => const AddMilestone());
+                                      },
+                                    ),
+                                  ],
+                                );
                               }
                             },
-                            isCTA: true,
-                            buttonSize: ButtonSize.large,
                           ),
                         ],
                       ),
@@ -94,41 +112,6 @@ class AddProject extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _ConfirmationDialog extends StatelessWidget {
-  const _ConfirmationDialog({Key? key}) : super(key: key);
-
-  static ProjectsClient projectsClient = Get.find();
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Add Project'),
-      content: const Text(
-        "Are you sue to Add Project? You won't be able to change it later",
-      ),
-      backgroundColor: kBackgroundColor.shade300,
-      titleTextStyle: Get.textTheme.headline6,
-      contentTextStyle: Get.textTheme.subtitle1,
-      elevation: kElevation,
-      shape: kMediumShape,
-      actions: [
-        MyButton.secondary(
-          label: 'Let me check',
-          onPressed: () => Get.back(),
-        ),
-        MyButton(
-          label: 'Yes, Create',
-          onPressed: () async {
-            Get.back();
-            await projectsClient.createProject();
-            Get.off(() => const AddMilestone());
-          },
-        ),
-      ],
     );
   }
 }
@@ -152,7 +135,7 @@ class _ProjectNameField extends StatelessWidget {
           style: Get.textTheme.subtitle1!.copyWith(color: kBlackColor),
           validator: (name) {
             if (name!.isEmpty) {
-              return "Project Name can't be Empty";
+              return "*Required";
             }
             // if (name.isValidName()) return 'Enter a Valid Project Name';
             projectController.projectName = name;

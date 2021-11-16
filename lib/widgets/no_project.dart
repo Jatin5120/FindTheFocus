@@ -13,7 +13,8 @@ class NoProjects extends StatelessWidget {
     final Size size = Utils.size(context);
     return SizedBox.expand(
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: size.height.sevenPercent),
+        padding:
+            EdgeInsets.symmetric(vertical: size.height.sevenPointFivePercent),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -37,9 +38,9 @@ class NoProjects extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: size.height.fivePercent),
-            MyButton(
+            Button(
               label: 'Create Project',
-              onPressed: () => Get.to(() => const AddProject()),
+              onTap: () => Get.to(() => const AddProject()),
               buttonSize: ButtonSize.large,
             ),
           ],

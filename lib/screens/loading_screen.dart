@@ -1,6 +1,5 @@
 import 'package:find_the_focus/constants/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({Key? key}) : super(key: key);

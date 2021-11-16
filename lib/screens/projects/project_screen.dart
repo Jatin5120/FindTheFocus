@@ -30,12 +30,13 @@ class ProjectScreen extends StatelessWidget {
               borderRadius: kChipRadius,
               color: kBackgroundColor[700],
             ),
-            constraints: BoxConstraints(maxHeight: size.height * 0.05),
+            // constraints: BoxConstraints(maxHeight: size.height * 0.05),
+            height: 48,
             margin: EdgeInsets.symmetric(
               horizontal: size.width.fivePercent,
               vertical: 4,
             ),
-            padding: EdgeInsets.all(size.height * 0.005),
+            padding: const EdgeInsets.all(6),
             child: Row(
               children: [
                 for (int i = 0; i < _labels.length; i++) ...[

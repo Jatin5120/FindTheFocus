@@ -1,4 +1,4 @@
-export 'my_button.dart';
+export 'button.dart';
 export 'text_fields.dart';
 export 'auth_wrapper.dart';
 export 'screen_wrapper.dart';

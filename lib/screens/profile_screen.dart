@@ -42,6 +42,7 @@ class ProfileScreen extends StatelessWidget {
             },
             label: const Text('Sign Out'),
             icon: const Icon(Icons.logout_outlined),
+            backgroundColor: kAccentColor,
           )
         ],
       ),

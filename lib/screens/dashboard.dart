@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_the_focus/services/firebase_services.dart';
 
@@ -61,7 +59,7 @@ class _DashboardState extends State<Dashboard> {
               physics: const BouncingScrollPhysics(),
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: size.width.sevenPercent,
+                  horizontal: size.width.sevenPointFivePercent,
                   vertical: size.height.twoPercent,
                 ),
                 child: Column(
@@ -260,8 +258,8 @@ class _DashboardHeader extends StatelessWidget {
               children: [
                 SizedBox(height: size.height.onePercent),
                 Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: size.width.sevenPercent),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: size.width.sevenPointFivePercent),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

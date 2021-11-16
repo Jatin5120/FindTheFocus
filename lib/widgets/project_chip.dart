@@ -35,6 +35,7 @@ class ProjectChip extends StatelessWidget {
                 color: projectController.selectedIndex == index
                     ? kAccentColor
                     : kDisabledColor,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),

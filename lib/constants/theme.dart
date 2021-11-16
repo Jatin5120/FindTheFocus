@@ -34,9 +34,12 @@ ThemeData myTheme = ThemeData(
   ),
   dialogTheme: DialogTheme(
     backgroundColor: kBackgroundColor.shade300,
-    titleTextStyle: Get.textTheme.headline6,
-    contentTextStyle: Get.textTheme.subtitle1,
+    titleTextStyle: Get.textTheme.headline6!.copyWith(color: kTextColor),
+    contentTextStyle: Get.textTheme.subtitle1!.copyWith(
+      color: kTextColor.shade500,
+    ),
     elevation: kElevation,
+    shape: kMediumShape,
   ),
   snackBarTheme: const SnackBarThemeData(
     backgroundColor: kAccentColor,

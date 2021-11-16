@@ -5,7 +5,7 @@ const double kElevation = 10;
 const BorderRadius kSmallRadius = BorderRadius.all(Radius.circular(8));
 const BorderRadius kMediumRadius = BorderRadius.all(Radius.circular(12));
 const BorderRadius kLargeRadius = BorderRadius.all(Radius.circular(16));
-const BorderRadius kChipRadius = BorderRadius.all(Radius.circular(28));
+const BorderRadius kChipRadius = BorderRadius.all(Radius.circular(50));
 const BorderRadius kCardRadius = BorderRadius.all(Radius.circular(24));
 
 const OutlinedBorder kSmallShape =

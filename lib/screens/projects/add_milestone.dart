@@ -64,13 +64,14 @@ class AddMilestone extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(
+              const Expanded(
                 flex: 3,
                 child: _MileStoneList(),
               ),
-              LongButton(
+              Button(
                 label: 'Finish',
-                onPressed: () async {
+                buttonSize: ButtonSize.large,
+                onTap: () async {
                   await FirebaseService.addMilestones(
                       projectController.projectID);
                   Get.back();
@@ -236,35 +237,3 @@ class _MileStoneList extends StatelessWidget {
     );
   }
 }
-
-/*
-
-Padding(
-  padding: EdgeInsets.only(
-    left: size.width.twoPercent,
-    top: size.height.onePercent,
-  ),
-  child: RichText(
-    text: TextSpan(
-      style: Get.textTheme.overline!.copyWith(
-        color: kSubtitleColor,
-        height: 1,
-      ),
-      children: [
-        const TextSpan(
-          text: 'Note: Enter each milestone separately. Press',
-        ),
-        TextSpan(
-          text: ' + ',
-          style:
-              Get.textTheme.bodyText1!.copyWith(color: kSubtitleColor),
-        ),
-        const TextSpan(
-          text: 'to add Milestone.',
-        ),
-      ],
-    ),
-  ),
-),
-
-*/

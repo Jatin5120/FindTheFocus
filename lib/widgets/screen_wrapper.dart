@@ -10,7 +10,6 @@ class ScreenWrapper extends StatelessWidget {
   const ScreenWrapper({Key? key}) : super(key: key);
 
   static final NavBarController _navBarController = Get.find();
-  static final ProjectsClient _projectsClient = Get.find();
   static final UserDataController _userDataController = Get.find();
 
   static const List<IconData> _icons = [
@@ -36,7 +35,6 @@ class ScreenWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return Obx(
       () => _userDataController.isNewUser
           ? const QuestionsWrapper()

@@ -36,7 +36,11 @@ const Color kWhiteColor = Color(0xFFFFFFFF);
 
 const Color kShadowColor = Color(0x33000000);
 
-const Color kDividerColor = Color(0x88FFFFFF);
+const MaterialColor kDividerColor = MaterialColor(0xFFF9F9F9, {
+  500: Color(0xFFF9F9F9),
+  700: Color(0xFFEAEAEA),
+  900: Color(0xFFC9C9C9),
+});
 
 const Color kSuccessColor = Color(0xFF00CD71);
 const Color kWarningColor = Color(0xFFFEC539);

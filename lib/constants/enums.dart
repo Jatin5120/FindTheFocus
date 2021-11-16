@@ -9,3 +9,10 @@ enum ButtonType {
   secondary,
   outlined,
 }
+
+enum DialogType {
+  normal,
+  success,
+  warning,
+  error,
+}

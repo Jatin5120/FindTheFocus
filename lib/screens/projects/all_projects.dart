@@ -18,7 +18,6 @@ class AllProjects extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = Utils.size(context);
     return GestureDetector(
       onPanUpdate: (details) {
         if (details.delta.dx > 12) projectController.selectedIndex = 0;
@@ -98,7 +97,7 @@ class ProjectCard extends StatelessWidget {
       },
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: size.width.sevenPercent,
+          horizontal: size.width.sevenPointFivePercent,
           vertical: size.height.twoDotFivePercent,
         ),
         child: AspectRatio(
@@ -111,7 +110,7 @@ class ProjectCard extends StatelessWidget {
               borderRadius: kLargeRadius,
               boxShadow: Utils.mediumShadow,
             ),
-            padding: EdgeInsets.all(size.width.sevenPercent),
+            padding: EdgeInsets.all(size.width.sevenPointFivePercent),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -160,11 +159,12 @@ class _ProjectDetails extends StatelessWidget {
             'Target date:  $endDate',
             style: Get.textTheme.subtitle2!.copyWith(color: kTextColor[500]),
           ),
-        MyButton.outlined(
+        Button.outlined(
           label: 'Start',
-          onPressed: () {},
-          icon: MyIcons.play,
-          backgroundColor: kSuccessColor,
+          onTap: () {},
+          //TODO: Add icon to buttons
+          // icon: MyIcons.play,
+          buttonColor: kSuccessColor,
           buttonSize: ButtonSize.small,
         )
       ],
