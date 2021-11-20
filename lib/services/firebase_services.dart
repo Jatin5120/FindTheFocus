@@ -49,7 +49,7 @@ class FirebaseService {
           .where('projectID', isEqualTo: projectID)
           .snapshots();
 
-  static Future<DocumentSnapshot<Object?>> get kCurrentProjectDOcument =>
+  static Future<DocumentSnapshot<Object?>> get kCurrentProjectDocument =>
       _currentProjectDocument.get();
 
   static Stream<DocumentSnapshot<Object?>> kCurrentProjectStream(
@@ -58,8 +58,8 @@ class FirebaseService {
 
   /// -------------------- [Methods] --------------------------
 
-  static Future<void> setCurrentProject(String projectID) =>
-      _currentProjectDocument.set({'projectID': projectID});
+  static Future<void> setCurrentProject(String projectID) async =>
+      await _currentProjectDocument.set({'projectID': projectID});
 
   static Future addNewUser() async {
     final User user = _userDataController.user!;

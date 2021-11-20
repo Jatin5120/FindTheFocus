@@ -89,7 +89,8 @@ class ProjectCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = Utils.size(context);
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
+        await FirebaseService.setCurrentProject(localProject.projectID);
         projectController.currentProject = localProject;
         projectController.selectedIndex = 0;
         projectController.currentProjectIndex =

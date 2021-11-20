@@ -30,28 +30,62 @@ class CurrentProject extends StatelessWidget {
           horizontal: size.width.fivePercent,
           vertical: size.height.threePercent,
         ),
-        child: FutureBuilder(
-          future: FirebaseService.kCurrentProjectDOcument,
+        child: FutureBuilder<DocumentSnapshot>(
+          future: FirebaseService.kCurrentProjectDocument,
           builder: (context, future) {
             if (!future.hasData) return const SizedBox();
 
-            Map<String, dynamic> project = future.data as Map<String, dynamic>;
+            Map<String, dynamic> project =
+                future.data!.data() as Map<String, dynamic>;
 
             return StreamBuilder<DocumentSnapshot>(
               stream:
                   FirebaseService.kCurrentProjectStream(project['projectID']),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const SizedBox();
-                return Obx(
-                  () {
-                    return projectController.currentProject == null
-                        ? projectController.projects.isEmpty
-                            ? const NoProjects()
-                            : ProjectDetailView(
-                                projectController.projects.first)
-                        : ProjectDetailView(projectController.currentProject!);
-                  },
+              builder: (context, projectSnapshot) {
+                if (!projectSnapshot.hasData) return const SizedBox();
+                final Project currentProject = Project.fromMap(
+                  projectSnapshot.data!.data() as Map<String, dynamic>,
                 );
+                return StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseService.kMilestonesStream(
+                        currentProject.projectID),
+                    builder: (context, milestoneSnapshot) {
+                      if (!milestoneSnapshot.hasData) {
+                        return const SizedBox();
+                      }
+                      List<QueryDocumentSnapshot> milestoneDocs =
+                          milestoneSnapshot.data!.docs;
+
+                      List<Milestone> milestones = milestoneDocs
+                          .map(
+                            (doc) => Milestone.fromMap(
+                                doc.data() as Map<String, dynamic>),
+                          )
+                          .toList();
+
+                      LocalProjectModal? localProject = LocalProjectModal(
+                        userID: currentProject.userID,
+                        projectID: currentProject.projectID,
+                        projectName: currentProject.projectName,
+                        projectNumber: currentProject.projectNumber,
+                        startDateEpoch: currentProject.startDateEpoch,
+                        isCompleted: currentProject.isCompleted,
+                        haveMilestones: currentProject.haveMilestones,
+                        milestones: milestones,
+                      );
+                      return ProjectDetailView(localProject);
+                      // return Obx(
+                      //   () {
+                      //     return projectController.currentProject == null
+                      //         ? projectController.projects.isEmpty
+                      //             ? const NoProjects()
+                      //             : ProjectDetailView(
+                      //                 projectController.projects.first)
+                      //         : ProjectDetailView(
+                      //             projectController.currentProject!);
+                      //   },
+                      // );
+                    });
               },
             );
           },
