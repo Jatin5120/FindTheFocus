@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:find_the_focus/constants/constants.dart';
+import 'package:find_the_focus/controllers/controllers.dart';
 import 'package:find_the_focus/modals/modals.dart';
 import 'package:find_the_focus/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -102,6 +103,8 @@ class _Option extends StatefulWidget {
 class _OptionState extends State<_Option> with SingleTickerProviderStateMixin {
   late AnimationController _dotAnimationController;
 
+  final UserDataController _userDataController = Get.find();
+
   @override
   void initState() {
     super.initState();
@@ -149,6 +152,7 @@ class _OptionState extends State<_Option> with SingleTickerProviderStateMixin {
         Offset offset = box.localToGlobal(Offset.zero);
         animateDot(offset);
         print("${widget.weightage} added");
+        _userDataController.workTime += widget.weightage;
       },
       child: Padding(
         padding: EdgeInsets.fromLTRB(

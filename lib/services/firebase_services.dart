@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import '../constants/collections.dart';
 import '../controllers/controllers.dart';
 import '../modals/modals.dart';
-import '../widgets/widgets.dart';
 
 class FirebaseService {
   const FirebaseService._();
@@ -82,13 +81,13 @@ class FirebaseService {
     } on SocketException {
       print('Internet Connection Problem');
     } catch (e) {
-      print("Error --> $e");
+      print("Error Adding New User--> $e");
     }
   }
 
   static Future addProject(Project project) async {
     try {
-      DialogService.showLoadingDialog('Creating Project');
+      DialogService.showLoadingDialog(message: 'Creating Project');
 
       DocumentReference _reference =
           await _projectCollection.add(project.toMap());
@@ -109,7 +108,7 @@ class FirebaseService {
         message: 'Please Check your internet connectivity',
       );
     } catch (e) {
-      print("Error --> $e");
+      print("Error Adding Project --> $e");
     } finally {
       DialogService.closeDialog();
     }
@@ -117,7 +116,7 @@ class FirebaseService {
 
   static Future addMilestones(String projectID) async {
     try {
-      DialogService.showLoadingDialog('Adding Milestones');
+      DialogService.showLoadingDialog(message: 'Adding Milestones');
 
       if (_projectController.milestones.isNotEmpty) {
         _projectCollection.doc(projectID).update({'haveMilestones': true});
@@ -136,9 +135,21 @@ class FirebaseService {
         message: 'Please Check your internet connectivity',
       );
     } catch (e) {
-      print("Error --> $e");
+      print("Error Adding Milestone--> $e");
     } finally {
       DialogService.closeDialog();
+    }
+  }
+
+  static Future updateWorkTime() async {
+    try {
+      _userCollection.doc(_userDataController.user!.uid).update({
+        'timerTime': _userDataController.workTime,
+      });
+    } on SocketException {
+      print('Internet Connection Problem');
+    } catch (e) {
+      print("Error WorkTime--> $e");
     }
   }
 }

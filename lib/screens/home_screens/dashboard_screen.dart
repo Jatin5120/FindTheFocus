@@ -3,21 +3,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:find_the_focus/services/firebase_services.dart';
 
-import '../modals/modals.dart';
+import '../../modals/modals.dart';
 import 'package:flutter/services.dart';
-import '../controllers/controllers.dart';
-import '../constants/constants.dart';
+import '../../controllers/controllers.dart';
+import '../../constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({Key? key}) : super(key: key);
 
   @override
-  _DashboardState createState() => _DashboardState();
+  _DashboardScreenState createState() => _DashboardScreenState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardScreenState extends State<DashboardScreen> {
   final NavBarController navBarController = Get.find();
   final ProjectController projectController = Get.find();
 

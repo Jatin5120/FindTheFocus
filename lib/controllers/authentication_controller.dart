@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:find_the_focus/constants/constants.dart';
 import 'package:find_the_focus/controllers/controllers.dart';
 import 'package:find_the_focus/services/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,62 +13,77 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationController extends GetxController {
   static final StorageController _storageController = Get.find();
+  static final UserDataController _userDataController = Get.find();
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final RxString userEmail = ''.obs;
-  final RxString userPassword = ''.obs;
   final Rx<GoogleSignInAccount?> _googleAccount =
       Rx<GoogleSignInAccount?>(null);
   final Rx<bool> _isLoggedIn = false.obs;
-  final RxBool _hidePassword = true.obs;
+  final RxBool _isNewUser = true.obs;
 
   @override
-  onInit() {
-    super.onInit();
+  onReady() {
+    super.onReady();
+    ever(_isNewUser, _handleNewUser);
+    ever(_isLoggedIn, _handleLogin);
+
+    isNewUser = _storageController.isNewUser;
     isLoggedIn = _storageController.isUserLoggedIn;
+
+    _userDataController.user = _firebaseAuth.currentUser;
+
+    _firebaseAuth.authStateChanges().listen((user) {
+      _userDataController.user = user;
+      isLoggedIn = user != null;
+    });
   }
 
   GoogleSignInAccount? get googleAccount => _googleAccount.value;
-
-  bool get isLoggedIn => _isLoggedIn.value;
-
-  set isLoggedIn(bool value) => _isLoggedIn.value = value;
-
   set googleAccount(GoogleSignInAccount? account) =>
       _googleAccount.value = account;
 
-  bool get hidePassword => _hidePassword.value;
+  bool get isLoggedIn => _isLoggedIn.value;
+  set isLoggedIn(bool value) => _isLoggedIn.value = value;
 
-  toggleHidePassword() {
-    _hidePassword.value = !_hidePassword.value;
-  }
-  // -------------------- Sign in methods --------------------
+  bool get isNewUser => _isNewUser.value;
+  set isNewUser(bool value) => _isNewUser.value = value;
 
-  Future<UserCredential?> signInWithEmail(
-      {required String? email, required String? password}) async {
-    try {
-      print("Signed in using Email and Password");
-      return await _firebaseAuth.signInWithEmailAndPassword(
-        // email: email!,
-        // password: password!,
-        email: 'test@test.com',
-        password: 'test123',
-      );
-    } on FirebaseAuthException catch (e) {
-      print(e.message);
-    } catch (e) {
-      print(e);
+  _handleLogin(bool loggedIn) {
+    log("Handle login --> $loggedIn");
+    if (loggedIn) {
+      _handleNewUser(isNewUser);
+    } else {
+      Get.offAllNamed(Routes.login);
     }
   }
 
+  _handleNewUser(bool newUser) {
+    log("Handle New User --> $newUser");
+    if (newUser) {
+      Get.offAllNamed(Routes.questions);
+    } else {
+      Get.offAllNamed(Routes.screenWrapper);
+    }
+  }
+
+  void _login() {
+    isLoggedIn = true;
+    log("Login = true");
+    _storageController.writeUserLoggedIn(true);
+  }
+
+  void _logout() {
+    isLoggedIn = false;
+    _storageController.writeUserLoggedIn(false);
+  }
+  // -------------------- Sign in methods --------------------
+
   Future<void> signInWithGoogle() async {
     try {
-      final UserDataController userDataController = Get.find();
-
       googleAccount = await _googleSignIn.signIn();
 
-      if (_googleAccount.value != null) {
+      if (googleAccount != null) {
         final GoogleSignInAuthentication googleAuth =
             await googleAccount!.authentication;
 
@@ -76,61 +92,33 @@ class AuthenticationController extends GetxController {
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
-        print(
-            "Signed in with Google --> ${_firebaseAuth.currentUser?.displayName}");
+
+        log("Signed in with Google --> ${_firebaseAuth.currentUser?.displayName}");
 
         final UserCredential userCredential =
             await _firebaseAuth.signInWithCredential(googleAuthCredential);
 
-        userDataController.user = userCredential.user!;
+        _userDataController.user = userCredential.user!;
 
-        userDataController.isNewUser =
-            userCredential.additionalUserInfo?.isNewUser ?? true;
+        isNewUser = userCredential.additionalUserInfo?.isNewUser ?? true;
 
-        _storageController.writeUserLoggedIn(true);
+        _login();
 
-        if (userDataController.isNewUser) {
+        if (isNewUser) {
           log("New User Added");
           FirebaseService.addNewUser();
         }
-      }
+      } else {}
     } on PlatformException catch (e) {
-      print("\n\nPlatformException --->" + e.message.toString());
+      print("PlatformException --> " + e.message.toString());
     } catch (e) {
-      print("\n\nNo id selected -> $e");
+      print("No id selected -> $e");
     }
   }
-/*
-  Future<UserCredential> signInWithFacebook() async {
-    final LoginResult result = await FacebookAuth.instance.login();
-
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(result.accessToken!.token);
-
-    return await FirebaseAuth.instance
-        .signInWithCredential(facebookAuthCredential);
-  }
-*/
-
-  // -------------------- Sign up --------------------
-
-  // Future<void> signUpWithEmail(
-  //     {required String? email, required String? password}) async {
-  //   try {
-  //     UserCredential userCredential =
-  //         await _firebaseAuth.createUserWithEmailAndPassword(
-  //       email: email!,
-  //       password: password!,
-  //     );
-  //   } on FirebaseAuthException catch (e) {
-  //     print(e.message);
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
     _googleAccount.value = await _googleSignIn.signOut();
+    _logout();
   }
 }

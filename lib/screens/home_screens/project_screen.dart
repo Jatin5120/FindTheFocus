@@ -1,7 +1,7 @@
 import '../../constants/constants.dart';
 import '../../controllers/controllers.dart';
 import '../../widgets/widgets.dart';
-import 'projects.dart';
+import '../screens.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

@@ -4,6 +4,7 @@ import 'package:find_the_focus/constants/colors.dart';
 import 'package:find_the_focus/constants/constants.dart';
 import 'package:find_the_focus/controllers/controllers.dart';
 import 'package:find_the_focus/modals/modals.dart';
+import 'package:find_the_focus/services/firebase_services.dart';
 import 'package:find_the_focus/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,13 +12,16 @@ import 'package:get/get.dart';
 class ObjectiveQuestions extends StatelessWidget {
   const ObjectiveQuestions({Key? key}) : super(key: key);
 
-  static QuestionsController questionsController = Get.find();
-  static UserDataController userDataController = Get.find();
-  static StorageController storageController = Get.find();
+  static final QuestionsController _questionsController = Get.find();
+  static final UserDataController _userDataController = Get.find();
+  static final StorageController _storageController = Get.find();
+  static final AuthenticationController _authenticationController = Get.find();
 
   static PageController pageController = PageController();
 
   static Curve transitionCurve = Curves.easeInOut;
+
+  static int workMinutes = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -36,18 +40,18 @@ class ObjectiveQuestions extends StatelessWidget {
                 controller: pageController,
                 pageSnapping: true,
                 scrollDirection: Axis.vertical,
-                itemCount: questionsController.questions.length,
+                itemCount: _questionsController.questions.length,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (_, index) {
                   final QuestionModal questionModal =
-                      questionsController.questions[index];
+                      _questionsController.questions[index];
                   return QuestionPage(
                     key: key,
                     number: index + 1,
                     questionModal: questionModal,
                     onOptionSelected: () {
                       if (index == 9) {
-                        questionsController.isQuestionsCompleted = true;
+                        _questionsController.isQuestionsCompleted = true;
                       }
                       pageController.nextPage(
                         duration: kAnimationDuration,
@@ -59,10 +63,11 @@ class ObjectiveQuestions extends StatelessWidget {
               ),
               Obx(
                 () {
-                  if (questionsController.isQuestionsCompleted) {
+                  if (_questionsController.isQuestionsCompleted) {
+                    FirebaseService.updateWorkTime();
                     Future.delayed(kDelayDuration, () {
-                      storageController.writeNewUser(false);
-                      userDataController.isNewUser = false;
+                      _storageController.writeNewUser(false);
+                      _authenticationController.isNewUser = false;
                     });
                     return const _DoneButton();
                   } else {

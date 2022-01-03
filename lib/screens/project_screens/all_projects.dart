@@ -23,58 +23,59 @@ class AllProjects extends StatelessWidget {
         if (details.delta.dx > 12) projectController.selectedIndex = 0;
       },
       child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseService.kProjectsStream,
-          builder: (context, projectSnapshot) {
-            if (!projectSnapshot.hasData) {
-              return const SizedBox();
-            }
-            List<QueryDocumentSnapshot> projectDocs =
-                projectSnapshot.data!.docs;
+        stream: FirebaseService.kProjectsStream,
+        builder: (context, projectSnapshot) {
+          if (!projectSnapshot.hasData) {
+            return const SizedBox();
+          }
+          final List<QueryDocumentSnapshot> projectDocs =
+              projectSnapshot.data!.docs;
 
-            if (projectDocs.isEmpty) {
-              return const NoProjects();
-            }
-            return ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: projectDocs.length,
-              padding: const EdgeInsets.only(top: 16, bottom: 56),
-              itemBuilder: (BuildContext context, int index) {
-                final Project project = Project.fromMap(
-                  projectDocs[index].data() as Map<String, dynamic>,
-                );
-                return StreamBuilder<QuerySnapshot>(
-                    stream:
-                        FirebaseService.kMilestonesStream(project.projectID),
-                    builder: (context, milestoneSnapshot) {
-                      if (!milestoneSnapshot.hasData) {
-                        return const SizedBox();
-                      }
-                      List<QueryDocumentSnapshot> milestoneDocs =
-                          milestoneSnapshot.data!.docs;
+          if (projectDocs.isEmpty) {
+            return const NoProjects();
+          }
+          return ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemCount: projectDocs.length,
+            padding: const EdgeInsets.only(top: 16, bottom: 56),
+            itemBuilder: (BuildContext context, int index) {
+              final Project project = Project.fromMap(
+                projectDocs[index].data() as Map<String, dynamic>,
+              );
+              return StreamBuilder<QuerySnapshot>(
+                stream: FirebaseService.kMilestonesStream(project.projectID),
+                builder: (context, milestoneSnapshot) {
+                  if (!milestoneSnapshot.hasData) {
+                    return const SizedBox();
+                  }
+                  List<QueryDocumentSnapshot> milestoneDocs =
+                      milestoneSnapshot.data!.docs;
 
-                      List<Milestone> milestones = milestoneDocs
-                          .map(
-                            (doc) => Milestone.fromMap(
-                                doc.data() as Map<String, dynamic>),
-                          )
-                          .toList();
+                  List<Milestone> milestones = milestoneDocs
+                      .map(
+                        (doc) => Milestone.fromMap(
+                            doc.data() as Map<String, dynamic>),
+                      )
+                      .toList();
 
-                      LocalProjectModal? localProject = LocalProjectModal(
-                        userID: project.userID,
-                        projectID: project.projectID,
-                        projectName: project.projectName,
-                        projectNumber: project.projectNumber,
-                        startDateEpoch: project.startDateEpoch,
-                        isCompleted: project.isCompleted,
-                        haveMilestones: project.haveMilestones,
-                        milestones: milestones,
-                      );
+                  LocalProjectModal? localProject = LocalProjectModal(
+                    userID: project.userID,
+                    projectID: project.projectID,
+                    projectName: project.projectName,
+                    projectNumber: project.projectNumber,
+                    startDateEpoch: project.startDateEpoch,
+                    isCompleted: project.isCompleted,
+                    haveMilestones: project.haveMilestones,
+                    milestones: milestones,
+                  );
 
-                      return ProjectCard(localProject);
-                    });
-              },
-            );
-          }),
+                  return ProjectCard(localProject);
+                },
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

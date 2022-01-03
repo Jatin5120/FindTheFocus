@@ -13,8 +13,10 @@ class NoProjects extends StatelessWidget {
     final Size size = Utils.size(context);
     return SizedBox.expand(
       child: Padding(
-        padding:
-            EdgeInsets.symmetric(vertical: size.height.sevenPointFivePercent),
+        padding: EdgeInsets.symmetric(
+          vertical: size.height.sevenPointFivePercent,
+          horizontal: size.width.fivePercent,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

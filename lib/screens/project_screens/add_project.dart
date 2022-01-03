@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
-import 'package:find_the_focus/screens/projects/projects.dart';
-import 'package:find_the_focus/services/services.dart';
+import 'project_screens.dart';
+import '../../services/services.dart';
 import '../../controllers/controllers.dart';
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';

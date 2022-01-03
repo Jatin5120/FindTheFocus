@@ -21,7 +21,7 @@ class DialogService {
   /// ```dart
   /// DialogService.closeDialog()
   /// ```
-  static void showLoadingDialog(String message) {
+  static void showLoadingDialog({String? message}) {
     Get.dialog(
       Dialog(
         backgroundColor: kBackgroundColor[300],
@@ -36,11 +36,10 @@ class DialogService {
               const CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(kSecondaryColor),
               ),
-              const SizedBox(width: 15),
-              Text(
-                message,
-                style: Get.textTheme.subtitle1,
-              ),
+              if (message != null) ...[
+                const SizedBox(width: 16),
+                Text(message, style: Get.textTheme.headline6),
+              ],
             ],
           ),
         ),
@@ -111,7 +110,7 @@ class DialogService {
     );
   }
 
-  /// This method shows a [Error dialog] as an [Overlay] on the screen
+  /// This method shows a [Success dialog] as an [Overlay] on the screen
   ///
   /// This uses `Get` library to show a `Dialog` with a the Error message
   ///

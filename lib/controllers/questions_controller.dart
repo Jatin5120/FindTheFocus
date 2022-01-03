@@ -23,7 +23,7 @@ final List<QuestionModal> _questions = [
     question:
         "Do you jump from task to task because you just can't seem to focus long enough to finish one completely?",
     answers: ['Yes', 'Sometimes', 'No'],
-    weightages: [0, 1, 2],
+    weightages: [-1, 0, 1],
   ),
   QuestionModal(
     question: "How do you deal with boring, repetitive tasks?",
@@ -48,13 +48,13 @@ final List<QuestionModal> _questions = [
     question:
         "When reading a book or magazine, how often do you find yourself re-reading the same paragraph or skipping ahead?",
     answers: ['Often', 'Sometimes', 'Rarely'],
-    weightages: [1, 2, 3],
+    weightages: [3, 2, 1],
   ),
   QuestionModal(
     question:
         "Do you have a knack for noticing details (e.g. typos in a document)?",
     answers: ["Yes", "Sometimes", "No"],
-    weightages: [1, 2, 3],
+    weightages: [3, 2, 1],
   ),
   QuestionModal(
     question: "Do you lose your patience easily?",

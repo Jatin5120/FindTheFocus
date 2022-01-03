@@ -27,7 +27,7 @@ class ScreenWrapper extends StatelessWidget {
   ];
 
   static const List<Widget> _screens = [
-    Dashboard(),
+    DashboardScreen(),
     ProjectScreen(),
     AnalyticsScreen(),
     ProfileScreen(),
@@ -35,39 +35,35 @@ class ScreenWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => _userDataController.isNewUser
-          ? const QuestionsWrapper()
-          : Scaffold(
-              resizeToAvoidBottomInset: false,
-              body: Obx(
-                () => _screens[_navBarController.selectedIndex],
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Obx(
+        () => _screens[_navBarController.selectedIndex],
+      ),
+      floatingActionButton: Obx(() {
+        return _navBarController.showFAB
+            ? FloatingActionButton(
+                backgroundColor: kPrimaryColor,
+                child: const Icon(MyIcons.plus),
+                onPressed: () => Get.to(() => const AddProject()),
+              )
+            : const SizedBox.shrink();
+      }),
+      bottomNavigationBar: Card(
+        margin: EdgeInsets.zero,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            for (int i = 0; i < _icons.length; i++) ...[
+              NavBarItem(
+                icon: _icons[i],
+                index: i,
+                label: _labels[i],
               ),
-              floatingActionButton: Obx(() {
-                return _navBarController.showFAB
-                    ? FloatingActionButton(
-                        backgroundColor: kPrimaryColor,
-                        child: const Icon(MyIcons.plus),
-                        onPressed: () => Get.to(() => const AddProject()),
-                      )
-                    : const SizedBox.shrink();
-              }),
-              bottomNavigationBar: Card(
-                margin: EdgeInsets.zero,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    for (int i = 0; i < _icons.length; i++) ...[
-                      NavBarItem(
-                        icon: _icons[i],
-                        index: i,
-                        label: _labels[i],
-                      ),
-                    ]
-                  ],
-                ),
-              ),
-            ),
+            ]
+          ],
+        ),
+      ),
     );
   }
 }

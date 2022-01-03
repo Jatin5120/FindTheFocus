@@ -1,12 +1,12 @@
-import 'package:get_storage/get_storage.dart';
-
-import '../services/services.dart';
-import '../constants/constants.dart';
-import '../controllers/controllers.dart';
-import '../widgets/widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+
+import 'services/services.dart';
+import 'bindings/bindings.dart';
+import 'constants/constants.dart';
+import 'controllers/controllers.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,11 +17,11 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-void initializeControllers() async {
+void initializeControllers() {
   Get.put(StorageController());
   Get.put(UserDataController());
-  Get.put(AuthenticationController());
   Get.put(NavBarController());
+  Get.put(AuthenticationController());
   Get.put(ProjectController());
   Get.put(WorkingTimeController());
   Get.put(ProjectsClient());
@@ -37,8 +37,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Find The Focus',
       theme: myTheme,
-      // home: const ObjectiveQuestions(),
-      home: const AuthenticationWrapper(),
+      initialRoute: AppPages.initialRoute,
+      initialBinding: AuthBinding(),
+      getPages: AppPages.pages,
     );
   }
 }
